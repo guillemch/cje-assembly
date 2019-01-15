@@ -15,3 +15,5 @@ Auth::routes(['register' => false]);
 
 Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/amendments', 'AmendmentsController@index')->name('amendments');
+

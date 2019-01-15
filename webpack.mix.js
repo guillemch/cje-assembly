@@ -11,5 +11,12 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.js('resources/js/credentials.js', 'public/js')
+   .js('resources/js/amendments.js', 'public/js')
+   .js('resources/js/vote.js', 'public/js')
+   .extract(['vue', 'bootstrap-vue'])
    .sass('resources/sass/app.scss', 'public/css');
+
+if (mix.inProduction()) {
+    mix.version();
+}
