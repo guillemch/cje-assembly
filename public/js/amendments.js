@@ -1709,10 +1709,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'amendments-list',
   data: function data() {
     return {
+      fields: [{
+        key: 'id',
+        label: '#',
+        sortable: true
+      }, {
+        key: 'name',
+        label: 'Votación',
+        sortable: true
+      }, {
+        key: 'option_1',
+        label: '1/Sí',
+        sortable: true
+      }, {
+        key: 'option_2',
+        label: '2/No',
+        sortable: true
+      }, {
+        key: 'option_3',
+        label: '3/Abs',
+        sortable: true
+      }, {
+        key: 'option_2',
+        label: '4',
+        sortable: true
+      }, {
+        key: 'option_2',
+        label: '5',
+        sortable: true
+      }, {
+        key: 'closed_at',
+        label: 'Cerrada',
+        sortable: true
+      }, {
+        key: 'actions',
+        label: 'Acciones'
+      }],
       amendments: []
     };
   },
@@ -6990,7 +7031,47 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    " + _vm._s(_vm.amendments) + "\n")])
+  return _c(
+    "b-card",
+    [
+      _c(
+        "h6",
+        { staticClass: "mb-0", attrs: { slot: "header" }, slot: "header" },
+        [_vm._v("Archivo de votaciones")]
+      ),
+      _vm._v(" "),
+      _c("b-table", {
+        attrs: {
+          striped: "",
+          hover: "",
+          items: _vm.amendments,
+          fields: _vm.fields
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "actions",
+            fn: function(data) {
+              return [
+                _c(
+                  "b-btn",
+                  {
+                    attrs: { size: "sm" },
+                    on: {
+                      click: function($event) {
+                        _vm.openVote(data)
+                      }
+                    }
+                  },
+                  [_vm._v("Abrir")]
+                )
+              ]
+            }
+          }
+        ])
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
