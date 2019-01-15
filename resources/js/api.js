@@ -7,6 +7,10 @@ export default class API {
         return this._call('get', 'amendments/list');
     }
 
+    getCurrentVote () {
+        return this._call('get', 'vote/current');
+    }
+
     _call (type, url, data) {
         return new Promise((resolve, reject) => {
             axios[type](this.baseUrl + url, data).then(response => {

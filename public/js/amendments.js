@@ -7173,6 +7173,11 @@ function () {
       return this._call('get', 'amendments/list');
     }
   }, {
+    key: "getCurrentVote",
+    value: function getCurrentVote() {
+      return this._call('get', 'vote/current');
+    }
+  }, {
     key: "_call",
     value: function _call(type, url, data) {
       var _this = this;

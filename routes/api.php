@@ -13,4 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+/* Amendments */
 Route::get('/amendments/list', 'AmendmentsController@list');
+
+/* Vote */
+Route::get('/vote/current', 'VoteController@current');

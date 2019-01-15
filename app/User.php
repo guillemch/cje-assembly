@@ -28,6 +28,14 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Get the votes cast by a user
+     */
+    public function votes()
+    {
+        return $this->hasMany('App\Vote');
+    }
+
     public function authorizeRoles($roles)
     {
         return $this->hasRole($roles) ||
