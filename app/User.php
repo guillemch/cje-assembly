@@ -27,4 +27,25 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function authorizeRoles($roles)
+    {
+        return $this->hasRole($roles) ||
+            abort(401, 'This action is unauthorized.');
+    }
+
+    /**
+     * Check role
+     * @param mixed $role
+     */
+    public function hasRole($role)
+    {
+        if ($this->role === 'admin') return true;
+
+        if (is_array($role)) {
+            return in_array($this->role, $role);
+        }
+
+        return $this->role === $role;
+    }
 }
