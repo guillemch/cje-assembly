@@ -1,6 +1,7 @@
 <template>
     <b-card>
         <h6 slot="header" class="mb-0">Archivo de votaciones</h6>
+        <b-btn @click="refreshVotes">Refresh</b-btn>
         <b-table striped hover :items="amendments" :fields="fields">
             <template slot="actions" slot-scope="data">
                 <b-btn size="sm" @click="openVote(data)">Abrir</b-btn>
@@ -76,6 +77,10 @@
                 }).catch(error => {
                     alert('Error al cargar las enmiendas. Refresca el navegador');
                 });
+            },
+
+            refreshVotes () {
+                this.$socket.emit('vote_opened', true);
             }
         }
     }

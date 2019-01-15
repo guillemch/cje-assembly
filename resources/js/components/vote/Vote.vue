@@ -32,6 +32,12 @@
             this.getCurrentVote();
         },
 
+        sockets: {
+            refresh_vote: function (data) {
+                this.getCurrentVote();
+            }
+        },
+
         methods: {
             getCurrentVote () {
                 this.loading = true;
