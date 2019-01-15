@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Amendment;
 use App\Vote;
+use App\Http\Requests\VoteRequest;
 
 class VoteController extends Controller
 {
@@ -31,12 +32,36 @@ class VoteController extends Controller
     /**
      * Get the currently open vote
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Response
      */
-    public function current()
+    public function current(Request $request)
     {
         $current = Amendment::current()->get();
 
+        $current->load(['votes' => function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+            $query->limit(1);
+        }]);
+
         return response()->json($current);
+    }
+
+    /**
+     * Submit a vote
+     *
+     * @return Response
+     */
+    public function submit(VoteRequest $request)
+    {
+        $vote = new Vote();
+        $vote->amendment_id = $request->input('amendment_id');
+        $vote->user_id = $request->user()->id;
+        $vote->vote_for = $request->input('selected');
+        
+        $submitted = $vote->save();
+
+        return response()->json([
+            'submitted' => $submitted
+        ]);
     }
 }

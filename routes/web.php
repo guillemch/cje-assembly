@@ -16,4 +16,4 @@ Auth::routes(['register' => false]);
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/vote', 'VoteController@index')->name('vote');
 Route::get('/amendments', 'AmendmentsController@index')->name('amendments');
-
+Route::get('/screen', 'ScreenController@index')->name('screen');

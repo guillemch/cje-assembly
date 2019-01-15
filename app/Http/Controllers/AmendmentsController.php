@@ -32,7 +32,7 @@ class AmendmentsController extends Controller
     /**
      * List all amendments
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Response
      */
     public function list(Request $request)
     {

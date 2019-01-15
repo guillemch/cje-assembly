@@ -1,10 +1,13 @@
 <template>
     <div>
         <b-btn @click="getCurrentVote">Refresh</b-btn>
+        <div v-if="loading">
+            Loading...
+        </div>
         <div v-if="!vote || vote.length === 0">
             No vote open...
         </div>
-        <vote-open :vote="vote" v-else />
+        <vote-open :vote="vote" @refresh="getCurrentVote" v-else />
     </div>
 </template>
 

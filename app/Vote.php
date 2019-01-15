@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
+    public function __construct(array $attributes = array())
+    {
+        parent::__construct($attributes);
+    
+        $this->ip = \Request::ip();
+        $this->user_agent = \Request::header('User-Agent');
+    }
+
     /**
      * Get the user that cast the vote
      */

@@ -18,3 +18,4 @@ Route::get('/amendments/list', 'AmendmentsController@list');
 
 /* Vote */
 Route::get('/vote/current', 'VoteController@current');
+Route::post('/vote/submit', 'VoteController@submit');

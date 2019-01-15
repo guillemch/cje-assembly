@@ -70,4 +70,9 @@ return [
      */
     'throw_exceptions' => true,
 
+    /*
+     * Secret
+     */
+    'secret' => env('GOOGLE_2FA_SECRET')
+
 ];

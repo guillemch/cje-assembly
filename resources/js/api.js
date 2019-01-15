@@ -11,6 +11,10 @@ export default class API {
         return this._call('get', 'vote/current');
     }
 
+    submitVote (data) {
+        return this._call('post', 'vote/submit', data);
+    }
+
     _call (type, url, data) {
         return new Promise((resolve, reject) => {
             axios[type](this.baseUrl + url, data).then(response => {

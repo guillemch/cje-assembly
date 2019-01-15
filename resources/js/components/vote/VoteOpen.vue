@@ -2,26 +2,25 @@
     <div>
         <h2>{{ vote.name }}</h2>
 
-        <div v-if="!vote.submitted">
-            <vote-options :vote="vote" @selected="selectOption" />
-        </div>
-        <div v-else>
-            Tu voto se ha emitido
-        </div>
-        <vote-confirm :vote="vote" :selected="selected" @submit="submitVote" />
+        <vote-options :vote="vote" @selected="selectOption" v-if="!vote.votes.length > 0" />
+        <vote-submitted :vote="vote" v-else />
+
+        <vote-confirm :vote="vote" :selected="selected" @submitted="voteSubmitted" />
     </div>
 </template>
 
 <script>
     import VoteOptions from './VoteOptions';
     import VoteConfirm from './VoteConfirm';
+    import VoteSubmitted from './VoteSubmitted';
 
     export default {
         name: 'vote-open',
 
         components: {
             VoteOptions,
-            VoteConfirm
+            VoteConfirm,
+            VoteSubmitted
         },
 
         props: {
@@ -40,8 +39,8 @@
                 this.$root.$emit('bv::show::modal', 'voteConfirm', '#option' + option);
             },
 
-            submitVote (password) {
-                alert(password);
+            voteSubmitted () {
+                this.$emit('refresh');
             }
         }
     }
