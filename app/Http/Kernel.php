@@ -35,10 +35,12 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            'jwt'
         ],
 
         'api' => [
-            'throttle:60,1',
+            'auth.api',
+            'throttle:10000,1',
             'bindings',
         ],
     ];
@@ -52,6 +54,8 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth.api' => \App\Http\Middleware\AuthenticateJWT::class,
+        'jwt' => \App\Http\Middleware\GenerateJWT::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,

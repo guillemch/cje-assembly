@@ -5,9 +5,14 @@ window.API = new API();
 
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
+import Amendments from './components/amendments/Amendments';
 
 Vue.use(BootstrapVue);
 
 const app = new Vue({
-    el: '#app'
+    components: {
+        Amendments
+    },
+
+    el: '#amendments'
 });

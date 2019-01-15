@@ -22,7 +22,7 @@ class CreateAmendmentsTable extends Migration
             $table->string('option_4')->nullable();
             $table->string('option_5')->nullable();
             $table->boolean('open');
-            $table->datetime('closed_at');
+            $table->datetime('closed_at')->nullable();
             $table->timestamps();
         });
     }

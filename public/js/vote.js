@@ -6928,11 +6928,49 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return API; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var API = function API() {
-  _classCallCheck(this, API);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  this.baseUrl = '/api/';
-};
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var API =
+/*#__PURE__*/
+function () {
+  function API() {
+    _classCallCheck(this, API);
+
+    this.baseUrl = '/api/';
+  }
+
+  _createClass(API, [{
+    key: "getAmendments",
+    value: function getAmendments() {
+      return this._call('get', 'amendments/list');
+    }
+  }, {
+    key: "_call",
+    value: function _call(type, url, data) {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        axios[type](_this.baseUrl + url, data).then(function (response) {
+          resolve(response.data);
+        }).catch(function (error) {
+          if (error.response.status === 500) {
+            reject({
+              'error': ['Error del sistema']
+            });
+          } else if (error.response.data.hasOwnProperty('errors')) {
+            reject(error.response.data.errors);
+          } else {
+            reject(error.response.data);
+          }
+        });
+      });
+    }
+  }]);
+
+  return API;
+}();
 
 
 
@@ -6958,12 +6996,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * a simple convenience so we don't have to attach every token manually.
  */
 
-var token = document.head.querySelector('meta[name="csrf-token"]');
+var CsrfToken = document.head.querySelector('meta[name="csrf-token"]');
+var JwtToken = document.head.querySelector('meta[name="jwt-token"]');
 
-if (token) {
-  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+if (CsrfToken) {
+  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = CsrfToken.content;
 } else {
-  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+  console.error('CSRF Token not set');
+}
+
+if (JwtToken) {
+  window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + JwtToken.content;
+} else {
+  console.error('JWT Token not set');
 }
 
 /***/ }),
