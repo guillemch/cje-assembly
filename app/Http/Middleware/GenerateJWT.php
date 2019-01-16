@@ -19,7 +19,9 @@ class GenerateJWT
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        $jwtToken = JWTAuth::fromUser($user);
+
+        $jwtToken = ($user) ? JWTAuth::fromUser($user) : '';
+
         View::share('jwtToken', $jwtToken);
         return $next($request);
     }
