@@ -20,13 +20,25 @@ class VoteController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the vote app
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
         return view('vote.index');
+    }
+
+    /**
+     * Show a user's votes
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function archive(Request $request)
+    {
+        $votes = $request->user()->votes()->with('amendment')->orderBy('id', 'desc')->get();
+
+        return view('vote.archive', compact('votes'));
     }
 
     /**
