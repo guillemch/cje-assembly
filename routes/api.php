@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
+/* Credentials */
+Route::get('/credentials/list', 'CredentialsController@list');
+
 /* Amendments */
 Route::get('/amendments/list', 'AmendmentsController@list');
 
