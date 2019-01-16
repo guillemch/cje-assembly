@@ -12,7 +12,7 @@ import Amendments from './components/amendments/Amendments';
 Vue.use(BootstrapVue);
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: 'http://localhost:3000/'
+    connection: process.env.MIX_SOCKETIO_SERVER
 }));
 
 const app = new Vue({
