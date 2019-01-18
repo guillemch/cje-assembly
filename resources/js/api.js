@@ -3,6 +3,14 @@ export default class API {
       this.baseUrl = '/api/';
     }
 
+    getUsers () {
+        return this._call('get', 'credentials/list');
+    }
+
+    checkIn (user_id) {
+        return this._call('post', 'credentials/checkin', { user_id });
+    }
+
     getAmendments () {
         return this._call('get', 'amendments/list');
     }

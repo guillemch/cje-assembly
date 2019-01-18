@@ -43,4 +43,14 @@ class CredentialsController extends Controller
         return response()->json($users);
     }
 
+    /**
+     * Check an attendee in
+     *
+     * @return Response
+     */
+    public function checkIn(Request $request)
+    {
+        return response()->json();
+    }
+
 }

@@ -9,30 +9,32 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                @if(Auth::user()->hasRole('credential_manager'))
+                @if(Auth::user())
+                    @if(Auth::user()->hasRole('credential_manager'))
+                        <li>
+                            <a class="nav-link {{ Route::currentRouteName() === 'credentials' ? 'active' : '' }}" href="{{ route('credentials') }}">
+                                <i class="far fa-id-card-alt"></i> Acreditaciones
+                            </a>
+                        </li>
+                    @endif
+                    @if(Auth::user()->hasRole('vote_manager'))
+                        <li>
+                            <a class="nav-link {{ Route::currentRouteName() === 'amendments' ? 'active' : '' }}" href="{{ route('amendments') }}">
+                                <i class="far fa-archive"></i> Votaciones
+                            </a>
+                        </li>
+                    @endif
                     <li>
-                        <a class="nav-link {{ Route::currentRouteName() === 'credentials' ? 'active' : '' }}" href="{{ route('credentials') }}">
-                            <i class="far fa-id-card-alt"></i> Acreditaciones
+                        <a class="nav-link {{ Route::currentRouteName() === 'vote' ? 'active' : '' }}" href="{{ route('vote') }}">
+                            <i class="far fa-hand-paper"></i> Votar
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link {{ Route::currentRouteName() === 'my-votes' ? 'active' : '' }}" href="{{ route('my-votes') }}">
+                            <i class="far fa-box-ballot"></i> Mis votos
                         </a>
                     </li>
                 @endif
-                @if(Auth::user()->hasRole('vote_manager'))
-                    <li>
-                        <a class="nav-link {{ Route::currentRouteName() === 'amendments' ? 'active' : '' }}" href="{{ route('amendments') }}">
-                            <i class="far fa-archive"></i> Votaciones
-                        </a>
-                    </li>
-                @endif
-                <li>
-                    <a class="nav-link {{ Route::currentRouteName() === 'vote' ? 'active' : '' }}" href="{{ route('vote') }}">
-                        <i class="far fa-hand-paper"></i> Votar
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link {{ Route::currentRouteName() === 'my-votes' ? 'active' : '' }}" href="{{ route('my-votes') }}">
-                        <i class="far fa-box-ballot"></i> Mis votos
-                    </a>
-                </li>
             </ul>
 
             <ul class="navbar-nav ml-auto">

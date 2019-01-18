@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 /* Credentials */
 Route::get('/credentials/list', 'CredentialsController@list');
+Route::post('/credentials/checkin', 'CredentialsController@checkIn');
 
 /* Amendments */
 Route::get('/amendments/list', 'AmendmentsController@list');
