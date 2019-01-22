@@ -1,21 +1,33 @@
 <template>
-    <b-card>
-        <h6 slot="header" class="mb-0">Miembros</h6>
-        
-        <b-table striped hover :items="users" :fields="fields">
-            <template slot="actions" slot-scope="data">
-                <div>
-                    <b-btn v-if="data.item.credentials_pickedup_at === null" size="sm" variant="success" @click="checkIn(data.item.id)">Acreditar</b-btn>
-                    <span v-else>
-                        <i class="far fa-check" /> {{ data.item.credentials_pickedup_at }}
-                    </span>
-                </div>
-            </template>
-        </b-table>
-    </b-card>
+    <div>
+        <div class="errors">
+            <div v-for="(error, i) in errors" class="error" :key="i">
+                {{ error }}
+            </div>
+        </div>
+        <b-card>
+            <h6 slot="header" class="mb-0">Miembros</h6>
+            
+            <b-table striped hover :items="users" :fields="fields">
+                <template slot="actions" slot-scope="data">
+                    <div>
+                        <b-btn v-if="data.item.credentials_pickedup_at === null" size="sm" variant="success" @click="checkIn(data.item)">Acreditar</b-btn>
+                        <span v-else>
+                            <i class="far fa-check" /> {{ data.item.credentials_pickedup_at | dateFilter }}
+                            <b-btn size="sm" variant="outline-danger" @click="undo(data.item)" class="float-right">
+                                <i class="far fa-times" />
+                            </b-btn>
+                        </span>
+                    </div>
+                </template>
+            </b-table>
+        </b-card>
+    </div>
 </template>
 
 <script>
+    import dateFormat from 'dateformat';
+
     export default {
         name: 'users-list',
 
@@ -52,6 +64,13 @@
             this.getUsers();
         },
 
+        filters: {
+            dateFilter: function (value) {
+                const date = new Date(value);
+                return dateFormat(date, "d/m HH:MM");
+            }
+        },
+
         methods: {
             getUsers () {
                 this.loading = true;
@@ -63,12 +82,28 @@
                 }).then(() => this.loading = false);
             },
 
-            checkIn (userId) {
-                API.checkIn(userId).then(response => {
+            checkIn (user) {
+                this.loading = true;
+
+                API.checkIn(user.id).then(response => {
                     this.getUsers();
                 })
-                .catch(errors => this.errors = errors)
+                .catch(error => this.errors.push(error))
                 .then(() => this.loading = false);
+            },
+
+            undo (user) {
+                this.loading = true;
+
+                const confirmed = confirm('Confirma que quieres anular la acreditación de ' + user.name + ' ' + user.last_name);
+
+                if (confirmed) {
+                    API.checkIn(user.id, true).then(response => {
+                        this.getUsers();
+                    })
+                    .catch(errors => this.errors = errors)
+                    .then(() => this.loading = false);
+                }
             }
         }
     }

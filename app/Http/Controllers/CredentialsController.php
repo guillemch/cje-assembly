@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Notifications\UserPickedupCredentials;
+use Carbon\Carbon;
 
 class CredentialsController extends Controller
 {
@@ -50,7 +52,34 @@ class CredentialsController extends Controller
      */
     public function checkIn(Request $request)
     {
-        return response()->json();
+        $request->user()->authorizeRoles('credential_manager');
+
+        $userId = $request->input('user_id');
+        $undo = $request->input('undo');
+
+        $user = User::find($userId);
+
+        if (!$user) {
+            return response()->json(['error' => 'No se ha encontrado el usuario especificado', 'checkedin' => false], 422);
+        }
+
+        if ($undo) {
+            $user->credentials_pickedup_at = null;
+            $user->save();
+
+            return response()->json(['user' => $user, 'checkedin' => false]);
+        }
+
+        if ($user->credentials_pickedup_at !== null) {
+            $message = $user->name . ' ' . $user->last_name . ' ya se ha acreditado';
+            return response()->json(['error' => $message, 'user' => $user], 422);
+        }
+
+        $user->credentials_pickedup_at = Carbon::now();
+        $user->save();
+        $user->notify(new UserPickedupCredentials);
+
+        return response()->json(['user' => $user, 'checkedin' => true]);
     }
 
 }

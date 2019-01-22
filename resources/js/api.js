@@ -7,8 +7,8 @@ export default class API {
         return this._call('get', 'credentials/list');
     }
 
-    checkIn (user_id) {
-        return this._call('post', 'credentials/checkin', { user_id });
+    checkIn (user_id, undo) {
+        return this._call('post', 'credentials/checkin', { user_id, undo });
     }
 
     getAmendments () {
