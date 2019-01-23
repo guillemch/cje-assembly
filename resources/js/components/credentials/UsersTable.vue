@@ -1,8 +1,11 @@
 <template>
     <div>
         <div class="errors">
-            <div v-for="(error, i) in errors" class="error" :key="i">
-                {{ error }}
+            <div v-for="(error, i) in errors" class="error alert alert-warning" :key="i">
+                <i class="far fa-exclamation-triangle" /> {{ error.error }}
+                <a href="#" @click.prevent="errors = null" class="float-right alert-link">
+                    <i class="far fa-times" />
+                </a>
             </div>
         </div>
         <b-card>
@@ -30,6 +33,20 @@
 
 <script>
     import dateFormat from 'dateformat';
+
+    dateFormat.i18n = {
+        dayNames: [
+            'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb',
+            'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
+        ],
+        monthNames: [
+            'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        timeNames: [
+            'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
+        ]
+    };
 
     export default {
         name: 'users-list',
@@ -71,7 +88,7 @@
         filters: {
             dateFilter: function (value) {
                 const date = new Date(value);
-                return dateFormat(date, "d/m HH:MM");
+                return dateFormat(date, "ddd HH:MM");
             }
         },
 
@@ -91,9 +108,10 @@
 
                 API.checkIn(user.id).then(response => {
                     this.getUsers();
-                })
-                .catch(error => this.errors.push(error))
-                .then(() => this.loadingUser = false);
+                }).catch((error) => {
+                    this.errors.push(error);
+                    this.getUsers();
+                }).then(() => this.loadingUser = false);
             },
 
             undo (user) {
@@ -112,3 +130,13 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .errors {
+        position: fixed;
+        top: 56px;
+        left: 0;
+        right: 0;
+        z-index: 10;
+    }
+</style>
