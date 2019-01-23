@@ -75,9 +75,12 @@ class CredentialsController extends Controller
             return response()->json(['error' => $message, 'user' => $user], 422);
         }
 
+        $newPassword = str_random(8);
         $user->credentials_pickedup_at = Carbon::now();
+        $user->password = bcrypt($newPassword);
         $user->save();
-        $user->notify(new UserPickedupCredentials);
+
+        $user->notify(new UserPickedupCredentials($newPassword));
 
         return response()->json(['user' => $user, 'checkedin' => true]);
     }

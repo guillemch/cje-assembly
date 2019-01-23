@@ -7,15 +7,18 @@
         </div>
         <b-card>
             <h6 slot="header" class="mb-0">Miembros</h6>
-            
+
             <b-table striped hover :items="users" :fields="fields">
                 <template slot="actions" slot-scope="data">
                     <div>
-                        <b-btn v-if="data.item.credentials_pickedup_at === null" size="sm" variant="success" @click="checkIn(data.item)">Acreditar</b-btn>
+                        <b-btn v-if="data.item.credentials_pickedup_at === null" size="sm" variant="success" @click="checkIn(data.item)" :disabled="loadingUser === data.item.id">
+                            <i :class="{ 'far': true, 'fa-check': loadingUser !== data.item.id, 'fa-spinner-third fa-spin': loadingUser === data.item.id }" />
+                            Acreditar
+                        </b-btn>
                         <span v-else>
                             <i class="far fa-check" /> {{ data.item.credentials_pickedup_at | dateFilter }}
-                            <b-btn size="sm" variant="outline-danger" @click="undo(data.item)" class="float-right">
-                                <i class="far fa-times" />
+                            <b-btn size="sm" variant="outline-danger" @click="undo(data.item)" class="float-right" :disabled="loadingUser === data.item.id">
+                                <i :class="{ 'far': true, 'fa-times': loadingUser !== data.item.id, 'fa-spinner-third fa-spin': loadingUser === data.item.id }" />
                             </b-btn>
                         </span>
                     </div>
@@ -56,7 +59,8 @@
                 ],
                 users: [],
                 errors: [],
-                loading: false
+                loading: false,
+                loadingUser: false
             }
         },
 
@@ -83,17 +87,17 @@
             },
 
             checkIn (user) {
-                this.loading = true;
+                this.loadingUser = user.id;
 
                 API.checkIn(user.id).then(response => {
                     this.getUsers();
                 })
                 .catch(error => this.errors.push(error))
-                .then(() => this.loading = false);
+                .then(() => this.loadingUser = false);
             },
 
             undo (user) {
-                this.loading = true;
+                this.loadingUser = user.id;
 
                 const confirmed = confirm('Confirma que quieres anular la acreditación de ' + user.name + ' ' + user.last_name);
 
@@ -102,7 +106,7 @@
                         this.getUsers();
                     })
                     .catch(errors => this.errors = errors)
-                    .then(() => this.loading = false);
+                    .then(() => this.loadingUser = false);
                 }
             }
         }

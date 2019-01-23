@@ -29,9 +29,8 @@ export default class API {
                 resolve(response.data);
             }).catch(error => {
                 if (error.response.status === 500) {
-                    reject({
-                        'error': ['Error del sistema']
-                    });
+                    alert('La sesión ha caducado. Refresca el navegador y vuelve a iniciar sesión.');
+                    location.reload();
                 } else if (error.response.data.hasOwnProperty('errors')){
                     reject(error.response.data.errors);
                 } else {
