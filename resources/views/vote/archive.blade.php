@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container vote-archive">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <h1><i class="far fa-box-ballot"></i> Mis votos</h1>
+            <h2><i class="far fa-box-ballot"></i> Mis votos</h2>
             <div class="card">
                 <div class="card-body p-0">
                     <table class="table table-my-votes">

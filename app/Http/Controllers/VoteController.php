@@ -24,8 +24,12 @@ class VoteController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->user()->credentials_pickedup_at === null) {
+            abort(403, 'Tienes que acreditarte para poder votar');
+        }
+
         return view('vote.index');
     }
 

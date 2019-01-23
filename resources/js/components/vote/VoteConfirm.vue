@@ -7,13 +7,18 @@
         <div slot="modal-title">
             Confirma tu voto
         </div>
-        <div :class="['selected', 'selected--' + optionClass]">
-            {{ selectedOption }}
+        <div class="vote d-flex">
+            <div>
+                <i class="hand far fa-hand-paper" />
+            </div>
+            <div :class="['selected-vote', 'bg-' + optionClass]">
+                {{ selectedOption }}
+            </div>
         </div>
-        <div slot="modal-footer">
+        <div slot="modal-footer" class="footer text-center">
             <b-form @submit.prevent="submitVote">
                 <label for="password">
-                    Para confirmar tu voto introduce el código que se muestra en pantalla
+                    <small class="text-muted">Para confirmar tu voto introduce el código que se muestra en pantalla</small>
                 </label>
                 <b-input-group>
                     <b-form-input
@@ -33,7 +38,7 @@
                             type="submit"
                             variant="primary"
                             size="lg">
-                            OK
+                            <i class="far fa-check" />
                         </b-btn>
                     </b-input-group-append>
                 </b-input-group>
@@ -120,3 +125,53 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    @import '~bootstrap/scss/functions';
+    @import '~bootstrap/scss/variables';
+    @import '~bootstrap/scss/mixins';
+
+    .vote {
+        font-size: 2rem;
+        justify-content: center;
+        align-items: center;
+        padding-top: 8vh;
+        padding-bottom: 8vh;
+    }
+
+    .hand {
+        color: $gray-700;
+        animation: thumbs-up 1s ease;
+    }
+
+    .selected-vote {
+        color: $white;
+        margin-left: 1rem;
+        padding: .25rem 2rem;
+        text-align: center;
+        border-radius: .25rem;
+    }
+
+    .footer {
+        width: 100%;
+
+        label {
+            line-height: 1;
+        }
+    }
+
+    @keyframes thumbs-up {
+        0% {
+            opacity: 0;
+            transform: translate(0, 75px) rotate(20deg);
+        }
+        50% {
+            opacity: 1;
+            transform: translate(0, -50px) rotate(-20deg);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(0, 0) rotate(0);
+        }
+    }
+</style>
