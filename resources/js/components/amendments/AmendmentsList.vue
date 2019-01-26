@@ -1,10 +1,15 @@
 <template>
     <b-card>
         <h6 slot="header" class="mb-0">Archivo de votaciones</h6>
-        <b-btn @click="refreshVotes">Refresh</b-btn>
         <b-table striped hover :items="amendments" :fields="fields">
             <template slot="actions" slot-scope="data">
-                <b-btn size="sm" @click="openVote(data)">Abrir</b-btn>
+                <b-btn size="sm" @click="openVote(data.item)" v-if="data.item.open === 0" :disable="loadingAmendment === data.item.id">
+                    <i :class="{ 'far': true, 'fa-hand-paper': loadingAmendment !== data.item.id, 'fa-spinner-third fa-spin': loadingAmendment === data.item.id }" />
+                    Abrir
+                </b-btn>
+                <span v-else>
+                    Votación actual
+                </span>
             </template>
         </b-table>
     </b-card>
@@ -43,12 +48,12 @@
                         sortable: true
                     },
                     {
-                        key: 'option_2',
+                        key: 'option_4',
                         label: '4',
                         sortable: true
                     },
                     {
-                        key: 'option_2',
+                        key: 'option_5',
                         label: '5',
                         sortable: true
                     },
@@ -62,7 +67,8 @@
                         label: 'Acciones'
                     }
                 ],
-                amendments: []
+                amendments: [],
+                loadingAmendment: false
             }
         },
 
@@ -80,8 +86,15 @@
                 });
             },
 
-            refreshVotes () {
-                this.$socket.emit('vote_opened', true);
+            openVote (amendment) {
+                this.loadingAmendment = amendment.id;
+                API.openAmendment(amendment.id).then(response => {
+                    this.$socket.emit('vote_opened', true);
+                    this.getAmendments();
+                }).catch(error => {
+                    alert('Error al cargar las enmiendas. Refresca el navegador');
+                }).then(() => this.loadingAmendment = false);
+                
             }
         }
     }

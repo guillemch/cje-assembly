@@ -83,4 +83,18 @@ class AmendmentsController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    /**
+     * Open a vote
+     *
+     * @return Response
+     */
+    public function open(Amendment $amendment, Request $request)
+    {
+        $request->user()->authorizeRoles('vote_manager');
+
+        $amendment->openVote();
+
+        return response()->json(['success' => true]);
+    }
 }
