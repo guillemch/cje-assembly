@@ -21,7 +21,7 @@ class CreateAmendmentsTable extends Migration
             $table->string('option_3')->nullable();
             $table->string('option_4')->nullable();
             $table->string('option_5')->nullable();
-            $table->boolean('open');
+            $table->boolean('open')->default(0);
             $table->datetime('closed_at')->nullable();
             $table->timestamps();
         });

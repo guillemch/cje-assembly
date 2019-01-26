@@ -15,6 +15,10 @@ export default class API {
         return this._call('get', 'amendments/list');
     }
 
+    submitAmendment (data) {
+        return this._call('post', 'amendments/new', data);
+    }
+
     getCurrentVote () {
         return this._call('get', 'vote/current');
     }

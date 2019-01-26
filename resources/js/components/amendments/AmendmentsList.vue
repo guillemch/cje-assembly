@@ -68,6 +68,7 @@
 
         mounted () {
             this.getAmendments();
+            this.$root.$on('refreshAmendments', this.getAmendments);
         },
 
         methods: {

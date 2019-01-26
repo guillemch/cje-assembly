@@ -19,6 +19,7 @@ Route::post('/credentials/checkin', 'CredentialsController@checkIn');
 
 /* Amendments */
 Route::get('/amendments/list', 'AmendmentsController@list');
+Route::post('/amendments/new', 'AmendmentsController@new');
 
 /* Vote */
 Route::get('/vote/current', 'VoteController@current');
