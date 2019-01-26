@@ -21,6 +21,11 @@ class Amendment extends Model
         $this->open = 1;
         return $this->save();
     }
+    
+    public function closeVote()
+    {
+        $this->closeAllVotes();
+    }
 
     public function scopeCurrent($query)
     {

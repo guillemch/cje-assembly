@@ -97,4 +97,18 @@ class AmendmentsController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    /**
+     * Close a vote
+     *
+     * @return Response
+     */
+    public function close(Amendment $amendment, Request $request)
+    {
+        $request->user()->authorizeRoles('vote_manager');
+
+        $amendment->closeVote();
+
+        return response()->json(['success' => true]);
+    }
 }

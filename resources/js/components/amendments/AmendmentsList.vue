@@ -77,6 +77,12 @@
             this.$root.$on('refreshAmendments', this.getAmendments);
         },
 
+        sockets: {
+            refresh_vote: function (data) {
+                this.getAmendments();
+            }
+        },
+
         methods: {
             getAmendments () {
                 API.getAmendments().then(response => {
@@ -90,7 +96,6 @@
                 this.loadingAmendment = amendment.id;
                 API.openAmendment(amendment.id).then(response => {
                     this.$socket.emit('vote_opened', true);
-                    this.getAmendments();
                 }).catch(error => {
                     alert('Error al cargar las enmiendas. Refresca el navegador');
                 }).then(() => this.loadingAmendment = false);

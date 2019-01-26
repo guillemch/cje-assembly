@@ -2,6 +2,7 @@
     <div>
         <b-btn id="AmendmentsNewButton" variant="warning" v-b-modal.AmendmentsNew>Nueva votación</b-btn>
         <hr />
+        <amendments-open />
         <amendments-list />
         <b-modal id="AmendmentsNew" title="Nueva votación" @shown="$refs.amendmentsForm.autofocus()" :hide-footer="true">
             <amendments-new ref="amendmentsForm" />
@@ -11,6 +12,7 @@
 
 <script>
     import AmendmentsList from './AmendmentsList';
+    import AmendmentsOpen from './AmendmentsOpen';
     import AmendmentsNew from './AmendmentsNew';
 
     export default {
@@ -18,6 +20,7 @@
 
         components: {
             AmendmentsList,
+            AmendmentsOpen,
             AmendmentsNew
         }
     }
