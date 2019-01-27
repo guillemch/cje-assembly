@@ -1,7 +1,18 @@
 <template>
     <div class="amendment-results row">
+        <div class="col-12">
+            <h4 class="mb-4">
+                {{ amendment.name }}
+                <span class="float-right">
+                    {{ amendment.results.total }}
+                </span>    
+            </h4>
+        </div>
         <div class="col-md-6">
             <table class="table table-groups table-sm">
+                <tr>
+                    <th colspan="2">Grupos</th>
+                </tr>
                 <tr v-for="(group, id) in amendment.results.by_group" :key="'group' + id">
                     <td width="50%">{{ group.acronym }}</td>
                     <td width="50%">
@@ -16,6 +27,12 @@
         </div>
         <div class="col-md-6">
             <table class="table table-results">
+                <tr>
+                    <th></th>
+                    <th class="text-right">A</th>
+                    <th class="text-right">B</th>
+                    <th colspan="2"></th>
+                </tr>
                 <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option-' + option, (amendment.results.winner === option) ? 'winner' : '']">
                     <template v-if="amendment['option_' + option]">
                         <td width="40%">{{ amendment['option_' + option] }}</td>
@@ -50,6 +67,20 @@
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
+
+    .table {
+        th {
+            padding: .25rem .75rem;
+            font-size: .8rem;
+            color: $gray-600;
+            border-top: 0;
+            font-weight: normal;
+        }
+
+        &-sm th {
+            padding: .25rem .3rem;
+        }
+    }
 
     .table-results {
         .winner {

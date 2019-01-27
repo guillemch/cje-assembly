@@ -11,6 +11,11 @@ use Carbon\Carbon;
 class Amendment extends Model
 {
     /**
+     * Append results to the amendment
+     */
+    protected $appends = ['results'];
+
+    /**
      * Get the votes for the amendment.
      */
     public function votes()
@@ -37,6 +42,10 @@ class Amendment extends Model
     {
         return $query->where('open', '=', 1)
                      ->limit(1);
+    }
+
+    public function getResultsAttribute() {
+        return Self::results($this->attributes['id'], false);
     }
 
     public static function results($id, $full = false)
@@ -87,7 +96,8 @@ class Amendment extends Model
             'weighted' => $weighted,
             'absolute' => $absolute,
             'winner' => $winner,
-            'by_group' => $byGroup
+            'by_group' => $byGroup,
+            'total' => array_sum($absolute[1]) + array_sum($absolute[2])
         ];
 
         if ($full) {

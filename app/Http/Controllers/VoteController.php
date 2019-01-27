@@ -56,14 +56,6 @@ class VoteController extends Controller
 
         if (!$current) return response()->json(['no_open_vote' => true]);
 
-        if ($request->input('with_results')) {
-            $request->user()->authorizeRoles('vote_manager');
-
-            $current->results = Amendment::results($current->id);
-
-            return response()->json($current);
-        }
-
         $current->load(['votes' => function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
             $query->limit(1);

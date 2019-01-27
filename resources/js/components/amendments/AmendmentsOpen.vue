@@ -11,8 +11,6 @@
             </div>
           </h6>
 
-          <h4 class="mb-2">{{ amendment.name }}</h4>
-
           <amendments-results :amendment="amendment" />
         </b-card>
     </div>
@@ -88,7 +86,7 @@
         }
 
         &__close-button {
-          margin: -.8rem 1rem;
+          margin: -.9rem 0 -.8rem 1rem;
         }
     }
 </style>
