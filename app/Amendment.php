@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Vote;
 use App\Group;
+use Carbon\Carbon;
 
 class Amendment extends Model
 {
@@ -21,12 +22,15 @@ class Amendment extends Model
     {
         $this->closeAllVotes();
         $this->open = 1;
+        $this->opened_at = Carbon::now();
         return $this->save();
     }
     
     public function closeVote()
     {
         $this->closeAllVotes();
+        $this->closed_at = Carbon::now();
+        return $this->save();
     }
 
     public function scopeCurrent($query)
