@@ -1,6 +1,9 @@
 <template>
     <div>
-        <b-btn id="AmendmentsNewButton" variant="warning" v-b-modal.AmendmentsNew>Nueva votación</b-btn>
+        <b-btn id="AmendmentsNewButton" variant="warning" v-b-modal.AmendmentsNew>
+            <i class="far fa-plus" />
+            Nueva votación
+        </b-btn>
         <hr />
         <amendments-open />
         <amendments-list />

@@ -74,7 +74,10 @@ class Amendment extends Model
             $weighted[$option] = round($weightedResultType1 + $weightedResultType2, 2);
         }
 
-        $winner = array_search(max($weighted), $weighted);
+        $sortedByScore = $weighted;
+        rsort($sortedByScore);
+        $highestScore = ($sortedByScore[0] === $sortedByScore[1]) ? 0 : $sortedByScore[0];
+        $winner = ($highestScore > 0) ? array_search($highestScore, $weighted) : 0;
 
         $results = [
             'weighted' => $weighted,

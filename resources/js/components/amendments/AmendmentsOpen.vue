@@ -11,7 +11,7 @@
             </div>
           </h6>
 
-          <h4>{{ amendment.name }}</h4>
+          <h4 class="mb-2">{{ amendment.name }}</h4>
 
           <amendments-results :amendment="amendment" />
         </b-card>
@@ -32,25 +32,33 @@
 
         data () {
             return {
-                amendment: null
+                amendment: null,
+                interval: null
             }
         },
 
         mounted () {
-            this.getCurrentVote();
+            this.getCurrentVote(true);
         },
 
         sockets: {
             refresh_vote: function (data) {
-                this.getCurrentVote();
+                this.getCurrentVote(true);
             }
         },
 
         methods: {
-            getCurrentVote () {
+            getCurrentVote (refresh) {
                 API.getCurrentVote({ with_results: true }).then(vote => {
-                    this.amendment = (vote.hasOwnProperty('name')) ? vote : null;
+                    if (vote.hasOwnProperty('name')) {
+                        this.amendment = vote;
+                        if (refresh) this.interval = setInterval(() => { this.getCurrentVote(false) }, 2000);
+                    } else {
+                        this.amendment = null;
+                        this.interval = null;
+                    }
                 }).catch(error => {
+                    console.log(error);
                     alert('Error');
                 });
             },
@@ -58,7 +66,8 @@
             close () {
                 API.closeAmendment(this.amendment.id).then(response => {
                     this.$socket.emit('vote_opened', false);
-                    this.amendment = {};
+                    this.amendment = null;
+                    this.interval = null;
                 }).catch(error => {
                     alert('Error');
                 });

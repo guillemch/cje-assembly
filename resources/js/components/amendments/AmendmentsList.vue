@@ -96,6 +96,7 @@
                 this.loadingAmendment = amendment.id;
                 API.openAmendment(amendment.id).then(response => {
                     this.$socket.emit('vote_opened', true);
+                    window.scrollTo(0, 0);
                 }).catch(error => {
                     alert('Error al cargar las enmiendas. Refresca el navegador');
                 }).then(() => this.loadingAmendment = false);
