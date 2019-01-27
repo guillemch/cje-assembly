@@ -8,6 +8,10 @@
     export default {
         name: 'amendments-timer',
 
+        props: {
+            opened: String
+        },
+
         data () {
             return {
                 startTime: Date.now(),
@@ -17,6 +21,7 @@
         },
 
         mounted () {
+            this.startTime = new Date(this.opened);
             this.interval = setInterval(this.updateCurrentTime, 1000);
         },
 
@@ -35,7 +40,7 @@
                 return this.minutes + ':' + this.seconds;
             },
             milliseconds: function() {
-                return this.currentTime - this.$data.startTime;
+                return this.currentTime - this.startTime;
             },
             minutes: function() {
                 const lapsed = this.milliseconds;
@@ -55,8 +60,8 @@
             },
 
             reset () {
-                this.$data.startTime = Date.now();
-                this.$data.currentTime = Date.now();
+                this.startTime = Date.now();
+                this.currentTime = Date.now();
             }
         }
     }

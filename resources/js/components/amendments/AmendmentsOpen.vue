@@ -4,7 +4,7 @@
           <h6 slot="header" class="amendments-open__header mb-0">
             <i class="far fa-sync fa-spin mr-2"></i> Votación abierta
             <div class="float-right">
-                <amendments-timer />
+                <amendments-timer :opened="amendment.opened_at" />
                 <b-btn variant="danger" class="amendments-open__close-button" @click="close">
                     <i class="far fa-hand-paper" /> Cerrar
                 </b-btn>
