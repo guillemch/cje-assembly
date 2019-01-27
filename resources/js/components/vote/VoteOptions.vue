@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="vote__options">
         <b-btn id="option1" variant="success" :block="true" size="lg" @click="$emit('selected', 1)">
             {{ vote.option_1 }}
         </b-btn>
@@ -31,3 +31,20 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    @import '~bootstrap/scss/functions';
+    @import '~bootstrap/scss/variables';
+    @import '~bootstrap/scss/mixins';
+    
+    .vote__options {
+        max-width: 400px;
+        margin: 0 auto;
+
+        .btn {
+            padding: 1rem 0;
+            margin: 1.5rem 0;
+            font-size: 1.5rem;
+        }
+    }
+</style>
