@@ -11,9 +11,9 @@
                         <colgroup>
                             <col width="100" />
                             <col />
-                            <col width="100" />
-                            <col width="100" />
-                            <col width="100" />
+                            <col width="150" />
+                            <col width="150" />
+                            <col width="75" />
                         </colgroup>
                         <thead>
                             <tr>
@@ -35,11 +35,17 @@
                             <tr>
                                 <td>{{ date('H:i', strtotime($vote->created_at)) }}</td>
                                 <td>{{ $vote->amendment->name }}</td>
-                                <td class="option-{{ $vote->vote_for }}">
-                                    {{ $vote->amendment['option_' . $vote->vote_for] }}
+                                <td>
+                                    <div class="option-tag option-tag-{{ $vote->vote_for }}">
+                                        {{ $vote->amendment['option_' . $vote->vote_for] }}
+                                    </div>
                                 </td>
-                                <td class="option-">
-                                    Result
+                                <td>
+                                    @if($vote->amendment->results['winner'])
+                                        <div class="option-tag option-tag-{{ $vote->amendment->results['winner'] }}">
+                                            {{ $vote->amendment['option_' . $vote->amendment->results['winner']] }}
+                                        </div>
+                                    @endif
                                 </td>
                                 <td>
                                     +

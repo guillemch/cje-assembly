@@ -1,14 +1,26 @@
 <template>
     <b-card>
         <h6 slot="header" class="mb-0">Archivo de votaciones</h6>
-        <b-table striped hover :items="amendments" :fields="fields">
+        <b-table hover :items="amendments" :fields="fields">
+            <template slot="table-colgroup">
+                <col width="5%" />
+                <col />
+                <col width="15%" />
+                <col width="10%" />
+                <col width="10%" />
+            </template>
+            <template slot="winner" slot-scope="data">
+                <div :class="'option-tag option-tag-' + data.item.results.winner" v-if="data.item.results.winner">
+                    {{ data.item['option_' + data.item.results.winner] }}
+                </div>
+            </template>
             <template slot="actions" slot-scope="data">
                 <b-btn size="sm" @click="openVote(data.item)" v-if="data.item.open === 0" :disable="loadingAmendment === data.item.id">
                     <i :class="{ 'far': true, 'fa-hand-paper': loadingAmendment !== data.item.id, 'fa-spinner-third fa-spin': loadingAmendment === data.item.id }" />
                     Abrir
                 </b-btn>
                 <span v-else>
-                    Votación actual
+                    Abierta
                 </span>
             </template>
         </b-table>
@@ -16,6 +28,22 @@
 </template>
 
 <script>
+    import dateFormat from 'dateformat';
+
+    dateFormat.i18n = {
+        dayNames: [
+            'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb',
+            'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
+        ],
+        monthNames: [
+            'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        ],
+        timeNames: [
+            'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
+        ]
+    };
+
     export default {
         name: 'amendments-list',
 
@@ -33,33 +61,14 @@
                         sortable: true
                     },
                     {
-                        key: 'option_1',
-                        label: '1/Sí',
-                        sortable: true
-                    },
-                    {
-                        key: 'option_2',
-                        label: '2/No',
-                        sortable: true
-                    },
-                    {
-                        key: 'option_3',
-                        label: '3/Abs',
-                        sortable: true
-                    },
-                    {
-                        key: 'option_4',
-                        label: '4',
-                        sortable: true
-                    },
-                    {
-                        key: 'option_5',
-                        label: '5',
+                        key: 'winner',
+                        label: 'Resultado',
                         sortable: true
                     },
                     {
                         key: 'closed_at',
                         label: 'Cerrada',
+                        formatter: 'dateTime',
                         sortable: true
                     },
                     {
@@ -101,6 +110,12 @@
                     alert('Error al cargar las enmiendas. Refresca el navegador');
                 }).then(() => this.loadingAmendment = false);
                 
+            },
+            
+            dateTime (value) {
+                if (!value) return '';
+                const date = new Date(value);
+                return dateFormat(date, "ddd HH:MM");
             }
         }
     }

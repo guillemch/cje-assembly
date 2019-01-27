@@ -6,11 +6,44 @@
   }
 
   .table {
-    .row-date {
+    .row-date {
       th {
-        padding: .25rem .75rem;
+        padding: .5rem .75rem;
         font-size: .8rem;
       }
     }
   }
+}
+
+.option-tag {
+  font-weight: bold;
+  padding: .25rem .5rem;
+  background: $gray-200;
+  border-radius: .5rem;
+  text-align: center;
+}
+
+.option-tag-1 {
+  background: lighten($green, 40%);
+  color: darken($green, 20%);
+}
+
+.option-tag-2 {
+  background: lighten($red, 35%);
+  color: darken($red, 20%);
+}
+
+.option-tag-3 {
+  background: lighten($orange, 40%);
+  color: darken($orange, 20%);
+}
+
+.option-tag-4 {
+  background: lighten($blue, 40%);
+  color: darken($blue, 20%);
+}
+
+.option-tag-5 {
+  background: $gray-400;
+  color: $gray-800;
 }
