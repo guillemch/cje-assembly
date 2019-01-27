@@ -3,8 +3,8 @@
         <div class="col-md-6">
             <table class="table table-groups table-sm">
                 <tr v-for="(group, id) in amendment.results.by_group" :key="'group' + id">
-                    <td>{{ group.acronym }}</td>
-                    <td>
+                    <td width="50%">{{ group.acronym }}</td>
+                    <td width="50%">
                         <ul class="group-votes">
                             <li v-for="(votes, vote_for) in group.votes" :key="'group' + id + vote_for">
                                 <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
@@ -78,8 +78,8 @@
             }
 
             &.option-5 td {
-                background: lighten($black, 40%);
-                color: darken($black, 20%);
+                background: $gray-400;
+                color: $gray-800;
             }
         }
     }

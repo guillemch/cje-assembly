@@ -45,3 +45,10 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    h2 {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+</style>
