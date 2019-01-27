@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top navbar-cje">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top navbar-cje">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
             Asamblea CJE

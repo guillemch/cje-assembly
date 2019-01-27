@@ -1,5 +1,5 @@
 <template>
-    <div class="amendments-open" v-if="open">
+    <div class="amendments-open" v-if="amendment">
         <b-card class="mb-4" header-bg-variant="success" border-variant="success">
           <h6 slot="header" class="amendments-open__header mb-0">
             <i class="far fa-sync fa-spin mr-2"></i> Votación abierta
@@ -10,26 +10,29 @@
                 </b-btn>
             </div>
           </h6>
-          {{ amendment.name }}
+
+          <h4>{{ amendment.name }}</h4>
+
+          <amendments-results :amendment="amendment" />
         </b-card>
     </div>
 </template>
 
 <script>
     import AmendmentsTimer from './AmendmentsTimer';
+    import AmendmentsResults from './AmendmentsResults';
 
     export default {
         name: 'amendments-open',
 
         components: {
-            AmendmentsTimer
+            AmendmentsTimer,
+            AmendmentsResults
         },
 
         data () {
             return {
-                open: false,
-                amendment: {},
-                votes: []
+                amendment: null
             }
         },
 
@@ -45,9 +48,8 @@
 
         methods: {
             getCurrentVote () {
-                API.getCurrentVote().then(response => {
-                    this.open = (response.length > 0) ? true : false;
-                    this.amendment = (response.length > 0) ? response[0] : {};
+                API.getCurrentVote({ with_results: true }).then(vote => {
+                    this.amendment = (vote.hasOwnProperty('name')) ? vote : null;
                 }).catch(error => {
                     alert('Error');
                 });
@@ -56,9 +58,7 @@
             close () {
                 API.closeAmendment(this.amendment.id).then(response => {
                     this.$socket.emit('vote_opened', false);
-                    this.open = false;
                     this.amendment = {};
-                    this.votes = [];
                 }).catch(error => {
                     alert('Error');
                 });

@@ -42,8 +42,8 @@
             getCurrentVote () {
                 this.loading = true;
 
-                API.getCurrentVote().then(response => {
-                    this.vote = response[0];
+                API.getCurrentVote().then(vote => {
+                    this.vote = (vote.hasOwnProperty('name')) ? vote : null;
                 }).catch(error => {
                     alert('Error');
                 }).then(() => this.loading = false);
