@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Google2FA;
+use App\Amendment;
 
 class ScreenController extends Controller
 {
@@ -26,10 +27,28 @@ class ScreenController extends Controller
     {
         $request->user()->authorizeRoles('admin');
 
-        $secret = config('google2fa.secret');
+        return view('screen.index');
+    }
 
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function screen(Request $request)
+    {
+        $request->user()->authorizeRoles('admin');
+
+        /* Time-based password */
+        $secret = config('google2fa.secret');
         $code = Google2FA::getCurrentOtp($secret);
 
-        return view('screen', compact('code'));
+        /* Vote */
+        $vote = Amendment::current()->first();
+
+        return response()->json([
+            'vote' => $vote,
+            'code' => $code
+        ]);
     }
 }

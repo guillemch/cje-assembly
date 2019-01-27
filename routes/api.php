@@ -27,3 +27,6 @@ Route::post('/amendments/{amendment}/close', 'AmendmentsController@close');
 /* Vote */
 Route::get('/vote/current', 'VoteController@current');
 Route::post('/vote/submit', 'VoteController@submit');
+
+/* Screen */
+Route::get('/screen', 'ScreenController@screen');

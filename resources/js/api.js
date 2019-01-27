@@ -31,6 +31,10 @@ export default class API {
         return this._call('get', 'vote/current', { params });
     }
 
+    getScreen () {
+        return this._call('get', 'screen');
+    }
+
     fullResults (id) {
         return this._call('get', 'amendments/' + id);
     }
