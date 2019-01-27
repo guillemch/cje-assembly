@@ -7,7 +7,7 @@
             <h2><i class="far fa-box-ballot"></i> Mis votos</h2>
             <div class="card">
                 <div class="card-body p-0">
-                    <table class="table table-my-votes">
+                    <table class="table table-my-votes table-responsive-sm">
                         <colgroup>
                             <col width="100" />
                             <col />

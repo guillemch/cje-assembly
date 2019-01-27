@@ -5,8 +5,8 @@
             <template slot="table-colgroup">
                 <col width="75" />
                 <col />
+                <col width="150" />
                 <col width="140" />
-                <col width="100" />
                 <col width="140" />
             </template>
             <template slot="winner" slot-scope="data">

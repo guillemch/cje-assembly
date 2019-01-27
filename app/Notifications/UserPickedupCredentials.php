@@ -11,6 +11,14 @@ class UserPickedupCredentials extends Notification
 {
     use Queueable;
 
+    /**
+     * The user
+     */
+    protected $user;
+
+    /**
+     * The new password
+     */
     protected $newPassword;
 
     /**
@@ -18,8 +26,9 @@ class UserPickedupCredentials extends Notification
      *
      * @return void
      */
-    public function __construct($newPassword)
+    public function __construct($user, $newPassword)
     {
+        $this->user = $user;
         $this->newPassword = $newPassword;
     }
 
@@ -43,9 +52,8 @@ class UserPickedupCredentials extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line("Tu contraseña es {$this->newPassword}")
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->subject('[CJE] Tu contraseña para acceder a las votaciones')
+                    ->markdown('mail.password', ['name' => $this->user->name, 'password' => $this->newPassword]);
     }
 
     /**

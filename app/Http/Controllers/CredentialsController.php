@@ -80,7 +80,7 @@ class CredentialsController extends Controller
         $user->password = bcrypt($newPassword);
         $user->save();
 
-        $user->notify(new UserPickedupCredentials($newPassword));
+        $user->notify(new UserPickedupCredentials($user, $newPassword));
 
         return response()->json(['user' => $user, 'checkedin' => true]);
     }

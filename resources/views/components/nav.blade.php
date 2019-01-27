@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top navbar-cje">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            Asamblea CJE
+            <img src="{{ asset('/img/logo.jpg') }}" alt="CJE" class="cje-logo" /> Asamblea CJE
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>

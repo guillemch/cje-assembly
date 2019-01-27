@@ -23,10 +23,14 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->user()->role === 'attendant') {
-            return redirect()->route('vote');
+        if ($request->user()->role === 'credential_manager' || $request->user()->role === 'admin') {
+            return redirect()->route('credentials');
         }
 
-        return view('home');
+        if ($request->user()->role === 'vote_manager') {
+            return redirect()->route('amendments');
+        }
+
+        return redirect()->route('vote');
     }
 }
