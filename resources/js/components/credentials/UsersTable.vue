@@ -9,9 +9,21 @@
             </div>
         </div>
         <b-card>
-            <h6 slot="header" class="mb-0">Miembros</h6>
+            <h6 slot="header" class="mb-0 d-flex align-items-center">
+                Miembros
+                <div class="ml-auto">
+                    <input type="search" placeholder="Filtrar..." v-model="filter" class="form-control" />
+                </div>
+            </h6>
 
-            <b-table striped hover :items="users" :fields="fields">
+            <b-table striped hover :items="users" :fields="fields" :filter="filter">
+                <template slot="table-colgroup">
+                    <col width="75" />
+                    <col />
+                    <col width="180" />
+                    <col width="240" />
+                    <col width="200" />
+                </template>
                 <template slot="actions" slot-scope="data">
                     <div>
                         <b-btn v-if="data.item.credentials_pickedup_at === null" size="sm" variant="success" @click="checkIn(data.item)" :disabled="loadingUser === data.item.id">
@@ -65,6 +77,11 @@
                         sortable: true
                     },
                     {
+                        key: 'id_card',
+                        label: 'DNI',
+                        sortable: true
+                    },
+                    {
                         key: 'email',
                         label: 'E-mail',
                         sortable: true
@@ -74,6 +91,7 @@
                         label: 'Acciones'
                     }
                 ],
+                filter: '',
                 users: [],
                 errors: [],
                 loading: false,
