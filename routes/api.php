@@ -20,6 +20,7 @@ Route::post('/credentials/checkin', 'CredentialsController@checkIn');
 /* Amendments */
 Route::get('/amendments/list', 'AmendmentsController@list');
 Route::post('/amendments/new', 'AmendmentsController@new');
+Route::get('/amendments/{amendment}', 'AmendmentsController@getAmendment');
 Route::post('/amendments/{amendment}/open', 'AmendmentsController@open');
 Route::post('/amendments/{amendment}/close', 'AmendmentsController@close');
 

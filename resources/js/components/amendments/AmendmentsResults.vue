@@ -1,5 +1,5 @@
 <template>
-    <div class="amendment-results row">
+    <div class="amendment-results row" v-if="amendment">
         <div class="col-12">
             <h4 class="mb-4">
                 {{ amendment.name }}
@@ -44,6 +44,24 @@
                 </tr>
             </table>
         </div>
+        <div class="col-12" v-if="fullList">
+            <div v-if="amendment.votes.length > 0">
+                <h5>Votos</h5>
+
+                <table class="table table-sm table-striped">
+                    <tr v-for="vote in amendment.votes" :key="vote.id">
+                        <td>
+                            {{ vote.type == 1 ? 'A' : 'B' }}
+                        </td>
+                        <td>{{ vote.acronym }}</td>
+                        <td>{{ vote.last_name + ', ' + vote.name }}</td>
+                        <td class="text-right">
+                            {{ amendment['option_' + vote.vote_for] }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -52,7 +70,8 @@
         name: 'amendments-results',
 
         props: {
-          amendment: Object
+          amendment: Object,
+          fullList: Boolean
         },
 
         filters: {

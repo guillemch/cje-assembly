@@ -3,11 +3,11 @@
         <h6 slot="header" class="mb-0">Archivo de votaciones</h6>
         <b-table hover :items="amendments" :fields="fields">
             <template slot="table-colgroup">
-                <col width="5%" />
+                <col width="75" />
                 <col />
-                <col width="15%" />
-                <col width="10%" />
-                <col width="10%" />
+                <col width="140" />
+                <col width="100" />
+                <col width="140" />
             </template>
             <template slot="winner" slot-scope="data">
                 <div :class="'option-tag option-tag-' + data.item.results.winner" v-if="data.item.results.winner">
@@ -15,20 +15,28 @@
                 </div>
             </template>
             <template slot="actions" slot-scope="data">
-                <b-btn size="sm" @click="openVote(data.item)" v-if="data.item.open === 0" :disable="loadingAmendment === data.item.id">
-                    <i :class="{ 'far': true, 'fa-hand-paper': loadingAmendment !== data.item.id, 'fa-spinner-third fa-spin': loadingAmendment === data.item.id }" />
-                    Abrir
-                </b-btn>
-                <span v-else>
-                    Abierta
-                </span>
+                <div class="text-right">
+                    <b-btn size="sm" @click="openVote(data.item)" v-if="data.item.open === 0" :disable="loadingAmendment === data.item.id">
+                        <i :class="{ 'far': true, 'fa-hand-paper': loadingAmendment !== data.item.id, 'fa-spinner-third fa-spin': loadingAmendment === data.item.id }" />
+                        Abrir
+                    </b-btn>
+                    <b-btn size="sm" variant="success" disabled v-else>
+                        Abierta
+                    </b-btn>
+                    <b-btn variant="primary" size="sm" @click="fullResults(data.item.id)">+</b-btn>
+                </div>
             </template>
         </b-table>
+
+        <b-modal id="AmendmentsDetails" ref="AmendmentsDetails" title="Resultados" size="lg" ok-only ok-title="Cerrar">
+            <amendments-results :amendment="selectedAmendment" full-list />
+        </b-modal>
     </b-card>
 </template>
 
 <script>
     import dateFormat from 'dateformat';
+    import AmendmentsResults from './AmendmentsResults';
 
     dateFormat.i18n = {
         dayNames: [
@@ -47,6 +55,10 @@
     export default {
         name: 'amendments-list',
 
+        components: {
+            AmendmentsResults
+        },
+
         data () {
             return {
                 fields: [
@@ -63,7 +75,7 @@
                     {
                         key: 'winner',
                         label: 'Resultado',
-                        sortable: true
+                        sortable: false
                     },
                     {
                         key: 'closed_at',
@@ -73,10 +85,11 @@
                     },
                     {
                         key: 'actions',
-                        label: 'Acciones'
+                        label: ''
                     }
                 ],
                 amendments: [],
+                selectedAmendment: null,
                 loadingAmendment: false
             }
         },
@@ -110,6 +123,13 @@
                     alert('Error al cargar las enmiendas. Refresca el navegador');
                 }).then(() => this.loadingAmendment = false);
                 
+            },
+
+            fullResults (amendmentId) {
+                API.fullResults(amendmentId).then(response => {
+                    this.selectedAmendment = response;
+                    this.$refs.AmendmentsDetails.show();
+                });
             },
             
             dateTime (value) {

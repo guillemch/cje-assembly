@@ -47,8 +47,8 @@
                                         </div>
                                     @endif
                                 </td>
-                                <td>
-                                    +
+                                <td class="text-right">
+                                    <a href="#" class="btn btn-sm">+</a>
                                 </td>
                             </tr>
                             @php
