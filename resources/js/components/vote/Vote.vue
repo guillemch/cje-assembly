@@ -14,14 +14,16 @@
             </div>
         </div>
         <div v-if="loading" class="vote__placeholder">
-            <i class="fas fa-sync fa-spin"></i>
+            <i class="far fa-sync fa-spin"></i>
             Cargando...
         </div>
-        <div v-if="!vote || vote.length === 0" class="vote__placeholder">
-            <i class="far fa-mug-hot" />
-            Ninguna votación en curso
+        <div v-else>
+            <div v-if="!vote || vote.length === 0" class="vote__placeholder">
+                <i class="far fa-mug-hot" />
+                Ninguna votación en curso
+            </div>
+            <vote-open v-else :vote="vote" @refresh="getCurrentVote" />
         </div>
-        <vote-open :vote="vote" @refresh="getCurrentVote" v-else />
     </div>
 </template>
 

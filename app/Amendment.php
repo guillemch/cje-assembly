@@ -61,7 +61,6 @@ class Amendment extends Model
         $byGroup = [];
         foreach($groups as $group) {
             $byGroup[$group->id] = [
-                'name' => $group->name,
                 'acronym' => $group->acronym,
                 'votes' => $options
             ];

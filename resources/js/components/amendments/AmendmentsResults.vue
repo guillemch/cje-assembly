@@ -35,8 +35,8 @@
             <table class="table table-results">
                 <tr>
                     <th></th>
-                    <th class="text-right">A</th>
-                    <th class="text-right">B</th>
+                    <th class="text-right">C</th>
+                    <th class="text-right">E</th>
                     <th colspan="2"></th>
                 </tr>
                 <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option-' + option, (amendment.results.winner === option) ? 'winner' : '']">
@@ -57,7 +57,7 @@
                 <table class="table table-sm table-striped">
                     <tr v-for="vote in amendment.votes" :key="vote.id">
                         <td>
-                            {{ vote.type == 1 ? 'A' : 'B' }}
+                            {{ vote.type == 1 ? 'C' : 'E' }}
                         </td>
                         <td>{{ vote.acronym }}</td>
                         <td>{{ vote.last_name + ', ' + vote.name }}</td>
@@ -147,11 +147,11 @@
 
     .group {
         display: inline-block;
-        background: $gray-100;
+        background: $gray-200;
         margin: 0 .5rem .5rem 0;
-        padding: .5rem;
+        padding: .3rem .5rem;
         list-style: none;
-        border-radius: .5rem;
+        border-radius: .25rem;
         font-size: .9rem;
 
         ul {
