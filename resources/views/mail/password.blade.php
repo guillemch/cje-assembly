@@ -1,7 +1,9 @@
 @component('mail::message')
 **Hola {{ $name }},**
 
-Tu contraseña para acceder a las votaciones es
+Te has acreditado correctamente en la **Asamblea del Consejo de la Juventud de España**.
+
+A continuación te adjuntamos tu contraseña para acceder a las votaciones:
 
 -------------------
 # {{ $password }}
@@ -15,12 +17,8 @@ Entrar
 {{-- Subcopy --}}
 @component('mail::subcopy')
 @lang(
-    "Si tienes problemas para hacer clic en el botón \":actionText\", copia y pega la siguiente dirección\n".
-    'en el navegador: [:actionURL](:actionURL)',
-    [
-        'actionText' => $actionText,
-        'actionURL' => $actionUrl,
-    ]
+    "También puedes acceder entrando a [:actionURL](:actionURL)",
+    ['actionURL' => url('/'),]
 )
 @endcomponent
 @endcomponent
