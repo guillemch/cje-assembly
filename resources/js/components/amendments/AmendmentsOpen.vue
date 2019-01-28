@@ -53,10 +53,10 @@
                         if (refresh) this.interval = setInterval(() => { this.getCurrentVote(false) }, 2000);
                     } else {
                         this.amendment = null;
+                        clearInterval(this.interval);
                         this.interval = null;
                     }
                 }).catch(error => {
-                    console.log(error);
                     alert('Error');
                 });
             },
@@ -65,6 +65,7 @@
                 API.closeAmendment(this.amendment.id).then(response => {
                     this.$socket.emit('vote_opened', false);
                     this.amendment = null;
+                    clearInterval(this.interval);
                     this.interval = null;
                 }).catch(error => {
                     alert('Error');

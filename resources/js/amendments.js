@@ -11,7 +11,7 @@ import Amendments from './components/amendments/Amendments';
 
 Vue.use(BootstrapVue);
 Vue.use(new VueSocketIO({
-    debug: true,
+    debug: process.env.NODE_ENV === 'development',
     connection: process.env.MIX_SOCKETIO_SERVER
 }));
 
