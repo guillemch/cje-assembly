@@ -11,16 +11,22 @@
         <div class="col-md-6">
             <table class="table table-groups table-sm">
                 <tr>
-                    <th colspan="2">Grupos</th>
+                    <th colspan="2">Entidades</th>
                 </tr>
-                <tr v-for="(group, id) in amendment.results.by_group" :key="'group' + id">
-                    <td width="50%">{{ group.acronym }}</td>
-                    <td width="50%">
-                        <ul class="group-votes">
-                            <li v-for="(votes, vote_for) in group.votes" :key="'group' + id + vote_for">
-                                <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
-                            </li>
-                        </ul>
+                <tr>
+                    <td>
+                        <div class="group-votes">
+                            <div v-for="(group, id) in amendment.results.by_group" :key="'group' + id" class="group">
+                                <span class="group-acronym">{{ group.acronym }}</span>
+                                <span class="group-votes">
+                                    <ul class="group-votes">
+                                        <li v-for="(votes, vote_for) in group.votes" :key="'group' + id + vote_for">
+                                            <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
+                                        </li>
+                                    </ul>
+                                </span>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -133,11 +139,24 @@
             }
         }
     }
-
     .group-votes {
-        margin: 0;
-        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: stretch;
+    }
+
+    .group {
+        display: inline-block;
+        background: $gray-100;
+        margin: 0 .5rem .5rem 0;
+        padding: .5rem;
         list-style: none;
+        border-radius: .5rem;
+        font-size: .9rem;
+
+        ul {
+            margin: 0;
+        }
 
         li {
             display: inline-block;
@@ -147,7 +166,7 @@
                 color: $white;
                 border-radius: 10px;
                 padding: .25rem .5rem;
-                font-size: .8rem;
+                font-size: .7rem;
                 margin-right: .25rem;
 
                 &.option-1 {
