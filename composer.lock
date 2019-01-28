@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11074f52662014b4ee1b85b63993f260",
+    "content-hash": "f54d9ae71ead9a53f0b3879ae0b0f1d3",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -636,6 +636,60 @@
             ],
             "description": "Highlight PHP code in terminal",
             "time": "2018-09-29T18:48:56+00:00"
+        },
+        {
+            "name": "laravel-notification-channels/messagebird",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-notification-channels/messagebird.git",
+                "reference": "d6e0385653f0c66911c8a6b597a802846813f0c9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-notification-channels/messagebird/zipball/d6e0385653f0c66911c8a6b597a802846813f0c9",
+                "reference": "d6e0385653f0c66911c8a6b597a802846813f0c9",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "illuminate/notifications": "^5.3",
+                "illuminate/queue": "^5.3",
+                "illuminate/support": "^5.1|^5.2|^5.3",
+                "php": ">=5.6.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.5",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NotificationChannels\\Messagebird\\MessagebirdServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NotificationChannels\\Messagebird\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Peter Steenbergen",
+                    "email": "psteenbergen@gmail.com",
+                    "homepage": "http://3ws.nl",
+                    "role": "Developer"
+                }
+            ],
+            "description": "MessageBird notification channel for Laravel 5.3",
+            "homepage": "https://github.com/laravel-notification-channels/messagebird",
+            "time": "2018-06-06T07:53:34+00:00"
         },
         {
             "name": "laravel/framework",

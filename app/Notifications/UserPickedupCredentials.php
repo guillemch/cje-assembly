@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use NotificationChannels\Messagebird\MessagebirdChannel;
+use NotificationChannels\Messagebird\MessagebirdMessage;
 
 class UserPickedupCredentials extends Notification
 {
@@ -40,7 +42,7 @@ class UserPickedupCredentials extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', MessagebirdChannel::class];
     }
 
     /**
@@ -54,6 +56,21 @@ class UserPickedupCredentials extends Notification
         return (new MailMessage)
                     ->subject('[CJE] Tu contraseña para acceder a las votaciones')
                     ->markdown('mail.password', ['name' => $this->user->name, 'password' => $this->newPassword]);
+    }
+
+    /**
+     * Get the SMS representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMessageBird($notifiable)
+    {
+        if (!$this->user->phone) return;
+
+        return (new MessagebirdMessage)
+                    ->setRecipients($this->user->phone)
+                    ->setBody("Bienvenido a la Asamblea CJE\n\nTus claves de acceso para las votaciones son:\nUsuario: {$this->user->email}\nContraseña: {$this->newPassword}\n\nPuedes acceder en https://votacionescje.org");
     }
 
     /**
