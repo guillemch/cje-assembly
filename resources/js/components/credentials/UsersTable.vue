@@ -19,11 +19,13 @@
             <b-table striped hover :items="users" :fields="fields" :filter="filter">
                 <template slot="table-colgroup">
                     <col width="75" />
-                    <col width="75" />
                     <col />
-                    <col width="180" />
+                    <col width="140" />
                     <col width="240" />
                     <col width="200" />
+                </template>
+                <template slot="name" slot-scope="data">
+                    {{ data.item.name + ' ' + data.item.last_name }}
                 </template>
                 <template slot="actions" slot-scope="data">
                     <div>
@@ -67,11 +69,6 @@
         data () {
             return {
                 fields: [
-                    {
-                        key: 'id',
-                        label: '#',
-                        sortable: true
-                    },
                     {
                         key: 'group.acronym',
                         label: 'Entidad',
