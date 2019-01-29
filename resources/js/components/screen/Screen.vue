@@ -46,7 +46,8 @@
                 screen: { vote: null, code: null, just_closed: false, next_alert: false },
                 loading: false,
                 connected: false,
-                interval: null
+                interval: null,
+                ticking: false
             };
         },
 
@@ -69,16 +70,26 @@
         methods: {
             getScreen (allowRefresh) {
                 this.loading = true;
-                console.log('Getting...');
+                console.log('Getting vote...');
                 API.getScreen().then(screen => {
                     this.screen = screen;
                     this.loading = false;
 
-                    if (this.screen.vote) {
-                      if (allowRefresh) this.interval = setInterval(() => { this.getScreen(false); }, 1000);
+                    if (this.screen.vote && !this.screen.just_closed) {
+                        console.log('Has vote');
+                        if (allowRefresh && !this.ticking) {
+                            console.log('Set refresh');
+                            this.ticking = true;
+                            this.interval = setInterval(() => { this.getScreen(false); }, 1000);
+                        }
                     } else {
-                      clearInterval(this.interval);
-                      this.interval = null;
+                        console.log('Resetting interval');
+                        clearInterval(this.interval);
+                        this.interval = null;
+                        this.ticking = false;
+                        if (this.screen.just_closed) {
+                            setTimeout(() => { this.getScreen(false); }, 35000);
+                        }
                     }
                 });
             }
