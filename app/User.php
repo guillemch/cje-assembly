@@ -29,6 +29,14 @@ class User extends Authenticatable
     ];
 
     /**
+     * Get the group that the user belongs to
+     */
+    public function group()
+    {
+        return $this->belongsTo('App\Group');
+    }
+
+    /**
      * Get the votes cast by a user
      */
     public function votes()

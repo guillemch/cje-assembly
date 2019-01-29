@@ -42,7 +42,7 @@ class UserPickedupCredentials extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', MessagebirdChannel::class];
+        return ($this->user->phone) ? ['mail', MessagebirdChannel::class] : ['mail'];
     }
 
     /**
@@ -66,8 +66,6 @@ class UserPickedupCredentials extends Notification
      */
     public function toMessageBird($notifiable)
     {
-        if (!$this->user->phone) return;
-
         return (new MessagebirdMessage)
                     ->setRecipients($this->user->phone)
                     ->setBody("Bienvenido a la Asamblea CJE\n\nTus claves de acceso para las votaciones son:\nUsuario: {$this->user->email}\nContraseña: {$this->newPassword}\n\nPuedes acceder en https://votacionescje.org");

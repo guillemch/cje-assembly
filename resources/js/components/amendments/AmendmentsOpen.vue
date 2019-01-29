@@ -5,8 +5,10 @@
             <i class="far fa-sync fa-spin mr-2"></i> Votación abierta
             <div class="float-right">
                 <amendments-timer :opened="amendment.opened_at" />
-                <b-btn variant="danger" class="amendments-open__close-button" @click="close">
-                    <i class="far fa-hand-paper" /> Cerrar
+                <b-btn variant="danger" class="amendments-open__close-button" @click="close" :disabled="closing">
+                    <i class="far fa-hand-paper" v-if="!closing" />
+                    <i class="fa-spinner-third fa-spin" v-else />
+                    Cerrar
                 </b-btn>
             </div>
           </h6>
@@ -31,7 +33,8 @@
         data () {
             return {
                 amendment: null,
-                interval: null
+                interval: null,
+                closing: false
             }
         },
 
@@ -62,6 +65,8 @@
             },
 
             close () {
+                this.closing = true;
+
                 API.closeAmendment(this.amendment.id).then(response => {
                     this.$socket.emit('vote_opened', false);
                     this.amendment = null;
@@ -69,7 +74,7 @@
                     this.interval = null;
                 }).catch(error => {
                     alert('Error');
-                });
+                }).then(() => this.closing = false);
             }
         }
     }

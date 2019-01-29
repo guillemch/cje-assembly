@@ -40,7 +40,7 @@ class CredentialsController extends Controller
     {
         $request->user()->authorizeRoles('credential_manager');
         
-        $users = User::all();
+        $users = User::where('role', '!=', 'admin')->with('group')->get();
 
         return response()->json($users);
     }

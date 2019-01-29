@@ -19,6 +19,7 @@
             <b-table striped hover :items="users" :fields="fields" :filter="filter">
                 <template slot="table-colgroup">
                     <col width="75" />
+                    <col width="75" />
                     <col />
                     <col width="180" />
                     <col width="240" />
@@ -69,6 +70,11 @@
                     {
                         key: 'id',
                         label: '#',
+                        sortable: true
+                    },
+                    {
+                        key: 'group.acronym',
+                        label: 'Entidad',
                         sortable: true
                     },
                     {
