@@ -84,7 +84,7 @@
             }
 
             &.option-5 td {
-                background: $gray-400;
+                background: $gray-800;
             }
         }
     }
