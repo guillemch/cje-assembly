@@ -10,7 +10,7 @@
         </div>
         <b-card>
             <h6 slot="header" class="mb-0 d-flex align-items-center">
-                Miembros
+                <strong class="mr-2">Miembros</strong> ({{ users.length }} total, {{ checkedin }} acreditados)
                 <div class="ml-auto">
                     <input type="search" placeholder="Filtrar..." v-model="filter" class="form-control" />
                 </div>
@@ -110,6 +110,12 @@
             dateFilter: function (value) {
                 const date = new Date(value);
                 return dateFormat(date, "ddd HH:MM");
+            }
+        },
+
+        computed: {
+            checkedin: function () {
+                return this.users.filter(user => user.credentials_pickedup_at !== null).length;
             }
         },
 
