@@ -43,7 +43,7 @@
 
     .table {
         th {
-            padding: .5vw 1;
+            padding: .5vw 1vw;
             font-size: 1.5vw;
             color: $gray-600;
             border-top: 0;

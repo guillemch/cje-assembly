@@ -4,15 +4,15 @@
             <div v-for="group in groups" :key="group.title" class="col-6">
                 <table class="table table-groups table-sm">
                     <tr>
-                        <th colspan="2">{{ group.title }} <span v-if="compensate == group.type">(Voto compensado)</span></th>
+                        <th colspan="2">{{ group.title }} <span v-if="compensate == group.type" class="compensated">(voto compensado)</span></th>
                     </tr>
                     <tr>
                         <td>
                             <div class="group-votes">
                                 <div v-for="(entity, id) in group.groups" :key="'group' + id" class="group">
                                     <span class="group-acronym">{{ entity.acronym }}</span>
-                                    <span class="group-votes">
-                                        <ul class="group-votes">
+                                    <span class="group-dots">
+                                        <ul>
                                             <li v-for="(votes, vote_for) in entity.votes" :key="'group' + id + vote_for">
                                                 <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
                                             </li>
@@ -108,10 +108,13 @@
         padding: .5vw .75vw;
         list-style: none;
         border-radius: .5vw;
-        font-size: 1.25vw;
+        font-size: 1.5vw;
 
         ul {
+            display: inline;
             margin: 0;
+            padding: 0;
+            margin-left: 5px;
         }
 
         li {
@@ -122,8 +125,8 @@
                 color: $white;
                 border-radius: 3vw;
                 padding: .25vw .75vw;
-                font-size: 1vw;
-                margin-right: .5vw;
+                font-size: 1.25vw;
+                margin-right: .25vw;
 
                 &.option-1 {
                     background: $green;
@@ -146,6 +149,10 @@
                 }
             }
         }
+    }
+
+    .compensated {
+        float: right;
     }
 
 </style>

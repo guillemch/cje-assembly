@@ -1,30 +1,33 @@
 <template>
-    <div class="screen">
-        <transition name="fade">
-            <div v-if="screen.vote !== null" class="vote-info">
-                <div class="vote-name">
-                    <h1>{{ screen.vote.name }}</h1>
-                </div>
-                <div class="vote-results">
-                    <screen-results :amendment="screen.vote" />
-                    <screen-results-by-group :results="screen.vote.results.by_group" :compensate="screen.vote.results.compensate" />
-                </div>
-                <transition name="fade">
-                    <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.vote !== null && !screen.just_closed">
-                        <screen-code :code="screen.code" />
+    <fullscreen ref="fullscreen" @change="fullscreenChange" class="fullscreen">
+        <div class="screen">
+            <transition name="fade">
+                <div v-if="screen.vote !== null" class="vote-info">
+                    <div class="vote-name">
+                        <h1>{{ screen.vote.name }}</h1>
                     </div>
-                    <div v-else-if="screen.just_closed" class="just-closed-bar">
-                        <i class="far fa-lock-alt" /> Cerrada
+                    <div class="vote-results">
+                        <screen-results :amendment="screen.vote" />
+                        <screen-results-by-group :results="screen.vote.results.by_group" :compensate="screen.vote.results.compensate" />
                     </div>
-                </transition>
-            </div>
-        </transition>
-        <div :class="{ 'screen-logo': true, 'vote-active': screen.vote !== null }">
-            <div class="logo">
-                <img src="../../../images/logo.jpg" alt="Logo" />
+                    <transition name="fade">
+                        <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.vote !== null && !screen.just_closed">
+                            <screen-code :code="screen.code" />
+                        </div>
+                        <div v-else-if="screen.just_closed" class="just-closed-bar">
+                            <i class="far fa-lock-alt" /> Cerrada
+                        </div>
+                    </transition>
+                </div>
+            </transition>
+            <div :class="{ 'screen-logo': true, 'vote-active': screen.vote !== null }">
+                <div class="logo">
+                    <img src="../../../images/logo.jpg" alt="Logo" />
+                    <button type="button" @click="toggleFullscreen" v-if="!fullscreen" class="fullscreen-button">Fullscreen</button>
+                </div>
             </div>
         </div>
-    </div>
+    </fullscreen>
 </template>
 
 <script>
@@ -47,7 +50,8 @@
                 loading: false,
                 connected: false,
                 interval: null,
-                ticking: false
+                ticking: false,
+                fullscreen: false
             };
         },
 
@@ -92,6 +96,14 @@
                         }
                     }
                 });
+            },
+
+            toggleFullscreen () {
+                this.$refs.fullscreen.toggle();
+            },
+
+            fullscreenChange (fullscreen) {
+                this.fullscreen = fullscreen
             }
         }
     }
@@ -103,11 +115,11 @@
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
 
-    .screen {
-    /*    width: 1080px;
-        height: 900px;
-        border: 2px red solid; */
+    .fullscreen {
+        background: $body-bg !important;
+    }
 
+    .screen {
         &-logo {
             position: fixed;
             top: 0;
@@ -188,6 +200,13 @@
                 font-size: 1.75vw;
             }
         }
+    }
+
+    .fullscreen-button {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        z-index: 1000;
     }
 
     .fade-enter-active, .fade-leave-active {
