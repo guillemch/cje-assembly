@@ -40,11 +40,11 @@
             groups: function () {
                 return [
                     {
-                        title: 'Entitades',
+                        title: 'Consejos',
                         groups: this.sortGroup('1', this.results)
                     },
                     {
-                        title: 'Consejos',
+                        title: 'Entidades',
                         groups: this.sortGroup('2', this.results)
                     }
                 ];
