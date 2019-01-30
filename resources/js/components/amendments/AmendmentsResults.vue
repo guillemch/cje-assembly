@@ -5,22 +5,22 @@
                 {{ amendment.name }}
                 <span class="float-right">
                     {{ amendment.results.total }}
-                </span>    
+                </span>
             </h4>
         </div>
         <div class="col-md-6">
-            <table class="table table-groups table-sm">
+            <table v-for="group in groups" :key="group.title" class="table table-groups table-sm">
                 <tr>
-                    <th colspan="2">Entidades</th>
+                    <th colspan="2">{{ group.title }} <span v-if="amendment.result.compensate == group.type">(Voto compensado)</span></th>
                 </tr>
                 <tr>
                     <td>
                         <div class="group-votes">
-                            <div v-for="(group, id) in amendment.results.by_group" :key="'group' + id" class="group">
-                                <span class="group-acronym">{{ group.acronym }}</span>
+                            <div v-for="(entity, id) in group.groups" :key="'group' + id" class="group">
+                                <span class="group-acronym">{{ entity.acronym }}</span>
                                 <span class="group-votes">
                                     <ul class="group-votes">
-                                        <li v-for="(votes, vote_for) in group.votes" :key="'group' + id + vote_for">
+                                        <li v-for="(votes, vote_for) in entity.votes" :key="'group' + id + vote_for">
                                             <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
                                         </li>
                                     </ul>
@@ -83,6 +83,32 @@
         filters: {
             percentage: function (value) {
                 return String(value).replace('.', ',') + '%';
+            }
+        },
+
+        computed: {
+            groups: function () {
+                return [
+                    {
+                        type: 1,
+                        title: 'Consejos',
+                        groups: this.sortGroup('1', this.amendment.results.by_group)
+                    },
+                    {
+                        type: 2,
+                        title: 'Entidades',
+                        groups: this.sortGroup('2', this.amendment.results.by_group)
+                    }
+                ];
+            }
+        },
+
+        methods: {
+            sortGroup (type, groups) {
+                const filteredGroups = Object.values(groups).filter(group => group.type === type);
+                const sortedGroups = filteredGroups.sort((a, b) => (a.acronym > b.acronym) ? 1 : ((b.acronym > a.acronym) ? -1 : 0));
+
+                return sortedGroups;
             }
         }
     }

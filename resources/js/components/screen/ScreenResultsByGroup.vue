@@ -1,10 +1,10 @@
 <template>
     <div class="screen-results-by-group">
         <div class="row">
-            <div v-for="group in groups" class="col-6">
+            <div v-for="group in groups" :key="group.title" class="col-6">
                 <table class="table table-groups table-sm">
                     <tr>
-                        <th colspan="2">{{ group.title }}</th>
+                        <th colspan="2">{{ group.title }} <span v-if="compensate == group.type">(Voto compensado)</span></th>
                     </tr>
                     <tr>
                         <td>
@@ -33,17 +33,26 @@
         name: 'screen-results-by-group',
 
         props: {
-            results: Object
+            results: Object,
+            compensate: [Number, Boolean]
+        },
+
+        filters: {
+            percentage: function (value) {
+                return String(value).replace('.', ',') + '%';
+            }
         },
 
         computed: {
             groups: function () {
                 return [
                     {
+                        type: 1,
                         title: 'Consejos',
                         groups: this.sortGroup('1', this.results)
                     },
                     {
+                        type: 2,
                         title: 'Entidades',
                         groups: this.sortGroup('2', this.results)
                     }
@@ -57,12 +66,6 @@
                 const sortedGroups = filteredGroups.sort((a, b) => (a.acronym > b.acronym) ? 1 : ((b.acronym > a.acronym) ? -1 : 0));
 
                 return sortedGroups;
-            }
-        },
-
-        filters: {
-            percentage: function (value) {
-                return String(value).replace('.', ',') + '%';
             }
         }
     }
