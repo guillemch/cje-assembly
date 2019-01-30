@@ -1,26 +1,30 @@
 <template>
     <div class="screen-results-by-group">
-        <table class="table table-groups table-sm">
-            <tr>
-                <th colspan="2">Entidades</th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="group-votes">
-                        <div v-for="(group, id) in results" :key="'group' + id" class="group">
-                            <span class="group-acronym">{{ group.acronym }}</span>
-                            <span class="group-votes">
-                                <ul class="group-votes">
-                                    <li v-for="(votes, vote_for) in group.votes" :key="'group' + id + vote_for">
-                                        <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
-                                    </li>
-                                </ul>
-                            </span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
+        <div class="row">
+            <div v-for="group in groups" class="col-6">
+                <table class="table table-groups table-sm">
+                    <tr>
+                        <th colspan="2">{{ group.title }}</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="group-votes">
+                                <div v-for="(entity, id) in group.groups" :key="'group' + id" class="group">
+                                    <span class="group-acronym">{{ entity.acronym }}</span>
+                                    <span class="group-votes">
+                                        <ul class="group-votes">
+                                            <li v-for="(votes, vote_for) in entity.votes" :key="'group' + id + vote_for">
+                                                <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
+                                            </li>
+                                        </ul>
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -30,6 +34,30 @@
 
         props: {
             results: Object
+        },
+
+        computed: {
+            groups: function () {
+                return [
+                    {
+                        title: 'Entitades',
+                        groups: this.sortGroup('1', this.results)
+                    },
+                    {
+                        title: 'Consejos',
+                        groups: this.sortGroup('2', this.results)
+                    }
+                ];
+            }
+        },
+
+        methods: {
+            sortGroup (type, groups) {
+                const filteredGroups = Object.values(groups).filter(group => group.type === type);
+                const sortedGroups = filteredGroups.sort((a, b) => (a.acronym > b.acronym) ? 1 : ((b.acronym > a.acronym) ? -1 : 0));
+
+                return sortedGroups;
+            }
         },
 
         filters: {
