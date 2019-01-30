@@ -30,7 +30,7 @@ class Amendment extends Model
         $this->opened_at = Carbon::now();
         return $this->save();
     }
-    
+
     public function closeVote()
     {
         $this->closeAllVotes();
@@ -56,36 +56,44 @@ class Amendment extends Model
             ->join('users', 'users.id', '=', 'votes.user_id')
             ->orderBy('votes.id', 'asc')
             ->get();
-        
+
         $groups = Group::orderBy('acronym', 'asc')->get();
         $byGroup = [];
         foreach($groups as $group) {
             $byGroup[$group->id] = [
                 'acronym' => $group->acronym,
+                'type' => $group->type,
                 'votes' => $options
             ];
         }
 
-        $absolute = [1 => $options, 2 => $options];
+        $participation = [1 => 0, 2 => 0];
+        $totals = [1 => $options, 2 => $options];
         foreach($votes as $vote) {
-            $absolute[$vote->type][$vote->vote_for]++;
+            $participation[$vote->type]++;
+            $totals[$vote->type][$vote->vote_for]++;
 
             if ($vote->group_id) {
                 $byGroup[$vote->group_id]['votes'][$vote->vote_for]++;
             }
         }
 
+        $percentage = $participation[1] / ($participation[1] + $participation[2]);
+        $compensate = ($percentage < 0.4) ? 1 : ($percentage > 0.6) ? 2 : false;
+
+        // Weighted results
         $weighted = $options;
-        foreach($options as $option => $optionWeight) {
-            $type1Votes = $absolute[1][$option];
-            $type2Votes = $absolute[2][$option];
-
-            $weightedResultType1 = ($type1Votes > 0) ? (($type1Votes / array_sum($absolute[1])) * 50) : 0;
-            $weightedResultType2 = ($type2Votes > 0) ? (($type2Votes / array_sum($absolute[2])) * 50) : 0;
-
-            $weighted[$option] = round($weightedResultType1 + $weightedResultType2, 2);
+        foreach($options as $option => $votes) {
+            if ($compensate == 1) {
+                $weighted[$option] = (($totals[2][$option] * (0.6 / $participation[2])) + ($totas[1][$option] * (0.4 / $participation[1]))) * 100;
+            } elseif($compensate == 2) {
+                $weighted[$option] = (($totals[2][$option] * (0.4 / $participation[2])) + ($totals[1][$option] * (0.6 / $participation[1]))) * 100;
+            } else {
+                $weighted[$option] = (($totals[2][$option] + $totals[1][$option]) / ($participation[2] + $participation[1])) * 100;
+            }
         }
 
+        // Winner
         $sortedByScore = $weighted;
         rsort($sortedByScore);
         $highestScore = ($sortedByScore[0] === $sortedByScore[1]) ? 0 : $sortedByScore[0];
@@ -93,10 +101,11 @@ class Amendment extends Model
 
         $results = [
             'weighted' => $weighted,
-            'absolute' => $absolute,
+            'absolute' => $totals,
             'winner' => $winner,
             'by_group' => $byGroup,
-            'total' => array_sum($absolute[1]) + array_sum($absolute[2])
+            'total' => array_sum($totals[1]) + array_sum($totals[2]),
+            'compensate' => $compensate
         ];
 
         if ($full) {
