@@ -45,14 +45,14 @@ class Amendment extends Model
     }
 
     public function getResultsAttribute() {
-        return Self::results($this->attributes['id'], false);
+        return Self::results($this->attributes, false);
     }
 
-    public static function results($id, $full = false)
+    public static function results($amendment, $full = false)
     {
         $options = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
         $votes = Vote::select('votes.id', 'votes.amendment_id', 'votes.vote_for', 'users.type', 'users.name', 'users.last_name', 'users.group_id')
-            ->where('amendment_id', $id)
+            ->where('amendment_id', $amendment['id'])
             ->join('users', 'users.id', '=', 'votes.user_id')
             ->orderBy('votes.id', 'asc')
             ->get();
@@ -78,26 +78,46 @@ class Amendment extends Model
             }
         }
 
-        $percentage = $participation[1] / ($participation[1] + $participation[2]);
-        $compensate = ($percentage < 0.4) ? 1 : ($percentage > 0.6) ? 2 : false;
+        $total = $participation[1] + $participation[2];
+        $percentage = ($total > 0) ? $participation[1] / $total : 0.5;
+        if ($percentage < 0.4) {
+            $compensate = 1;
+        } elseif($percentage > 0.6) {
+            $compensate = 2;
+        } else {
+            $compensate = false;
+        }
 
         // Weighted results
         $weighted = $options;
         foreach($options as $option => $votes) {
             if ($compensate == 1) {
-                $weighted[$option] = (($totals[2][$option] * (0.6 / $participation[2])) + ($totas[1][$option] * (0.4 / $participation[1]))) * 100;
+                $result = ($participation[1] > 0 && $participation[2] > 0) ? ((($totals[2][$option] * (0.6 / $participation[2])) + ($totals[1][$option] * (0.4 / $participation[1]))) * 100) : 0;
             } elseif($compensate == 2) {
-                $weighted[$option] = (($totals[2][$option] * (0.4 / $participation[2])) + ($totals[1][$option] * (0.6 / $participation[1]))) * 100;
+                $result = ($participation[1] > 0 && $participation[2] > 0) ? ((($totals[2][$option] * (0.4 / $participation[2])) + ($totals[1][$option] * (0.6 / $participation[1]))) * 100) : 0;
             } else {
-                $weighted[$option] = (($totals[2][$option] + $totals[1][$option]) / ($participation[2] + $participation[1])) * 100;
+                $result = ($total > 0) ? ((($totals[2][$option] + $totals[1][$option]) / $total) * 100) : 0;
             }
+
+            $weighted[$option] = round($result, 2);
         }
 
         // Winner
-        $sortedByScore = $weighted;
-        rsort($sortedByScore);
-        $highestScore = ($sortedByScore[0] === $sortedByScore[1]) ? 0 : $sortedByScore[0];
-        $winner = ($highestScore > 0) ? array_search($highestScore, $weighted) : 0;
+        if ($amendment['option_3'] == 'Abstención') {
+            $difference = $weighted[1] - $weighted[2];
+            if ($difference > 0) {
+                $winner = 1;
+            } elseif($difference < 0) {
+                $winner = 2;
+            } else {
+                $winner = 0;
+            }
+        } else {
+            $sortedByScore = $weighted;
+            rsort($sortedByScore);
+            $highestScore = ($sortedByScore[0] === $sortedByScore[1]) ? 0 : $sortedByScore[0];
+            $winner = ($highestScore > 0) ? array_search($highestScore, $weighted) : 0;
+        }
 
         $results = [
             'weighted' => $weighted,

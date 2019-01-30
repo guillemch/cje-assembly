@@ -11,7 +11,7 @@
         <div class="col-md-6">
             <table v-for="group in groups" :key="group.title" class="table table-groups table-sm">
                 <tr>
-                    <th colspan="2">{{ group.title }} <span v-if="amendment.result.compensate == group.type">(Voto compensado)</span></th>
+                    <th colspan="2">{{ group.title }} <span v-if="amendment.results.compensate == group.type">(Voto compensado)</span></th>
                 </tr>
                 <tr>
                     <td>
