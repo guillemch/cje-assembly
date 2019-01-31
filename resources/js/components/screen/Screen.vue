@@ -20,7 +20,18 @@
                     </transition>
                 </div>
             </transition>
-            <div :class="{ 'screen-logo': true, 'vote-active': screen.vote !== null }">
+            <transition name="fade">
+                <div :class="{ 'countdown': true, 'ongoing-vote': screen.vote !== null }" v-if="countdown.time !== null">
+                    <h1 v-if="countdown.speaker">{{ countdown.speaker.name }}</h1>
+                    <h3 v-if="countdown.speaker">{{ countdown.speaker.group.name }}</h3>
+                    <div class="text-center">
+                        <countdown :time="countdown.time" :class="{ 'countdown-timer': true, 'countdown-alert': countdown.alert }" @end="resetCountdown" @progress="handleCountdown">
+                            <template slot-scope="props">{{ props.minutes | time }}:{{ props.seconds | time }}</template>
+                        </countdown>
+                    </div>
+                </div>
+            </transition>
+            <div :class="{ 'screen-logo': true, 'vote-active': (screen.vote !== null || countdown.time !== null) }">
                 <div class="logo">
                     <img src="../../../images/logo.jpg" alt="Logo" />
                     <button type="button" @click="toggleFullscreen" v-if="!fullscreen" class="fullscreen-button">Fullscreen</button>
@@ -34,6 +45,7 @@
     import ScreenResults from './ScreenResults';
     import ScreenResultsByGroup from './ScreenResultsByGroup';
     import ScreenCode from './ScreenCode';
+    import VueCountdown from '@chenfengyuan/vue-countdown';
 
     export default {
         name: 'screen',
@@ -41,12 +53,14 @@
         components: {
             ScreenResults,
             ScreenResultsByGroup,
-            ScreenCode
+            ScreenCode,
+            'countdown': VueCountdown
         },
 
         data () {
             return {
                 screen: { vote: null, code: null, just_closed: false, next_alert: false },
+                countdown: { time: null, speaker: null, alert: false },
                 loading: false,
                 connected: false,
                 interval: null,
@@ -65,6 +79,14 @@
             },
             refresh_vote: function (data) {
                 this.getScreen(true);
+            },
+            refresh_speaker: function (payload) {
+                this.countdown.time = payload.time;
+                if (payload.speaker) {
+                    this.countdown.speaker = payload.speaker;
+                } else {
+                    this.countdown.speaker = null;
+                }
             },
             disconnect: function () {
                 this.connected = false;
@@ -104,6 +126,27 @@
 
             fullscreenChange (fullscreen) {
                 this.fullscreen = fullscreen
+            },
+
+            handleCountdown(data) {
+                if(data.totalSeconds < 10) {
+                    this.countdown.alert = true;
+                } else {
+                    this.countdown.alert = false;
+                }
+            },
+
+            resetCountdown () {
+                setTimeout(() => {
+                    this.countdown = { time: null, speaker: null };
+                }, 5000);
+            }
+        },
+
+        filters: {
+            time: function (value) {
+                const time = String(value);
+                return (time.length === 1) ? '0' + time : time;
             }
         }
     }
@@ -153,7 +196,8 @@
             }
         }
 
-        .vote-info {
+        .vote-info,
+        .countdown {
             position: fixed;
             z-index: 10;
             top: 10vh;
@@ -189,6 +233,7 @@
             h1 {
                 font-size: 4vw;
                 font-weight: bold;
+                padding-right: 18vw;
             }
 
             .just-closed {
@@ -198,6 +243,56 @@
                 padding: .5vw 1vw;
                 color: $white;
                 font-size: 1.75vw;
+            }
+        }
+
+        .countdown {
+            h1 {
+                font-size: 5.5vw;
+                font-weight: bold;
+            }
+
+            h3 {
+                font-size: 3.5vw;
+                color: $gray-600;
+            }
+
+            &-timer {
+                display: inline-block;
+                font-size: 12vw;
+                border: .75vw $gray-300 solid;
+                padding: 0 3vw;
+                width: 56vw;
+                border-radius: 2rem;
+                margin-top: 10vw;
+            }
+
+            &-alert {
+                animation: alert-countdown 1s infinite;
+            }
+
+            &.ongoing-vote {
+                display: flex;
+                justify-content: flex-end;
+                align-items: flex-start;
+
+                h1 {
+                    font-size: 2vw;
+                    padding: 1.5vw;
+                    background: $gray-100;
+                }
+
+                h3 {
+                    display: none;
+                }
+
+                .countdown-timer {
+                    font-size: 3vw;
+                    width: 15vw;
+                    margin-top: 0;
+                    float: right;
+                    border-width: .25vw;
+                }
             }
         }
     }
@@ -226,6 +321,24 @@
         }
         100% {
             background: $blue;
+        }
+    }
+
+    @keyframes alert-countdown {
+        0% {
+            color: $black;
+            background: transparent;
+            border-color: $gray-300;
+        }
+        50% {
+            color: $white;
+            background: $red;
+            border-color: $red;
+        }
+        100% {
+            color: $black;
+            background: transparent;
+            border-color: $gray-300;
         }
     }
 </style>

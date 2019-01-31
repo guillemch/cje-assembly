@@ -35,6 +35,11 @@
             v-model="amendment.open">
             Abrir votación inmediatamente
         </b-form-checkbox>
+        <b-form-checkbox
+            id="amendmentTimer"
+            v-model="timer">
+            Contador <input type="time" v-model="timeLimit" class="form-control" :disabled="!timer" />
+        </b-form-checkbox>
         <hr />
         <div class="text-right">
             <b-btn type="button" @click="$root.$emit('bv::hide::modal', 'AmendmentsNew', '#AmendmentsNewButton');">Cancelar</b-btn>
@@ -63,6 +68,8 @@
                     option_5_active: false,
                     open: true
                 },
+                timer: false,
+                timeLimit: '01:00',
                 loading: false,
                 errors: []
             }
@@ -74,7 +81,19 @@
                 this.loading = true;
 
                 API.submitAmendment(this.amendment).then(response => {
-                    if (this.amendment.open) this.$socket.emit('vote_opened', true);
+                    if (this.amendment.open) {
+                        this.$socket.emit('vote_opened', true);
+                    }
+
+                    if (this.timer) {
+                        const time = this.timeLimit.split(":");
+                        const milliseconds = ((parseInt(time[0]) * 60) + (parseInt(time[1]))) * 1000;
+                        this.$socket.emit('new_speaker', {
+                            speaker: null,
+                            time: milliseconds
+                        });
+                    }
+
                     this.resetAmendment();
                     this.$root.$emit('refreshAmendments', true);
                     this.$root.$emit('bv::hide::modal', 'AmendmentsNew', '#AmendmentsNewButton');
@@ -89,17 +108,16 @@
 
             resetAmendment() {
                 this.amendment.name = '';
-                this.option_1 = 'Sí';
-                this.option_1_active = true;
-                this.option_2 = 'No';
-                this.option_2_active = true;
-                this.option_3 = 'Abstención';
-                this.option_3_active = true;
-                this.option_4 = '';
-                this.option_4_active = false;
-                this.option_5 = '';
-                this.option_5_active = false;
-                this.open = true;
+                this.amendment.option_1 = 'Sí';
+                this.amendment.option_1_active = true;
+                this.amendment.option_2 = 'No';
+                this.amendment.option_2_active = true;
+                this.amendment.option_3 = 'Abstención';
+                this.amendment.option_3_active = true;
+                this.amendment.option_4 = '';
+                this.amendment.option_4_active = false;
+                this.amendment.option_5 = '';
+                this.amendment.option_5_active = false;
             }
         }
     }

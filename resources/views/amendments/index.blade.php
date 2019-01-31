@@ -9,5 +9,10 @@
 @endsection
 
 @push('scripts')
+    <script>
+        window.config = {
+            users: {!! json_encode($users) !!}
+        }
+    </script>
     <script src="{{ mix('/js/amendments.js') }}"></script>
 @endpush
