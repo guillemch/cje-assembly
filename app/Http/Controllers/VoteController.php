@@ -46,6 +46,18 @@ class VoteController extends Controller
     }
 
     /**
+     * Show a user's votes
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function myVotes(Request $request)
+    {
+        $votes = $request->user()->votes()->with('amendment')->orderBy('id', 'desc')->get();
+
+        return response()->json($votes);
+    }
+
+    /**
      * Get the currently open vote
      *
      * @return Response

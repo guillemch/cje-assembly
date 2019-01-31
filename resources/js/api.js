@@ -35,6 +35,10 @@ export default class API {
         return this._call('get', 'screen');
     }
 
+    getMyVotes () {
+        return this._call('get', 'vote/my-votes');
+    }
+
     fullResults (id) {
         return this._call('get', 'amendments/' + id);
     }

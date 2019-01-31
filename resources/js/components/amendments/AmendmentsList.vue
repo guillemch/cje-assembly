@@ -37,20 +37,7 @@
 <script>
     import dateFormat from 'dateformat';
     import AmendmentsResults from './AmendmentsResults';
-
-    dateFormat.i18n = {
-        dayNames: [
-            'Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb',
-            'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'
-        ],
-        monthNames: [
-            'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
-            'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-        ],
-        timeNames: [
-            'a', 'p', 'am', 'pm', 'A', 'P', 'AM', 'PM'
-        ]
-    };
+    dateFormat.i18n = require('../../shared/dates.js');
 
     export default {
         name: 'amendments-list',

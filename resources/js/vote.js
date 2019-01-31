@@ -15,7 +15,7 @@ Vue.use(new VueSocketIO({
     connection: process.env.MIX_SOCKETIO_SERVER
 }));
 
-const app = new Vue({
+const vote = new Vue({
     components: {
         Vote
     },

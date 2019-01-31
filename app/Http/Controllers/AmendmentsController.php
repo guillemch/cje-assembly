@@ -50,8 +50,6 @@ class AmendmentsController extends Controller
      */
     public function getAmendment(Amendment $amendment, Request $request)
     {
-        $request->user()->authorizeRoles('vote_manager');
-
         $amendment->load(['votes' => function ($query) {
             $query->select('votes.id', 'votes.amendment_id', 'votes.vote_for', 'votes.created_at', 'users.name', 'users.last_name', 'users.type', 'groups.name AS group_name', 'groups.acronym AS acronym');
             $query->join('users', 'users.id', '=', 'votes.user_id');
