@@ -42,7 +42,10 @@ class ScreenController extends Controller
 
         /* Time-based password */
         $secret = config('google2fa.secret');
-        $code = Google2FA::getCurrentOtp($secret);
+        $google2fa = app('pragmarx.google2fa');
+        $google2fa->setOneTimePasswordLength(4);
+        $google2fa->setKeyRegeneration(30);
+        $code = $google2fa->getCurrentOtp($secret);
         $timestamp = Google2FA::getTimestamp();
         $now = Carbon::now();
         $nextCode = Carbon::createFromTimestamp(($timestamp * 30) + 30);

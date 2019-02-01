@@ -27,7 +27,10 @@ class PasswordCorrect implements Rule
     public function passes($attribute, $value)
     {
         $secret = config('google2fa.secret');
-        $verified = Google2FA::verifyKey($secret, $value, 0);
+        $google2fa = app('pragmarx.google2fa');
+        $google2fa->setOneTimePasswordLength(4);
+        $google2fa->setKeyRegeneration(30);
+        $verified = $google2fa->verifyKey($secret, $value, 0);
 
         return $verified;
     }
