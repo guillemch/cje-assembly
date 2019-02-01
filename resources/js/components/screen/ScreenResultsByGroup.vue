@@ -93,7 +93,7 @@
 
         td {
             font-size: 1.25vw;
-            padding: 1vw;
+            padding: .5vw 1vw;
         }
     }
 
@@ -106,11 +106,11 @@
     .group {
         display: inline-block;
         background: $gray-200;
-        margin: 0 .75vw .75vw 0;
+        margin: 0 .5vw .5vw 0;
         padding: .5vw .75vw;
         list-style: none;
         border-radius: .5vw;
-        font-size: 1.25vw;
+        font-size: 1.1vw;
 
         ul {
             display: inline;
