@@ -57,9 +57,9 @@
 </template>
 
 <script>
-    import dateFormat from 'dateformat';
     import AmendmentsResults from '../amendments/AmendmentsResults';
-    dateFormat.i18n = require('../../shared/dates.js');
+    const moment = require('moment');
+    moment.locale('es');
 
     export default {
         name: 'my-votes',
@@ -83,14 +83,12 @@
         filters: {
             fullDate: function (value) {
                 if (!value) return '';
-                const date = new Date(value);
-                return dateFormat(date, "dddd, d mmmm yyyy");
+                return moment(value).format("dddd, D MMMM YYYY");
             },
 
             time: function (value) {
                 if (!value) return '';
-                const date = new Date(value);
-                return dateFormat(date, "HH:MM");
+                return moment(value).format("HH:mm");
             }
         },
 

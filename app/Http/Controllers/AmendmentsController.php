@@ -78,7 +78,7 @@ class AmendmentsController extends Controller
      */
     public function getAmendmentSummary(Amendment $amendment, Request $request)
     {
-        $current->load(['votes' => function ($query) use ($request) {
+        $amendment->load(['votes' => function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
             $query->limit(1);
         }]);

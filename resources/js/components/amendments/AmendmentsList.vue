@@ -35,9 +35,9 @@
 </template>
 
 <script>
-    import dateFormat from 'dateformat';
     import AmendmentsResults from './AmendmentsResults';
-    dateFormat.i18n = require('../../shared/dates.js');
+    const moment = require('moment');
+    moment.locale('es');
 
     export default {
         name: 'amendments-list',
@@ -121,8 +121,7 @@
             
             dateTime (value) {
                 if (!value) return '';
-                const date = new Date(value);
-                return dateFormat(date, "ddd HH:MM");
+                return moment(value).format("ddd HH:mm");
             }
         }
     }

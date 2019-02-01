@@ -47,8 +47,8 @@
 </template>
 
 <script>
-    import dateFormat from 'dateformat';
-    dateFormat.i18n = require('../../shared/dates.js');
+    const moment = require('moment');
+    moment.locale('es');
 
     export default {
         name: 'users-list',
@@ -95,8 +95,8 @@
 
         filters: {
             dateFilter: function (value) {
-                const date = new Date(value);
-                return dateFormat(date, "ddd HH:MM");
+                if (!value) return '';
+                return moment(value).format("ddd HH:mm");
             }
         },
 
