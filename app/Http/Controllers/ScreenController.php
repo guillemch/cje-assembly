@@ -58,10 +58,12 @@ class ScreenController extends Controller
             $vote = Amendment::orderBy('closed_at', 'desc')->first();
             $voteClosedAt = Carbon::parse($vote->closed_at);
 
-            if ($voteClosedAt->diffInSeconds($now) > 30) {
-                $vote = null;
-            } else {
-                $justClosed = true;
+            if ($vote->closed_at) {
+                if ($voteClosedAt->diffInSeconds($now) > 30) {
+                    $vote = null;
+                } else {
+                    $justClosed = true;
+                }
             }
         }
 
