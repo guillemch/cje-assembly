@@ -69,8 +69,10 @@
             },
 
             reset () {
-                this.time = null;
-                this.speaker = null;
+                setTimeout(() => {
+                    this.time = null;
+                    this.speaker = null;
+                }, 5000);
             }
         },
         filters: {
