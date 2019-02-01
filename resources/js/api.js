@@ -43,6 +43,10 @@ export default class API {
         return this._call('get', 'amendments/' + id);
     }
 
+    results (id) {
+        return this._call('get', 'amendments/' + id + '/summary');
+    }
+
     submitVote (data) {
         return this._call('post', 'vote/submit', data);
     }

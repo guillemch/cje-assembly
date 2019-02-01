@@ -51,7 +51,7 @@
         </div>
 
         <b-modal id="AmendmentsDetails" ref="AmendmentsDetails" title="Resultados" size="lg" ok-only ok-title="Cerrar">
-            <amendments-results :amendment="selectedAmendment" full-list />
+            <amendments-results :amendment="selectedAmendment" />
         </b-modal>
     </div>
 </template>
@@ -106,7 +106,7 @@
             },
 
             fullResults (amendmentId) {
-                API.fullResults(amendmentId).then(response => {
+                API.results(amendmentId).then(response => {
                     this.selectedAmendment = response;
                     this.$refs.AmendmentsDetails.show();
                 });

@@ -57,6 +57,8 @@ class AmendmentsController extends Controller
      */
     public function getAmendment(Amendment $amendment, Request $request)
     {
+        $request->user()->authorizeRoles('vote_manager');
+
         $amendment->load(['votes' => function ($query) {
             $query->select('votes.id', 'votes.amendment_id', 'votes.vote_for', 'votes.created_at', 'users.name', 'users.last_name', 'users.type', 'groups.name AS group_name', 'groups.acronym AS acronym');
             $query->join('users', 'users.id', '=', 'votes.user_id');
@@ -64,6 +66,21 @@ class AmendmentsController extends Controller
             $query->orderBy('users.type', 'asc');
             $query->orderBy('groups.acronym', 'asc');
             $query->orderBy('users.last_name', 'asc');
+        }]);
+
+        return response()->json($amendment);
+    }
+
+    /**
+     * Retreive an amendment
+     *
+     * @return Response
+     */
+    public function getAmendmentSummary(Amendment $amendment, Request $request)
+    {
+        $current->load(['votes' => function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+            $query->limit(1);
         }]);
 
         return response()->json($amendment);
