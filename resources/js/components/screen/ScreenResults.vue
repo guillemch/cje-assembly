@@ -42,6 +42,8 @@
     @import '~bootstrap/scss/mixins';
 
     .table {
+        margin-bottom: 0;
+
         th {
             padding: .5vw 1vw;
             font-size: 1.5vw;

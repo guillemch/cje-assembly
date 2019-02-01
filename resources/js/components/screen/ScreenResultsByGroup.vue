@@ -1,7 +1,7 @@
 <template>
     <div class="screen-results-by-group">
         <div class="row">
-            <div v-for="group in groups" :key="group.title" class="col-6">
+            <div v-for="group in groups" :key="group.title" class="col-12">
                 <table class="table table-groups table-sm">
                     <tr>
                         <th colspan="2">{{ group.title }} <span v-if="compensate == group.type" class="compensated">(voto compensado)</span></th>
@@ -77,12 +77,14 @@
     @import '~bootstrap/scss/mixins';
 
     .screen-results-by-group {
-        margin-top: 3vh;
+        margin-top: 0vh;
     }
 
     .table {
+        margin-bottom: 0;
+
         th {
-            padding: .5vw 1vw;
+            padding: .75vw 1vw;
             font-size: 1.25vw;
             color: $gray-600;
             border-top: 0;
@@ -108,7 +110,7 @@
         padding: .5vw .75vw;
         list-style: none;
         border-radius: .5vw;
-        font-size: 1.5vw;
+        font-size: 1.25vw;
 
         ul {
             display: inline;
