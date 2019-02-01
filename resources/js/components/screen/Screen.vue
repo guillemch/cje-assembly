@@ -6,6 +6,7 @@
                     <div class="vote-name">
                         <h1>{{ screen.vote.name }}</h1>
                     </div>
+                    <transition name="fade">
                     <div class="vote-results row" v-show="screen.just_closed">
                         <div class="col-7">
                             <screen-results :amendment="screen.vote" />
@@ -14,6 +15,7 @@
                             <screen-results-by-group :results="screen.vote.results.by_group" :compensate="screen.vote.results.compensate" />
                         </div>
                     </div>
+                    </transition>
                     <transition name="fade">
                         <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.vote !== null && !screen.just_closed">
                             <screen-code :code="screen.code" />
