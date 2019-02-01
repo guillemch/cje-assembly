@@ -56,9 +56,9 @@
             return {
                 amendment: {
                     name: '',
-                    option_1: 'Sí',
+                    option_1: 'A favor',
                     option_1_active: true,
-                    option_2: 'No',
+                    option_2: 'En contra',
                     option_2_active: true,
                     option_3: 'Abstención',
                     option_3_active: true,
@@ -108,9 +108,9 @@
 
             resetAmendment() {
                 this.amendment.name = '';
-                this.amendment.option_1 = 'Sí';
+                this.amendment.option_1 = 'A favor';
                 this.amendment.option_1_active = true;
-                this.amendment.option_2 = 'No';
+                this.amendment.option_2 = 'En contra';
                 this.amendment.option_2_active = true;
                 this.amendment.option_3 = 'Abstención';
                 this.amendment.option_3_active = true;
