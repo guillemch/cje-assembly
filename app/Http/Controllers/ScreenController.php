@@ -64,6 +64,8 @@ class ScreenController extends Controller
                 } else {
                     $justClosed = true;
                 }
+            } else {
+                $vote = null;
             }
         }
 
