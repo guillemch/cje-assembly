@@ -43,12 +43,12 @@
                     value: null
                 }
             ];
-            config.users.forEach(user => {
+            config.groups.forEach(group => {
                 this.speakers.push({
-                    text: user.last_name + ', ' + user.name + ' (' + user.group.acronym + ')',
+                    text: group.name,
                     value: {
-                      name: user.name + ' ' + user.last_name,
-                      group: user.group
+                      name: group.acronym,
+                      group: group
                     }
                 });
             });

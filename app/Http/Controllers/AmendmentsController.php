@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Amendment;
 use App\User;
+use App\Group;
 
 class AmendmentsController extends Controller
 {
@@ -27,13 +28,9 @@ class AmendmentsController extends Controller
     {
         $request->user()->authorizeRoles('vote_manager');
 
-        $users = User::select('id', 'group_id', 'name', 'last_name')
-            ->with('group')
-            ->where('role', '!=', 'admin')
-            ->orderBy('last_name', 'asc')
-            ->get();
+        $groups = Group::all();
 
-        return view('amendments.index', compact('users'));
+        return view('amendments.index', compact('groups'));
     }
 
     /**

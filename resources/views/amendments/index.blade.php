@@ -11,7 +11,7 @@
 @push('scripts')
     <script>
         window.config = {
-            users: {!! json_encode($users) !!}
+            groups: {!! json_encode($groups) !!}
         }
     </script>
     <script src="{{ mix('/js/amendments.js') }}"></script>
