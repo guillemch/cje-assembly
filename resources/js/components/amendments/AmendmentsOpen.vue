@@ -69,6 +69,10 @@
 
                 API.closeAmendment(this.amendment.id).then(response => {
                     this.$socket.emit('vote_opened', false);
+                    this.$socket.emit('new_speaker', {
+                        speaker: null,
+                        time: null
+                    });
                     this.amendment = null;
                     clearInterval(this.interval);
                     this.interval = null;
