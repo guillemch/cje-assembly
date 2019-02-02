@@ -31,7 +31,7 @@
                     <h1 v-if="countdown.speaker">{{ countdown.speaker.name }}</h1>
                     <h3 v-if="countdown.speaker">{{ countdown.speaker.group.name }}</h3>
                     <div class="text-center">
-                        <countdown :time="countdown.time" :class="{ 'countdown-timer': true, 'countdown-alert': countdown.alert }" @end="resetCountdown" @progress="handleCountdown">
+                        <countdown :time="countdown.time" :class="{ 'countdown-timer': true }" @end="resetCountdown" @progress="handleCountdown">
                             <template slot-scope="props">{{ props.minutes | time }}:{{ props.seconds | time }}</template>
                         </countdown>
                     </div>
@@ -191,7 +191,7 @@
 
                 .logo img {
                     border: .25vw $white solid;
-                    width: 7vw;
+                    width: 5.5vw;
                 }
             }
 
@@ -256,6 +256,7 @@
             h1 {
                 font-size: 5.5vw;
                 font-weight: bold;
+                display: none;
             }
 
             h3 {
@@ -265,12 +266,12 @@
 
             &-timer {
                 display: inline-block;
-                font-size: 12vw;
+                font-size: 11vw;
                 border: .75vw $gray-300 solid;
-                padding: 0 3vw;
+                padding: 0 2.5vw;
                 width: 56vw;
                 border-radius: 2rem;
-                margin-top: 10vw;
+                margin-top: 7vw;
             }
 
             &-alert {
