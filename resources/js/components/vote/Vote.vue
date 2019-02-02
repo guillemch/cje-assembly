@@ -52,6 +52,7 @@
         sockets: {
             connect: function () {
                 this.connected = true;
+                this.getCurrentVote();
             },
             refresh_vote: function (data) {
                 this.getCurrentVote();
