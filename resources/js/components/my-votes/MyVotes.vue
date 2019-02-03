@@ -23,7 +23,7 @@
                                 </tr>
                             </thead>
                             <template v-for="(vote, i) in votes">
-                                <tr v-if="(i === 0) ? true : (votes[(i - 1)].created_at !== vote.created_at)" class="row-date thead-light" :key="'header-' + vote.id">
+                                <tr v-if="(i === 0) ? true : (compareDate(votes[(i - 1)].created_at) !== compareDate(vote.created_at))" class="row-date thead-light" :key="'header-' + vote.id">
                                     <th colspan="5">{{ vote.created_at | fullDate }}</th>
                                 </tr>
                                 <tr :key="'vote-' + vote.id">
@@ -112,6 +112,10 @@
                     this.$refs.AmendmentsDetails.show();
                 });
             },
+
+            compareDate (date) {
+                return moment(date).format("dddd, D MMMM YYYY");
+            }
         }
     }
 </script>
