@@ -35,12 +35,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div v-if="vote.amendment.results.winner" :class="'option-tag option-tag-' + vote.amendment.results.winner">
+                                        <div v-if="vote.amendment.results.winner && vote.amendment.closed_at" :class="'option-tag option-tag-' + vote.amendment.results.winner">
                                             {{ vote.amendment['option_' + vote.amendment.results.winner] }}
+                                        </div>
+                                        <div v-else-if="vote.amendment.closed_at === null">
+                                            <em>En curso</em>
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <a href="#" @click.prevent="fullResults(vote.amendment.id)" class="btn btn-sm">+</a>
+                                        <a v-if="vote.amendment.closed_at" href="#" @click.prevent="fullResults(vote.amendment.id)" class="btn btn-sm">+</a>
                                     </td>
                                 </tr>
                             </template>
