@@ -1,11 +1,22 @@
 <template>
-    <div>
-        <h2>{{ vote.name }}</h2>
-
-        <vote-options :vote="vote" @selected="selectOption" v-if="!vote.votes.length > 0" />
-        <vote-submitted :vote="vote" v-else />
-
-        <vote-confirm :vote="vote" :selected="selected" @submitted="voteSubmitted" />
+    <div class="vote-open">
+        <div v-if="!votes[0].votes.length">
+            <ul aria-label="Listado de votaciones" class="vote-list">
+                <li v-for="vote in votes" :key="vote.id">
+                    <vote-options
+                        v-if="selected[vote.id]"
+                        :vote="vote"
+                        :selected="selected[vote.id]"
+                        @select="(option, votes) => updateSelection(vote.id, option, votes)" />
+                    <hr />
+                </li>
+            </ul>
+            <b-button v-b-modal.voteConfirm>Vota</b-button>
+            <vote-confirm :votes="votes" :selected="selected" @submitted="voteSubmitted" />
+        </div>
+        <div v-else>
+            <vote-submitted :votes="votes" />
+        </div>
     </div>
 </template>
 
@@ -24,23 +35,34 @@
         },
 
         props: {
-            vote: Object
+            votes: Array
         },
 
         data () {
             return {
-                selected: null
+                selected: {}
             };
         },
 
-        methods: {
-            selectOption (option) {
-                this.selected = option;
-                this.$root.$emit('bv::show::modal', 'voteConfirm', '#option' + option);
-            },
+        mounted () {
+            this.votes.forEach(vote => {
+                this.$set(this.selected, vote.id, {
+                    option_1: 0,
+                    option_2: 0,
+                    option_3: 0,
+                    option_4: 0,
+                    option_5: 0
+                });
+            });
+        },
 
+        methods: {
             voteSubmitted () {
                 this.$emit('refresh');
+            },
+
+            updateSelection (id, option, votes) {
+                this.selected[id][`option_${option}`] = votes;
             }
         }
     }
@@ -50,5 +72,11 @@
     h2 {
         font-size: 3rem;
         margin-bottom: 2rem;
+    }
+
+    .vote-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
     }
 </style>

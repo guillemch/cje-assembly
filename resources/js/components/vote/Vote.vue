@@ -8,7 +8,7 @@
                 <div  class="disconnected" v-else>
                     Desconectado
                 </div>
-                <b-btn @click="getCurrentVote" size="sm" class="ml-auto">
+                <b-btn @click="getOpenVotes" size="sm" class="ml-auto">
                     <i class="far fa-sync" />
                 </b-btn>
             </div>
@@ -18,11 +18,11 @@
             Cargando...
         </div>
         <div v-else>
-            <div v-if="!vote || vote.length === 0" class="vote__placeholder">
+            <div v-if="!votes || votes.length === 0" class="vote__placeholder">
                 <i class="far fa-mug-hot" />
                 Ninguna votación en curso
             </div>
-            <vote-open v-else :vote="vote" @refresh="getCurrentVote" />
+            <vote-open v-else :votes="votes" @refresh="getOpenVotes" />
         </div>
     </div>
 </template>
@@ -39,23 +39,23 @@
 
         data () {
             return {
-                vote: null,
+                votes: null,
                 loading: false,
                 connected: false
             };
         },
 
         mounted () {
-            this.getCurrentVote();
+            this.getOpenVotes();
         },
 
         sockets: {
             connect: function () {
                 this.connected = true;
-                this.getCurrentVote();
+                this.getOpenVotes();
             },
             refresh_vote: function (data) {
-                this.getCurrentVote();
+                this.getOpenVotes();
             },
             disconnect: function () {
                 this.connected = false;
@@ -63,11 +63,11 @@
         },
 
         methods: {
-            getCurrentVote () {
+            getOpenVotes () {
                 this.loading = true;
 
-                API.getCurrentVote().then(vote => {
-                    this.vote = (vote.hasOwnProperty('name')) ? vote : null;
+                API.getOpenVotes().then(votes => {
+                    this.votes = (votes.length > 0) ? votes : null;
                 }).catch(error => {
                     alert('Error');
                 }).then(() => this.loading = false);

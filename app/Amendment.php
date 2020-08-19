@@ -38,10 +38,16 @@ class Amendment extends Model
         return $this->save();
     }
 
+    /* Deprecated, delete later */
     public function scopeCurrent($query)
     {
         return $query->where('open', '=', 1)
                      ->limit(1);
+    }
+
+    public function scopeOpen($query)
+    {
+        return $query->where('open', '=', 1);
     }
 
     public function getResultsAttribute() {

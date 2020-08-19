@@ -9,5 +9,10 @@
 @endsection
 
 @push('scripts')
+    <script>
+        window.user = {
+            votes: {!! Auth::user()->votes !!}
+        }
+    </script>
     <script src="{{ mix('/js/vote.js') }}"></script>
 @endpush

@@ -27,6 +27,7 @@ Route::post('/amendments/{amendment}/close', 'AmendmentsController@close');
 
 /* Vote */
 Route::get('/vote/current', 'VoteController@current');
+Route::get('/vote/open', 'VoteController@open_votes');
 Route::post('/vote/submit', 'VoteController@submit');
 Route::get('/vote/my-votes', 'VoteController@myVotes');
 
