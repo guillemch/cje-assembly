@@ -109,6 +109,7 @@
             background: $gray-300;
             border-bottom: 1px $gray-400 solid;
             padding: .5rem;
+            z-index: 1000;
 
             .connected {
                 color: $green;

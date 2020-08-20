@@ -7,16 +7,45 @@
         <div slot="modal-title">
             Confirma tu voto
         </div>
-        <div class="vote d-flex">
-            <div>
+        <div class="vote">
+            <div class="vote__icon" v-if="userVotes === 1">
                 <i class="hand far fa-hand-paper" />
             </div>
-            <div :class="['selected-vote', 'bg-' + optionClass]">
-                {{ selectedOption }}
-            </div>
+            <ul :class="['vote__summary', {'vote__summary--multiple': userVotes > 1}]">
+                <li v-for="vote in votes" :key="vote.id">
+                    <span class="vote__summary__name">{{ vote.name }}</span>
+                    <span class="vote__summary__divider"></span>
+                    <div v-if="Object.values(selected[vote.id]).some((votes) => votes > 0)" class="vote__summary__selection">
+                        <div v-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) < userVotes">
+                            <div class="alert alert-sm alert-info">
+                                ℹ️ No has asignado todos tus votos
+                            </div>
+                        </div>
+                        <div v-else-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) > userVotes">
+                            <div class="alert alert-sm alert-danger">
+                                🛑 Has asignado más votos de los disponibles
+                            </div>
+                        </div>
+                        <ul>
+                            <template v-for="(votes, key) in selected[vote.id]">
+                                <li v-if="(userVotes > 1 && vote[key]) || (userVotes === 1 && votes === 1)" :key="key">
+                                    <span v-if="userVotes > 1">
+                                        {{ vote[key] }}:
+                                        {{ votes }}
+                                    </span>
+                                    <span v-else :class="key">
+                                        {{ vote[key] }}
+                                    </span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                    <span v-else class="vote__summary__ignore">No votar</span>
+                </li>
+            </ul>
         </div>
         <div slot="modal-footer" class="footer text-center">
-            <b-form @submit.prevent="submitVote">
+            <b-form @submit.prevent="submitVote" v-if="canVote">
                 <label for="password">
                     <small class="text-muted">Para confirmar tu voto introduce el código que se muestra en pantalla</small>
                 </label>
@@ -48,6 +77,9 @@
                     </div>
                 </div>
             </b-form>
+            <div v-else>
+                Corrige los errores para poder votar
+            </div>
         </div>
     </b-modal>
 </template>
@@ -57,34 +89,18 @@
         name: 'vote-confirm',
 
         props: {
-            vote: Object,
-            selected: Number
+            votes: Array,
+            selected: Object,
+            canVote: Boolean
         },
 
         data () {
             return {
                 password: '',
                 loading: false,
-                errors: []
+                errors: [],
+                userVotes: window.user.votes
             };
-        },
-
-        computed: {
-            selectedOption: function () {
-                return this.vote['option_' + this.selected];
-            },
-
-            optionClass: function () {
-                const classes = {
-                    1: 'success',
-                    2: 'danger',
-                    3: 'warning',
-                    4: 'info',
-                    5: 'secondary'
-                };
-
-                return classes[this.selected];
-            }
         },
 
         methods: {
@@ -127,29 +143,74 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../../sass/variables';
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
 
     .vote {
-        font-size: 2rem;
-        justify-content: center;
-        align-items: center;
-        padding-top: 8vh;
-        padding-bottom: 8vh;
+        &__icon {
+            text-align: center;
+            font-size: 2.5rem;
+        }
+
+        &__summary {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            & > li {
+                display: flex;
+                margin: 1rem 0;
+            }
+
+            &__divider {
+                border-bottom: 1px dotted $gray-500;
+                flex-grow: 1;
+                flex-shrink: 0;
+                position: relative;
+                top: -5px;
+                margin: 0 .5rem;
+            }
+
+            &__selection ul {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+            }
+
+            &__ignore {
+                color: $gray-600;
+                font-style: italic;
+            }
+
+            &--multiple {
+                & > li {
+                    flex-direction: column;
+                }
+
+                .vote__summary__divider {
+                    display: none;
+                }
+
+                .vote__summary__name {
+                    font-weight: bold;
+                    border-bottom: 1px dotted $gray-500;
+                    margin-bottom: .5rem;
+                }
+            }
+
+            @each $name, $color in $colors {
+                .#{$name} {
+                    color: $color;
+                }
+            }
+        }
     }
 
     .hand {
         color: $gray-700;
         animation: thumbs-up 1s ease;
-    }
-
-    .selected-vote {
-        color: $white;
-        margin-left: 1rem;
-        padding: .25rem 2rem;
-        text-align: center;
-        border-radius: .25rem;
     }
 
     .footer {

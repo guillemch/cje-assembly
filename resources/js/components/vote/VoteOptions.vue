@@ -11,7 +11,7 @@
             v-else
             :vote="vote"
             :selected="selected"
-            @select="(option) => this.updateSelection(option, 1)" />
+            @select="(option) => this.updateSelection(option, 1, true)" />
     </div>
 </template>
 
@@ -39,8 +39,8 @@
         },
 
         methods: {
-            updateSelection (option, votes) {
-                this.$emit('select', option, votes);
+            updateSelection (option, votes, reset) {
+                this.$emit('select', option, votes, reset);
             }
         }
     }

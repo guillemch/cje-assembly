@@ -7,14 +7,23 @@
             👍 Has asignado <strong>todos los votos</strong>.
         </div>
         <div class="alert alert-danger" v-else>
-            ⚠️ Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
+            🛑 Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
         </div>
         <ul>
             <template v-for="i in 5">
-                <li v-if="vote[`option_${i}`]" :key="i" :class="`slider-${colors[i - 1]}`">
+                <li v-if="vote[`option_${i}`]" :key="i" :class="`slider-option_${i}`">
                     <div class="vote__multiple__label">
                         <label>{{ vote[`option_${i}`]}}</label>
-                        <span>{{ selected[`option_${i}`] }} votos</span>
+                        <span>
+                            <input
+                                type="number"
+                                :value="selected[`option_${i}`]"
+                                class="vote__multiple__number"
+                                min="0"
+                                :max="userVotes"
+                                @input="$emit('select', i, parseInt($event.target.value))">
+                            votos
+                        </span>
                     </div>
                     <vue-slider
                         :value="selected[`option_${i}`]"
@@ -49,7 +58,6 @@
         data () {
             return {
                 userVotes: window.user.votes,
-                colors: ['success', 'danger', 'warning', 'info', 'secondary']
             }
         },
 
@@ -65,6 +73,7 @@
 </script>
 
 <style lang="scss">
+    @import '../../../sass/variables';
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
@@ -92,10 +101,17 @@
                     margin-left: auto;
                 }
             }
+
+            &__number {
+                background: white;
+                text-align: right;
+                border: 1px solid $gray-400;
+                padding-right: .15rem;
+                border-radius: 4px;
+                width: 2.75rem;
+            }
         }
     }
-
-    $colors: ('success': $green, 'danger': $red, 'warning': $orange, 'info': $cyan, 'secondary': $purple);
 
     @each $name, $color in $colors {
         .slider {
