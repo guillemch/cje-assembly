@@ -30,13 +30,10 @@ class VoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'amendment_id' => [
-                'required',
-                new VoteIsOpen()
-            ],
             'selected' => [
                 'required',
-                new ValidVote($this->input('amendment_id'))
+                new VoteIsOpen(),
+                new ValidVote()
             ],
             'password' => [
                 'required',

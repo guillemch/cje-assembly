@@ -27,13 +27,17 @@ class VoteIsOpen implements Rule
      */
     public function passes($attribute, $value)
     {
-        $amendment = Amendment::find($value);
+        if (!is_array($value)) return false;
 
-        if (!$amendment) return false;
+        foreach($value as $amendmentId => $selection) {
+            $amendment = Amendment::find($amendmentId);
+            if (!$amendment) return false;
 
-        $hasVoted = $amendment->votes()->where('user_id', Auth::user()->id)->count();
+            $hasVoted = $amendment->votes()->where('user_id', Auth::user()->id)->count();
+            if ($amendment->open !== 1 || $hasVoted !== 0) return false;
+        }
 
-        return $amendment->open === 1 && $hasVoted === 0;
+        return true;
     }
 
     /**

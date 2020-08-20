@@ -89,7 +89,6 @@ class VoteController extends Controller
 
         $current->load(['votes' => function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
-            $query->limit(1);
         }]);
 
         return response()->json($current);
@@ -102,15 +101,28 @@ class VoteController extends Controller
      */
     public function submit(VoteRequest $request)
     {
-        $vote = new Vote();
-        $vote->amendment_id = $request->input('amendment_id');
-        $vote->user_id = $request->user()->id;
-        $vote->vote_for = $request->input('selected');
-        
-        $submitted = $vote->save();
+        $amendments = $request->input('selected');
+
+        // For each amendment
+        foreach($amendments as $amendmentId => $selection) {
+            // For each option in amendment
+            foreach($selection as $option => $votes) {
+                // If 0 votes, skip
+                if ($votes < 1) continue;
+
+                //For each vote in option
+                for($i = 1; $i <= $votes; $i++) {
+                    $vote = new Vote();
+                    $vote->amendment_id = $amendmentId;
+                    $vote->user_id = $request->user()->id;
+                    $vote->vote_for = str_replace('option_', '', $option);
+                    $saved = $vote->save();
+                }
+            }
+        }
 
         return response()->json([
-            'submitted' => $submitted
+            'submitted' => true
         ]);
     }
 }

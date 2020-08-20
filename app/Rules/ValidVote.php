@@ -2,22 +2,20 @@
 
 namespace App\Rules;
 
+use Auth;
 use Illuminate\Contracts\Validation\Rule;
 use App\Amendment;
 
 class ValidVote implements Rule
 {
-    /* The amendment that is being voted on */
-    protected $amendment;
-
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct($amendmentId)
+    public function __construct()
     {
-        $this->amendment = Amendment::find($amendmentId);
+        
     }
 
     /**
@@ -29,11 +27,14 @@ class ValidVote implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (!in_array($value, [1, 2, 3, 4, 5])) return false;
+        $userVotes = Auth::user()->votes;
 
-        $cell = 'option_' . $value;
+        foreach($value as $amendmentId => $selection) {
+            $totalVotes = array_sum(array_column($selection, null));
+            if ($totalVotes > $userVotes) return false;
+        }
 
-        return $this->amendment[$cell] !== null;
+        return true;
     }
 
     /**

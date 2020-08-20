@@ -1,9 +1,29 @@
 <template>
-    <div class="placeholder">
-        <i class="far fa-check-circle" />
-        Voto registrado
-        <div :class="'option option-' + vote.votes[0].vote_for">
-            {{ selectedOption }}
+    <div class="submitted">
+        <div class="submitted__title">
+            <i class="far fa-check-circle" />
+            Voto registrado
+        </div>
+        <div class="submitted__summary">
+            <table class="table">
+                <tbody>
+                    <tr v-for="amendment in votes" :key="amendment.id">
+                        <td width="40%">
+                            {{ amendment.name }}
+                        </td>
+                        <td width="60%">
+                            <ul class="vote-pills">
+                                <li
+                                    v-for="vote in amendment.votes"
+                                    :key="vote.id"
+                                    :class="['vote-pill', `option_${vote.vote_for}`]">
+                                    {{ amendment[`option_${vote.vote_for}`] }}
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -13,66 +33,66 @@
         name: 'vote-submitted',
 
         props: {
-            vote: Object
-        },
-
-        computed: {
-            selectedOption: function () {
-                return this.vote['option_' + this.vote.votes[0].vote_for];
-            },
+            votes: Array
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    @import '../../../sass/variables';
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
     
-    .placeholder {
+    .submitted {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         color: $gray-800;
-        font-size: 2rem;
-        height: 40vh;
-        text-align: center;
+        min-height: 80vh;
+        max-width: 600px;
+        margin: 0 auto;
         line-height: 1.15;
 
         .far {
             font-size: 4rem;
             margin-bottom: 2rem;
         }
+
+        &__title {
+            display: flex;
+            flex-direction: column;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        &__summary {
+            margin-top: 2rem;
+        }
+
+        .vote-pills {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            justify-content: flex-end;
+        }
+
+        .vote-pill {
+            background: $gray-500;
+            color: $white;
+            padding: .25rem .75rem;
+            border-radius: $border-radius-lg;
+            white-space: nowrap;
+            margin: 0 .5rem .5rem 0;
+        }
+
+        @each $name, $color in $colors {
+            .#{$name} {
+                background: $color;
+            }
+        }
     }
-
-    .option {
-        background: $gray-200;
-        color: $white;
-        padding: .5rem 2rem;
-        border-radius: .5rem;
-        font-size: 2.5rem;
-        margin-top: 1rem;
-
-        &.option-1 {
-            background: $green;
-        }
-
-        &.option-2 {
-            background: $red;
-        }
-
-        &.option-3 {
-            background: $orange;
-        }
-
-        &.option-4 {
-            background: $blue;
-        }
-
-        &.option-5 {
-            background: $gray-800;
-        }
-    }
-
 </style>
