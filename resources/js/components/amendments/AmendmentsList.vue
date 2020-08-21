@@ -46,6 +46,10 @@
             AmendmentsResults
         },
 
+        props: {
+            timer: Object
+        },
+
         data () {
             return {
                 fields: [
@@ -105,12 +109,17 @@
                 this.loadingAmendment = amendment.id;
                 API.openAmendment(amendment.id).then(response => {
                     this.$socket.emit('vote_opened', true);
-                    this.$socket.emit('new_speaker', {
-                        speaker: null,
-                        time: 30000
-                    });
+                    if(this.timer.active) {
+                        const time = this.timer.limit.split(":");
+                        const milliseconds = ((parseInt(time[0]) * 60) + (parseInt(time[1]))) * 1000;
+                        this.$socket.emit('new_speaker', {
+                            speaker: null,
+                            time: milliseconds
+                        });
+                    }
                     // window.scrollTo(0, 0);
                 }).catch(error => {
+                    console.log(error)
                     alert('Error al cargar las enmiendas. Refresca el navegador');
                 }).then(() => this.loadingAmendment = false);
                 

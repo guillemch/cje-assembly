@@ -110,6 +110,16 @@
                 border-radius: 4px;
                 width: 2.75rem;
             }
+
+            .alert {
+                white-space: nowrap;
+                overflow-x: auto;
+                padding: .5rem;
+
+                @include media-breakpoint-up(lg) {
+                    padding: .5rem 1rem;
+                }
+            }
         }
     }
 

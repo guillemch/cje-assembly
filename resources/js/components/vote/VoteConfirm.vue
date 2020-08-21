@@ -74,6 +74,7 @@
                 password: '',
                 loading: false,
                 errors: [],
+                userVotes: window.user.votes
             };
         },
 

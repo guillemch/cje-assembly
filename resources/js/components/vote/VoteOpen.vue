@@ -136,15 +136,20 @@
 </style>
 
 <style lang="scss">
+    @import '../../../sass/variables';
+    @import '~bootstrap/scss/functions';
+    @import '~bootstrap/scss/variables';
+    @import '~bootstrap/scss/mixins';
+
     .vote-button {
         position: fixed;
         bottom: 1.5rem;
-        left: 1.5rem;
-        right: 1.5rem;
+        left: 1rem;
+        right: 1rem;
         z-index: 1000;
 
         &__wrapper {
-            max-width: 500px;
+            max-width: 525px;
             margin: 0 auto;
         }
 

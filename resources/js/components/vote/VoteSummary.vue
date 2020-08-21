@@ -21,7 +21,7 @@
                                 {{ vote[key] }}:
                                 {{ votes }}
                             </span>
-                            <span v-else :class="key">
+                            <span v-else :class="['vote-pill', key]">
                                 {{ vote[key] }}
                             </span>
                         </li>
@@ -86,6 +86,13 @@
             font-style: italic;
         }
 
+        &__name {
+            display: block;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 50%;
+        }
+
         &--multiple {
             & > li {
                 flex-direction: column;
@@ -99,12 +106,20 @@
                 font-weight: bold;
                 border-bottom: 1px dotted $gray-500;
                 margin-bottom: .5rem;
+                max-width: 100%;
             }
+        }
+
+        .vote-pill {
+            color: $white;
+            padding: .25rem .75rem;
+            border-radius: $border-radius-lg;
+            white-space: nowrap;
         }
 
         @each $name, $color in $colors {
             .#{$name} {
-                color: $color;
+                background: $color;
             }
         }
     }

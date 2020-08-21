@@ -53,8 +53,9 @@
 
     .vote {
         &__options {
-            max-width: 400px;
+            max-width: 450px;
             margin: 0 auto;
+            padding: 0 .5rem;
 
             .btn {
                 padding: 1rem 0;
