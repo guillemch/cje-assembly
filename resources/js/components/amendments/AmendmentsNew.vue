@@ -38,7 +38,8 @@
         <b-form-checkbox
             id="amendmentTimer"
             v-model="timer">
-            Contador <input type="time" v-model="timeLimit" class="form-control" :disabled="!timer" />
+            Temporizador
+            <input type="time" v-model="timeLimit" class="form-control" :disabled="!timer" />
         </b-form-checkbox>
         <hr />
         <div class="text-right">
@@ -69,7 +70,7 @@
                     open: true
                 },
                 timer: false,
-                timeLimit: '01:00',
+                timeLimit: '00:30',
                 loading: false,
                 errors: []
             }

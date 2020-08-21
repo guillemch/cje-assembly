@@ -1,20 +1,36 @@
 <template>
-    <div class="amendments-open" v-if="amendment">
-        <b-card class="mb-4" header-bg-variant="success" border-variant="success">
-          <h6 slot="header" class="amendments-open__header mb-0">
-            <i class="far fa-sync fa-spin mr-2"></i> Votación abierta
-            <div class="float-right">
-                <amendments-timer :opened="amendment.opened_at" />
-                <b-btn variant="danger" class="amendments-open__close-button" @click="close" :disabled="closing">
-                    <i class="far fa-hand-paper" v-if="!closing" />
-                    <i class="fa-spinner-third fa-spin" v-else />
-                    Cerrar
-                </b-btn>
-            </div>
-          </h6>
-
-          <amendments-results :amendment="amendment" />
-        </b-card>
+    <div class="amendments-open" v-if="amendments">
+        <b-card
+            class="mb-4"
+            header-bg-variant="success"
+            border-variant="success"
+            no-body>
+            <h6 slot="header" class="amendments-open__header mb-0">
+                <i class="far fa-sync fa-spin mr-2"></i> Votación abierta
+                <div class="float-right">
+                    <amendments-timer :opened="amendments[0].opened_at" />
+                    <b-btn variant="danger" class="amendments-open__close-button" @click="close" :disabled="closing">
+                        <i class="far fa-hand-paper" v-if="!closing" />
+                        <i class="fa-spinner-third fa-spin" v-else />
+                        Cerrar
+                    </b-btn>
+                    <b-btn variant="success" class="amendments-open__minimize-button" @click="minimized = !minimized">
+                        <i class="far fa-window-minimize" v-if="!minimized" />
+                        <i class="far fa-window-maximize" v-else />
+                    </b-btn>
+                </div>
+            </h6>
+            <b-tabs card v-show="!minimized">
+                <b-tab
+                    v-for="amendment in amendments"
+                    :key="amendment.id"
+                    :title="amendment.name">
+                        <b-card-text>
+                            <amendments-results :amendment="amendment" />
+                        </b-card-text>
+                </b-tab>
+            </b-tabs>
+         </b-card>
     </div>
 </template>
 
@@ -32,30 +48,31 @@
 
         data () {
             return {
-                amendment: null,
+                amendments: null,
                 interval: null,
-                closing: false
+                closing: false,
+                minimized: false
             }
         },
 
         mounted () {
-            this.getCurrentVote(true);
+            this.getOpenVotes(true);
         },
 
         sockets: {
             refresh_vote: function (data) {
-                this.getCurrentVote(true);
+                this.getOpenVotes(true);
             }
         },
 
         methods: {
-            getCurrentVote (refresh) {
-                API.getCurrentVote({ with_results: true }).then(vote => {
-                    if (vote.hasOwnProperty('name')) {
-                        this.amendment = vote;
-                        if (refresh) this.interval = setInterval(() => { this.getCurrentVote(false) }, 2000);
+            getOpenVotes (refresh) {
+                API.getOpenVotes({ with_results: true }).then(amendments => {
+                    if (amendments.length > 0) {
+                        this.amendments = amendments;
+                        if (refresh) this.interval = setInterval(() => { this.getOpenVotes(false) }, 2000);
                     } else {
-                        this.amendment = null;
+                        this.amendments = null;
                         clearInterval(this.interval);
                         this.interval = null;
                     }
@@ -67,7 +84,7 @@
             close () {
                 this.closing = true;
 
-                API.closeAmendment(this.amendment.id).then(response => {
+                API.closeAmendment(this.amendments[0].id).then(response => {
                     this.$socket.emit('vote_opened', false);
                     this.$socket.emit('new_speaker', {
                         speaker: null,
@@ -98,5 +115,14 @@
         &__close-button {
           margin: -.9rem 0 -.8rem 1rem;
         }
+
+        &__minimize-button {
+            margin: -.9rem -.9rem -.8rem 0;
+        }
+    }
+</style>
+<style>
+    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+        background: white;
     }
 </style>

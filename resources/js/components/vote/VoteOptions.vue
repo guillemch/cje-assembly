@@ -62,6 +62,11 @@
                 margin: 1.5rem 0;
                 font-size: 1.5rem;
             }
+
+            h2 {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
         }
     }
 </style>

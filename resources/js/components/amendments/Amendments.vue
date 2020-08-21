@@ -13,7 +13,7 @@
                     </b-btn>
                     <div class="ml-auto form-inline">
                         <b-form-checkbox
-                            id="amendmentTimer"
+                            id="globalTimer"
                             v-model="timer.active">
                             Temporizador
                             <input type="time" class="form-control form-control-sm ml-2" v-model="timer.limit" />
@@ -96,8 +96,10 @@
             top: 50px;
             left: 0;
             width: 100%;
-            padding: 1rem 0;
+            padding-top: 1rem;
             z-index: 100;
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
         }
     }
 </style>

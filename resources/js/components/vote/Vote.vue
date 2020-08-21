@@ -82,7 +82,7 @@
     @import '~bootstrap/scss/mixins';
     
     .vote {
-        padding-top: 4rem;
+        padding-top: 3rem;
 
         &__placeholder {
         display: flex;

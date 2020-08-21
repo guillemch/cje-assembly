@@ -23,11 +23,20 @@ class Amendment extends Model
         return $this->hasMany('App\Vote');
     }
 
-    public function openVote()
+    public function openVote($closeAll = true)
     {
-        $this->closeAllVotes();
+        if ($closeAll) $this->closeAllVotes();
         $this->open = 1;
         $this->opened_at = Carbon::now();
+
+        // Open all joint amendments as well
+        $jointAmendments = Self::where('joint_with', $this->id)->get();
+        if ($jointAmendments) {
+            foreach ($jointAmendments as $amendment) {
+                $amendment->openVote(false);
+            }
+        }
+
         return $this->save();
     }
 
