@@ -8,7 +8,7 @@
                 </a>
             </div>
         </div>
-        <b-card>
+        <b-card no-body>
             <h6 slot="header" class="mb-0 d-flex align-items-center">
                 <strong class="mr-2">Miembros</strong> ({{ users.length }} total, {{ checkedin }} acreditados)
                 <div class="ml-auto">

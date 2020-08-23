@@ -8,11 +8,11 @@
             <table class="table">
                 <tbody>
                     <tr v-for="amendment in votes" :key="amendment.id">
-                        <td width="40%">
+                        <td class="vote-name" width="40%">
                             {{ amendment.name }}
                         </td>
-                        <td width="60%">
-                            <ul class="vote-pills">
+                        <td class="vote-pills" width="60%">
+                            <ul>
                                 <li
                                     v-for="vote in amendment.votes"
                                     :key="vote.id"
@@ -71,22 +71,29 @@
             margin-top: 2rem;
         }
 
-        .vote-pills {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            justify-content: flex-end;
+        .vote-name {
+            padding-top: 1rem;
         }
 
-        .vote-pill {
-            background: $gray-500;
-            color: $white;
-            padding: .25rem .75rem;
-            border-radius: $border-radius-lg;
-            white-space: nowrap;
-            margin: 0 .5rem .5rem 0;
+        .vote-pills {
+            padding-bottom: .25rem;
+
+            ul {
+                display: flex;
+                flex-wrap: wrap;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                justify-content: flex-end;
+            }
+
+            .vote-pill {
+                color: $white;
+                padding: .25rem .75rem;
+                border-radius: $border-radius-lg;
+                white-space: nowrap;
+                margin: 0 .5rem .5rem 0;
+            }
         }
 
         @each $name, $color in $colors {

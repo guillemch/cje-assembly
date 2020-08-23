@@ -22,7 +22,7 @@
 
 <script>
     export default {
-        name: 'screen',
+        name: 'screen-results',
 
         props: {
             amendment: Object

@@ -49,31 +49,30 @@ class ScreenController extends Controller
         $timestamp = Google2FA::getTimestamp();
         $now = Carbon::now();
         $nextCode = Carbon::createFromTimestamp(($timestamp * 30) + 30);
-
         $nextAlert = ($nextCode->diffInSeconds($now) <= 5);
 
         /* Vote */
         $justClosed = false;
-        $vote = Amendment::current()->first();
+        $votes = Amendment::open()->get();
 
-        if (!$vote) {
-            // Retreive last vote if closed within 30 seconds
-            $vote = Amendment::orderBy('closed_at', 'desc')->first();
-            $voteClosedAt = Carbon::parse($vote->closed_at);
+        if (!$votes) {
+            // Retreive last votes if closed within 30 seconds
+            $votes = Amendment::orderBy('closed_at', 'desc')->get();
+            $votesClosedAt = Carbon::parse($votes[0]->closed_at);
 
-            if ($vote->closed_at) {
-                if ($voteClosedAt->diffInSeconds($now) > 30) {
+            if ($votes[0]->closed_at) {
+                if ($votesClosedAt->diffInSeconds($now) > 30) {
                     $vote = null;
                 } else {
                     $justClosed = true;
                 }
             } else {
-                $vote = null;
+                $votes = null;
             }
         }
 
         return response()->json([
-            'vote' => $vote,
+            'votes' => $votes,
             'code' => $code,
             'next_alert' => $nextAlert,
             'just_closed' => $justClosed

@@ -1,6 +1,6 @@
 <template>
     <div v-if="time" class="floor">
-        <b-card class="mb-4" header-bg-variant="info" border-variant="info">
+        <b-card class="mb-4" header-bg-variant="info" border-variant="info" no-body>
             <h6 slot="header" class="mb-0">
                 <i class="far fa-sync fa-spin mr-2"></i> Turno de palabra
                 <div class="float-right">
@@ -8,9 +8,13 @@
                         <i class="far fa-hand-paper" />
                         Cerrar
                     </b-btn>
+                    <b-btn variant="info" class="minimize-button" @click="minimized = !minimized">
+                        <i class="far fa-window-minimize" v-if="!minimized" />
+                        <i class="far fa-window-maximize" v-else />
+                    </b-btn>
                 </div>
             </h6>
-            <div class="row align-items-center">
+            <div class="row align-items-center p-3" v-show="!minimized">
                 <div class="col-md-8">
                     <h5 v-if="speaker">{{ speaker.name }} ({{ speaker.group.acronym }})</h5>
                 </div>
@@ -38,7 +42,8 @@
             return {
                 time: null,
                 speaker: null,
-                connected: false
+                connected: false,
+                minimized: false
             }
         },
 
@@ -98,6 +103,10 @@
 
         .close-button {
             margin: -.9rem 0 -.8rem 1rem;
+        }
+
+        .minimize-button {
+            margin: -.9rem -.9rem -.8rem 0;
         }
 
         .countdown {

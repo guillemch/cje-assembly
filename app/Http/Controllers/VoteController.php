@@ -58,25 +58,6 @@ class VoteController extends Controller
     }
 
     /**
-     * Get the currently open vote (deprecated, delete later)
-     *
-     * @return Response
-     */
-    public function current(Request $request)
-    {
-        $current = Amendment::current()->first();
-
-        if (!$current) return response()->json(['no_open_vote' => true]);
-
-        $current->load(['votes' => function ($query) use ($request) {
-            $query->where('user_id', $request->user()->id);
-            $query->limit(1);
-        }]);
-
-        return response()->json($current);
-    }
-
-    /**
      * Get the currently open votes
      *
      * @return Response

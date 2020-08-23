@@ -2,28 +2,31 @@
     <fullscreen ref="fullscreen" @change="fullscreenChange" class="fullscreen">
         <div class="screen">
             <transition name="fade">
-                <div v-if="screen.vote !== null" class="vote-info">
+                <div v-if="screen.votes.length === 1" class="vote-info">
                     <div class="vote-name">
-                        <h1>{{ screen.vote.name }}</h1>
+                        <h1>{{ screen.votes[0].name }}</h1>
                     </div>
                     <transition name="fade">
-                    <div class="vote-results row" v-show="screen.just_closed">
-                        <div class="col-7">
-                            <screen-results :amendment="screen.vote" />
-                        </div>
-                        <div class="col-5">
-                            <screen-results-by-group :results="screen.vote.results.by_group" :compensate="screen.vote.results.compensate" />
-                        </div>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                        <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.vote !== null && !screen.just_closed">
-                            <screen-code :code="screen.code" />
-                        </div>
-                        <div v-else-if="screen.just_closed" class="just-closed-bar">
-                            <i class="far fa-lock-alt" /> Cerrada
+                        <div class="vote-results row" v-show="screen.just_closed">
+                            <div class="col-7">
+                                <screen-results :amendment="screen.votes[0]" />
+                            </div>
+                            <div class="col-5">
+                                <screen-results-by-group :results="screen.votes[0].results.by_group" :compensate="screen.votes[0].results.compensate" />
+                            </div>
                         </div>
                     </transition>
+                </div>
+                <div v-else-if="screen.votes.length > 1" class="vote-info">
+                    <screen-multiple-results :amendments="screen.votes" />
+                </div>
+            </transition>
+            <transition name="fade">
+                <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.votes !== null && !screen.just_closed">
+                    <screen-code :code="screen.code" />
+                </div>
+                <div v-else-if="screen.just_closed" class="just-closed-bar">
+                    <i class="far fa-lock-alt" /> Cerrada
                 </div>
             </transition>
             <transition name="fade">
@@ -37,7 +40,7 @@
                     </div>
                 </div>
             </transition>
-            <div :class="{ 'screen-logo': true, 'vote-active': (screen.vote !== null || countdown.time !== null) }">
+            <div :class="{ 'screen-logo': true, 'vote-active': (screen.votes !== null || countdown.time !== null) }">
                 <div class="logo">
                     <img src="../../../images/logo.jpg" alt="Logo" />
                     <button type="button" @click="toggleFullscreen" v-if="!fullscreen" class="fullscreen-button">Fullscreen</button>
@@ -49,6 +52,7 @@
 
 <script>
     import ScreenResults from './ScreenResults';
+    import ScreenMultipleResults from './ScreenMultipleResults';
     import ScreenResultsByGroup from './ScreenResultsByGroup';
     import ScreenCode from './ScreenCode';
     import VueCountdown from '@chenfengyuan/vue-countdown';
@@ -58,6 +62,7 @@
 
         components: {
             ScreenResults,
+            ScreenMultipleResults,
             ScreenResultsByGroup,
             ScreenCode,
             'countdown': VueCountdown
@@ -65,7 +70,7 @@
 
         data () {
             return {
-                screen: { vote: null, code: null, just_closed: false, next_alert: false },
+                screen: { votes: null, code: null, just_closed: false, next_alert: false },
                 countdown: { time: null, speaker: null, alert: false },
                 loading: false,
                 connected: false,
@@ -107,8 +112,8 @@
                     this.screen = screen;
                     this.loading = false;
 
-                    if (this.screen.vote && !this.screen.just_closed) {
-                        console.log('Has vote');
+                    if (this.screen.votes && !this.screen.just_closed) {
+                        console.log('Has votes');
                         if (allowRefresh && !this.ticking) {
                             console.log('Set refresh');
                             this.ticking = true;

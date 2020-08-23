@@ -27,10 +27,6 @@ export default class API {
         return this._call('post', 'amendments/' + id + '/close');
     }
 
-    getCurrentVote (params) {
-        return this._call('get', 'vote/current', { params });
-    }
-
     getOpenVotes (params) {
         return this._call('get', 'vote/open', { params });
     }

@@ -1,5 +1,5 @@
 <template>
-    <b-card>
+    <b-card no-body>
         <h6 slot="header" class="mb-0">Archivo de votaciones</h6>
         <b-table hover :items="amendments" :fields="fields">
             <template slot="table-colgroup">
