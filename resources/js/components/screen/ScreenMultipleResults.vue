@@ -1,40 +1,80 @@
 <template>
-    <div class="screen-results">
-        <table class="table table-multiple-results">
-            <tr>
-              <th></th>
-              <th>A favor</th>
-              <th>En contra</th>
-              <th>Abstención</th>
-            </tr>
-            <tr v-for="amendment in amendments" :key="amendment.id" :class="amendment.results.winner">
-                <td class="amendment-name" width="30%">{{ amendment.name }}</td>
-                <template v-for="option in 3">
-                  <td v-if="amendment[`option_${option}`]" :key="option" class="option-row" width="20%">
-                      <div :class="['option', 'option_' + option, { 'winner': amendment.results.winner === option }]">
-                        <span class="option-votes option-votes--c">{{ amendment.results.absolute[1][option] }} <em>C</em></span>
-                        <span class="option-votes option-votes--e">{{ amendment.results.absolute[2][option] }} <em>E</em></span>
-                        <span class="option-percentage">{{ amendment.results.weighted[option] | percentage }}</span>
-                        <i class="option-tick far fa-check" v-if="amendment.results.winner === option" />
-                      </div>
-                  </td>
-                </template>
-            </tr>
-        </table>
+    <div class="screen-multiple-results">
+        <div :class="['screen-slide', {'screen-slide--current': currentSlide === 0 }]">
+            <screen-multiple-results-summary :amendments="amendments" class="summary" />
+        </div>
+        <div v-for="(amendment, slide) in amendments" :key="amendment.id" :class="['screen-slide', {'screen-slide--current': currentSlide === slide + 1 }]">
+            <div class="vote-name">
+                <h1>{{ amendment.name }}</h1>
+            </div>
+            <div class="row">
+                <div class="col-7">
+                    <screen-results :amendment="amendment" />
+                </div>
+                <div class="col-5">
+                    <screen-results-by-group :results="amendment.results.by_group" :compensate="amendment.results.compensate" />
+                </div>
+            </div>
+        </div>
+        <div class="slide-nav">
+            <ul>
+                <li :class="['slide-nav-item', {'slide-nav-item--current': currentSlide === 0 }]">
+                    Resumen
+                </li>
+                <li v-for="(amendment, slide) in amendments" :key="`amendment-${amendment.id}`" :class="['slide-nav-item', {'slide-nav-item--current': currentSlide === slide + 1 }]">
+                    {{ amendment.name }}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <script>
+    import ScreenMultipleResultsSummary from './ScreenMultipleResultsSummary';
+    import ScreenResults from './ScreenResults';
+    import ScreenResultsByGroup from './ScreenResultsByGroup';
+
     export default {
         name: 'screen-multiple-results',
+
+        components: {
+          ScreenMultipleResultsSummary,
+          ScreenResults,
+          ScreenResultsByGroup
+        },
 
         props: {
             amendments: Array
         },
 
-        filters: {
-            percentage: function (value) {
-                return String(value).replace('.', ',') + '%';
+        data () {
+            return {
+                currentSlide: 0,
+                counter: null
+            }
+        },
+
+        computed: {
+            slides () {
+                return this.amendments.length;
+            }
+        },
+
+        mounted () {
+            this.nextSlide();
+        },
+
+        methods: {
+            nextSlide () {
+                setTimeout(() => {
+                    if (this.currentSlide === this.slides) {
+                        this.currentSlide = 0;
+                    } else {
+                        this.currentSlide++;
+                    }
+
+                    this.nextSlide();
+                }, 15000);
             }
         }
     }
@@ -46,71 +86,90 @@
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
 
-    .table-multiple-results {
-      th {
-        border-top: 0;
-        color: $gray-600;
-        font-weight: normal;
-        text-align: right;
-      }
+    .screen-multiple-results {
+        position: relative;
 
-      .option {
-        display: grid;
-        grid-template-columns: 2rem 1fr 1fr;
-        grid-template-rows: auto auto;
-        grid-template-areas:
-          "tick percentage percentage"
-          "tick votes-c votes-e";
-        gap: .4rem;
-        padding: .7rem;
-        border-radius: .25rem;
-        line-height: 1;
+        .screen-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            opacity: 0;
+            transition: opacity .5s ease, transform 1s ease;
+            transform: translateY(2rem);
+            will-change: opacity, transform;
 
-        &-percentage {
-          grid-area: percentage;
-          font-size: 2.25rem;
-          text-align: right;
+            &--current {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        &-votes {
-          text-align: right;
-          opacity: .7;
-
-          em {
-            font-style: normal;
-            opacity: .7;
-          }
+        .summary {
+            margin-top: 4rem;
         }
 
-        &-votes--c {
-          grid-area: votes-c;
+        .vote-name {
+            h1 {
+                font-size: 4vw;
+                font-weight: bold;
+                padding-right: 18vw;
+            }
         }
 
-        &-votes--e {
-          grid-area: votes-e
+        .slide-nav {
+            position: fixed;
+            left: 8vw;
+            bottom: 12vw;
+
+            ul {
+                display: flex;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            &-item {
+                position: relative;
+                overflow: hidden;
+                border-radius: .5rem;
+                margin-right: 1rem;
+                background: $gray-200;
+                padding: .25rem .5rem;
+                font-size: .85rem;
+                min-width: 100px;
+                text-align: center;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    background: $gray-400;
+                    z-index: 1;
+                    width: 0;
+                    mix-blend-mode: multiply;
+                    will-change: width;
+                }
+
+                &--current {
+                    &::before {
+                        animation: fill 15s linear;
+                    }
+                }
+            }
+        }
+    }
+
+    @keyframes fill {
+        0% {
+            width: 0;
         }
 
-        &-tick {
-          grid-area: tick;
-          font-size: 2rem;
-          align-self: center;
+        100% {
+            width: 100%;
         }
-
-        &-row {
-          padding: .25rem;
-        }
-      }
-
-      .amendment-name {
-        font-size: 1.75rem;
-        vertical-align: middle;
-      }
-      
-      @each $name, $color in $colors {
-        .#{$name}.winner {
-          background: $color;
-          color: $white;
-        }
-      }
     }
 </style>

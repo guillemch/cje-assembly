@@ -23,28 +23,31 @@ class Amendment extends Model
         return $this->hasMany('App\Vote');
     }
 
-    public function openVote($closeAll = true)
+    public function openVote()
     {
-        if ($closeAll) $this->closeAllVotes();
-        $this->open = 1;
-        $this->opened_at = Carbon::now();
+        $this->closeAllVotes();
+        $openTime = Carbon::now();
+        $ref = $this->joint_with ?: $this->id;
+        $jointAmendments = Self::where('joint_with', $ref)->orWhere('id', $ref)->get();
 
-        // Open all joint amendments as well
-        $jointAmendments = Self::where('joint_with', $this->id)->get();
-        if ($jointAmendments) {
-            foreach ($jointAmendments as $amendment) {
-                $amendment->openVote(false);
-            }
+        foreach($jointAmendments as $amendment) {
+            $amendment->open = 1;
+            $amendment->opened_at = $openTime;
+            $amendment->save();
         }
-
-        return $this->save();
     }
 
     public function closeVote()
     {
         $this->closeAllVotes();
-        $this->closed_at = Carbon::now();
-        return $this->save();
+        $closeTime = Carbon::now();
+        $ref = $this->joint_with ?: $this->id;
+        $jointAmendments = Self::where('joint_with', $ref)->orWhere('id', $ref)->get();
+
+        foreach($jointAmendments as $amendment) {
+            $amendment->closed_at = $closeTime;
+            $amendment->save();
+        }
     }
 
     /* Deprecated, delete later */

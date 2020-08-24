@@ -50,24 +50,28 @@ class ScreenController extends Controller
         $now = Carbon::now();
         $nextCode = Carbon::createFromTimestamp(($timestamp * 30) + 30);
         $nextAlert = ($nextCode->diffInSeconds($now) <= 5);
+        $willHideIn = null;
 
         /* Vote */
         $justClosed = false;
         $votes = Amendment::open()->get();
 
-        if (!$votes) {
-            // Retreive last votes if closed within 30 seconds
-            $votes = Amendment::orderBy('closed_at', 'desc')->get();
-            $votesClosedAt = Carbon::parse($votes[0]->closed_at);
+        if (!$votes->count()) {
+            // Get last close time
+            $lastCloseTime = Amendment::orderBy('closed_at', 'desc')->first();
+            if ($lastCloseTime->closed_at) {
+                // Get all amendments closed at the same time
+                $lastAmendments = Amendment::where('closed_at', $lastCloseTime->closed_at)->orderBy('id', 'asc')->get();
 
-            if ($votes[0]->closed_at) {
-                if ($votesClosedAt->diffInSeconds($now) > 30) {
-                    $vote = null;
-                } else {
+                // Allocate 10 seconds per amendment or 30 if only one
+                $votesClosedAt = Carbon::parse($lastCloseTime->closed_at);
+                $seconds = ($lastAmendments->count() === 1) ? 35 : 15 * ($lastAmendments->count() + 1);
+
+                if ($votesClosedAt->diffInSeconds($now) < $seconds) {
+                    $votes = $lastAmendments;
                     $justClosed = true;
+                    $willHideIn = $seconds * 1000;
                 }
-            } else {
-                $votes = null;
             }
         }
 
@@ -75,7 +79,8 @@ class ScreenController extends Controller
             'votes' => $votes,
             'code' => $code,
             'next_alert' => $nextAlert,
-            'just_closed' => $justClosed
+            'just_closed' => $justClosed,
+            'will_hide_in' => $willHideIn
         ]);
     }
 }

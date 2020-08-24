@@ -1,13 +1,14 @@
 <template>
     <fullscreen ref="fullscreen" @change="fullscreenChange" class="fullscreen">
         <div class="screen">
-            <transition name="fade">
-                <div v-if="screen.votes.length === 1" class="vote-info">
-                    <div class="vote-name">
+            <transition name="fade" mode="out-in">
+                <div key="single-vote" v-if="screen.votes && screen.votes.length === 1" class="vote-info">
+                    <div :class="['vote-name ongoing-vote', {'vote-name--ongoing': !screen.just_closed}]">
+                        <h3>Votación <span class="pulse-icon"></span></h3>
                         <h1>{{ screen.votes[0].name }}</h1>
                     </div>
-                    <transition name="fade">
-                        <div class="vote-results row" v-show="screen.just_closed">
+                    <transition name="fade" mode="out-in">
+                        <div key="results" class="vote-results row" v-if="screen.just_closed">
                             <div class="col-7">
                                 <screen-results :amendment="screen.votes[0]" />
                             </div>
@@ -15,14 +16,23 @@
                                 <screen-results-by-group :results="screen.votes[0].results.by_group" :compensate="screen.votes[0].results.compensate" />
                             </div>
                         </div>
+                        <div key="awaiting" v-else></div>
                     </transition>
                 </div>
-                <div v-else-if="screen.votes.length > 1" class="vote-info">
-                    <screen-multiple-results :amendments="screen.votes" />
+                <div key="multiple-votes" v-else-if="screen.votes.length > 1" class="vote-info">
+                    <transition name="fade" mode="out-in">
+                        <screen-multiple-results :amendments="screen.votes" v-if="screen.just_closed" />
+                        <div v-else class="ongoing-vote">
+                            <h3>Votación <span class="pulse-icon"></span></h3>
+                            <div v-for="amendment in screen.votes" :key="amendment.id">
+                                <h2>{{ amendment.name }}</h2>
+                            </div>
+                        </div>
+                    </transition>
                 </div>
             </transition>
             <transition name="fade">
-                <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.votes !== null && !screen.just_closed">
+                <div :class="{ 'screen-password': true, 'next-alert': screen.next_alert }" v-if="screen.votes && screen.votes.length > 0 && !screen.just_closed">
                     <screen-code :code="screen.code" />
                 </div>
                 <div v-else-if="screen.just_closed" class="just-closed-bar">
@@ -30,7 +40,7 @@
                 </div>
             </transition>
             <transition name="fade">
-                <div :class="{ 'countdown': true, 'ongoing-vote': screen.vote !== null }" v-if="countdown.time !== null">
+                <div :class="{ 'countdown': true, 'ongoing-vote': screen.votes && screen.votes.length > 0 }" v-if="countdown.time !== null">
                     <h1 v-if="countdown.speaker">{{ countdown.speaker.name }}</h1>
                     <h3 v-if="countdown.speaker">{{ countdown.speaker.group.name }}</h3>
                     <div class="text-center">
@@ -40,7 +50,7 @@
                     </div>
                 </div>
             </transition>
-            <div :class="{ 'screen-logo': true, 'vote-active': (screen.votes !== null || countdown.time !== null) }">
+            <div :class="{ 'screen-logo': true, 'vote-active': ((screen.votes && screen.votes.length > 0) || countdown.time !== null) }">
                 <div class="logo">
                     <img src="../../../images/logo.jpg" alt="Logo" />
                     <button type="button" @click="toggleFullscreen" v-if="!fullscreen" class="fullscreen-button">Fullscreen</button>
@@ -125,7 +135,7 @@
                         this.interval = null;
                         this.ticking = false;
                         if (this.screen.just_closed) {
-                            setTimeout(() => { this.getScreen(false); }, 35000);
+                            setTimeout(() => { this.getScreen(false); }, this.screen.will_hide_in);
                         }
                     }
                 });
@@ -168,6 +178,7 @@
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500&display=swap');
 
     .fullscreen {
         background: $body-bg !important;
@@ -216,6 +227,7 @@
             left: 0;
             right: 0;
             padding: 4vw 8vw;
+            font-variant-numeric: tabular-nums;
         }
 
         .screen-password,
@@ -241,10 +253,13 @@
         }
 
         .vote-name {
+            position: relative;
+
             h1 {
                 font-size: 4vw;
                 font-weight: bold;
                 padding-right: 18vw;
+                transition: 1s ease;
             }
 
             .just-closed {
@@ -254,6 +269,41 @@
                 padding: .5vw 1vw;
                 color: $white;
                 font-size: 1.75vw;
+            }
+
+            h3 {
+                position: absolute;
+                top: 1vw;
+                left: 0;
+                opacity: 0;
+                transition: 1s ease;
+            }
+
+            &--ongoing {
+                h1 {
+                    transform: translateY(15vw);
+                    font-size: 7.5vw;
+                }
+
+                h3 {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .ongoing-vote {
+            h3 {
+                color: $gray-600;
+                text-transform: uppercase;
+                letter-spacing: .25em;
+                font-size: 2vw;
+                margin-bottom: 3vw;
+            }
+
+            h2 {
+                margin: .25em 0;
+                font-size: 4.5vw;
+                font-weight: bold;
             }
         }
 
@@ -277,6 +327,9 @@
                 width: 56vw;
                 border-radius: 2rem;
                 margin-top: 7vw;
+                font-variant-numeric: tabular-nums;
+                font-family: Manrope, sans-serif;
+                font-weight: 500;
             }
 
             &-alert {
@@ -304,9 +357,23 @@
                     margin-top: 0;
                     float: right;
                     border-width: .25vw;
+                    font-variant-numeric: tabular-nums;
                 }
             }
         }
+    }
+
+    .pulse-icon {
+        display: inline-block;
+        position: relative;
+        height: 1em;
+        width: 1em;
+        background: $red;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba($red, 1);
+        transform: scale(1);
+        animation: pulse 2s infinite;
+        top: .15em;
     }
 
     .fullscreen-button {
@@ -351,6 +418,23 @@
             color: $black;
             background: transparent;
             border-color: $gray-300;
+        }
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba($red, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba($red, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba($red, 0);
         }
     }
 </style>

@@ -25,9 +25,7 @@
                     v-for="amendment in amendments"
                     :key="amendment.id"
                     :title="amendment.name">
-                        <b-card-text>
-                            <amendments-results :amendment="amendment" />
-                        </b-card-text>
+                        <amendments-results :amendment="amendment" />
                 </b-tab>
             </b-tabs>
          </b-card>
