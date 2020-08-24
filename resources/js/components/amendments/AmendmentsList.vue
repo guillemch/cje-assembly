@@ -1,32 +1,76 @@
 <template>
     <b-card no-body>
         <h6 slot="header" class="mb-0">Archivo de votaciones</h6>
-        <b-table hover :items="amendments" :fields="fields">
-            <template slot="table-colgroup">
+        <b-table-simple hover>
+            <colgroup>
                 <col width="75" />
                 <col />
                 <col width="150" />
                 <col width="140" />
                 <col width="140" />
-            </template>
-            <template slot="winner" slot-scope="data">
-                <div :class="'option-tag option-tag-' + data.item.results.winner" v-if="data.item.results.winner">
-                    {{ data.item['option_' + data.item.results.winner] }}
-                </div>
-            </template>
-            <template slot="actions" slot-scope="data">
-                <div class="text-right">
-                    <b-btn size="sm" @click="openVote(data.item)" v-if="data.item.open === 0" :disable="loadingAmendment === data.item.id">
-                        <i :class="{ 'far': true, 'fa-hand-paper': loadingAmendment !== data.item.id, 'fa-spinner-third fa-spin': loadingAmendment === data.item.id }" />
-                        Abrir
-                    </b-btn>
-                    <b-btn size="sm" variant="success" disabled v-else>
-                        Abierta
-                    </b-btn>
-                    <b-btn variant="primary" size="sm" @click="fullResults(data.item.id)">+</b-btn>
-                </div>
-            </template>
-        </b-table>
+            </colgroup>
+            <b-thead>
+                <b-th class="text-right">#</b-th>
+                <b-th>Votación</b-th>
+                <b-th>Resultado</b-th>
+                <b-th>Cerrada</b-th>
+                <b-th></b-th>
+            </b-thead>
+            <b-tbody>
+                <template v-for="amendment in amendments">
+                    <b-tr :key="amendment.id">
+                        <b-td class="text-right">
+                            {{ amendment.id }}
+                        </b-td>
+                        <b-td>
+                            {{ amendment.name }}
+                        </b-td>
+                        <b-td>
+                            <div :class="'option-tag option-tag-' + amendment.results.winner" v-if="amendment.results.winner">
+                                {{ amendment['option_' + amendment.results.winner] }}
+                            </div>
+                        </b-td>
+                        <b-td>
+                            {{ amendment.closed_at | dateTime }}
+                        </b-td>
+                        <b-td>
+                            <div class="text-right">
+                                <b-btn size="sm" @click="openVote(amendment)" v-if="amendment.open === 0" :disable="loadingAmendment === amendment.id">
+                                    <i :class="{ 'far': true, 'fa-hand-paper': loadingAmendment !== amendment.id, 'fa-spinner-third fa-spin': loadingAmendment === amendment.id }" />
+                                    Abrir
+                                </b-btn>
+                                <b-btn size="sm" variant="success" disabled v-else>
+                                    Abierta
+                                </b-btn>
+                                <b-btn variant="primary" size="sm" @click="fullResults(amendment.id)">+</b-btn>
+                            </div>
+                        </b-td>
+                    </b-tr>
+                    <b-tr v-for="jointAmendment in amendment.joint_amendments" :key="jointAmendment.id" class="joint-amendment">
+                        <b-td class="text-right">
+                            {{ jointAmendment.id }}
+                        </b-td>
+                        <b-td>
+                            <i class="far fa-arrow-right"></i>
+                            {{ jointAmendment.name }}
+                        </b-td>
+                        <b-td>
+                            <div :class="'option-tag option-tag-' + jointAmendment.results.winner" v-if="jointAmendment.results.winner">
+                                {{ jointAmendment['option_' + jointAmendment.results.winner] }}
+                            </div>
+                        </b-td>
+                        <b-td>
+                            
+                        </b-td>
+                        <b-td>
+                            <div class="text-right">
+                                <b-btn variant="primary" size="sm" @click="fullResults(jointAmendment.id)">+</b-btn>
+                            </div>
+                        </b-td>
+                    </b-tr>
+                </template>
+            </b-tbody>
+        </b-table-simple>
 
         <b-modal id="AmendmentsDetails" ref="AmendmentsDetails" title="Resultados" size="lg" ok-only ok-title="Cerrar">
             <amendments-results :amendment="selectedAmendment" full-list />
@@ -52,33 +96,6 @@
 
         data () {
             return {
-                fields: [
-                    {
-                        key: 'id',
-                        label: '#',
-                        sortable: true
-                    },
-                    {
-                        key: 'name',
-                        label: 'Votación',
-                        sortable: true
-                    },
-                    {
-                        key: 'winner',
-                        label: 'Resultado',
-                        sortable: false
-                    },
-                    {
-                        key: 'closed_at',
-                        label: 'Cerrada',
-                        formatter: 'dateTime',
-                        sortable: true
-                    },
-                    {
-                        key: 'actions',
-                        label: ''
-                    }
-                ],
                 amendments: [],
                 selectedAmendment: null,
                 loadingAmendment: false
@@ -130,8 +147,10 @@
                     this.selectedAmendment = response;
                     this.$refs.AmendmentsDetails.show();
                 });
-            },
-            
+            }
+        },
+
+        filters: {
             dateTime (value) {
                 if (!value) return '';
                 return moment(value).format("ddd HH:mm");
@@ -139,3 +158,21 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    @import '../../../sass/variables';
+    @import '~bootstrap/scss/functions';
+    @import '~bootstrap/scss/variables';
+    @import '~bootstrap/scss/mixins';
+
+    .joint-amendment {
+        td {
+            border-top: 0;
+            color: $gray-600;
+
+            i {
+                margin-right: .5rem;
+            }
+        }
+    }
+</style>

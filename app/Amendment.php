@@ -23,6 +23,17 @@ class Amendment extends Model
         return $this->hasMany('App\Vote');
     }
 
+    /**
+     * Get joint amendments
+     */
+    public function joint_amendments()
+    {
+        return $this->hasMany(Self::class, 'joint_with');
+    }
+
+    /**
+     * Opens a vote on an amendment
+     */
     public function openVote()
     {
         $this->closeAllVotes();
@@ -37,6 +48,9 @@ class Amendment extends Model
         }
     }
 
+    /**
+     * Closes the vote on an amendment
+     */
     public function closeVote()
     {
         $this->closeAllVotes();
@@ -50,22 +64,24 @@ class Amendment extends Model
         }
     }
 
-    /* Deprecated, delete later */
-    public function scopeCurrent($query)
-    {
-        return $query->where('open', '=', 1)
-                     ->limit(1);
-    }
-
+    /**
+     * Filter open votes
+     */
     public function scopeOpen($query)
     {
         return $query->where('open', '=', 1);
     }
 
+    /**
+     * Results attribute
+     */
     public function getResultsAttribute() {
         return Self::results($this->attributes, false);
     }
 
+    /**
+     * Generates the results for an amendment
+     */
     public static function results($amendment, $full = false)
     {
         $options = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
@@ -153,6 +169,9 @@ class Amendment extends Model
         return $results;
     }
 
+    /**
+     * Closes all votes
+     */
     private function closeAllVotes()
     {
         return DB::table('amendments')->update(['open' => 0]);

@@ -42,7 +42,7 @@ class AmendmentsController extends Controller
     {
         $request->user()->authorizeRoles('vote_manager');
         
-        $amendments = Amendment::all();
+        $amendments = Amendment::whereNull('joint_with')->with('joint_amendments')->get();
 
         return response()->json($amendments);
     }
