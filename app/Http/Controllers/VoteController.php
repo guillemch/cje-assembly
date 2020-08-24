@@ -38,11 +38,9 @@ class VoteController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function archive(Request $request)
+    public function archive()
     {
-        $votes = $request->user()->votes()->with('amendment')->orderBy('id', 'desc')->get();
-
-        return view('vote.archive', compact('votes'));
+        return view('vote.archive');
     }
 
     /**
@@ -52,7 +50,12 @@ class VoteController extends Controller
      */
     public function myVotes(Request $request)
     {
-        $votes = $request->user()->votes()->with('amendment')->orderBy('id', 'desc')->get();
+        $votes = $request->user()->votes()->selectRaw('vote_for, amendment_id, created_at, COUNT(id) as votes')
+            ->groupBy('vote_for')
+            ->groupBy('amendment_id')
+            ->groupBy('created_at')
+            ->with('amendment')
+            ->orderBy('created_at', 'desc')->get();
 
         return response()->json($votes);
     }

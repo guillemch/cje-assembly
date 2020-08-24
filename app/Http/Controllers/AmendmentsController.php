@@ -63,6 +63,7 @@ class AmendmentsController extends Controller
             $query->orderBy('users.type', 'asc');
             $query->orderBy('groups.acronym', 'asc');
             $query->orderBy('users.last_name', 'asc');
+            $query->orderBy('votes.vote_for', 'asc');
         }]);
 
         return response()->json($amendment);

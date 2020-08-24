@@ -26,15 +26,18 @@
                                 <tr v-if="(i === 0) ? true : (compareDate(votes[(i - 1)].created_at) !== compareDate(vote.created_at))" class="row-date thead-light" :key="'header-' + vote.id">
                                     <th colspan="5">{{ vote.created_at | fullDate }}</th>
                                 </tr>
-                                <tr :key="'vote-' + vote.id">
-                                    <td>{{ vote.created_at | time }}</td>
-                                    <td>{{ vote.amendment.name }}</td>
-                                    <td>
+                                <tr :key="'vote-' + vote.id" class="row-my-vote">
+                                    <td class="my-vote-time">{{ vote.created_at | time }}</td>
+                                    <td class="my-vote-name">{{ vote.amendment.name }}</td>
+                                    <td class="my-vote-option">
                                         <div :class="'option-tag option-tag-' + vote.vote_for">
                                             {{ vote.amendment['option_' + vote.vote_for] }}
                                         </div>
+                                        <div v-if="vote.votes > 1" class="times-tag">
+                                            x {{ vote.votes }}
+                                        </div>
                                     </td>
-                                    <td>
+                                    <td class="my-vote-result">
                                         <div v-if="vote.amendment.results.winner && vote.amendment.closed_at" :class="'option-tag option-tag-' + vote.amendment.results.winner">
                                             {{ vote.amendment['option_' + vote.amendment.results.winner] }}
                                         </div>
@@ -42,8 +45,11 @@
                                             <em>En curso</em>
                                         </div>
                                     </td>
-                                    <td class="text-right">
-                                        <a v-if="vote.amendment.closed_at" href="#" @click.prevent="fullResults(vote.amendment.id)" class="btn btn-sm">+</a>
+                                    <td class="my-vote-more text-right">
+                                        <a v-if="vote.amendment.closed_at" href="#" @click.prevent="fullResults(vote.amendment.id)" class="btn btn-sm" aria-label="Detalles">
+                                            <span class="d-none d-lg-inline">+</span>
+                                            <span class="d-lg-none">Detalles</span>
+                                        </a>
                                     </td>
                                 </tr>
                             </template>
@@ -140,6 +146,19 @@
             font-size: .8rem;
           }
         }
+
+        .my-vote-option {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: .5rem;
+
+            .times-tag {
+                white-space: nowrap;
+                color: $gray-600;
+                min-width: 35px;
+            }
+        }
       }
     }
 
@@ -149,5 +168,80 @@
           font-size: 4rem;
         }
       }
+    }
+
+    @include media-breakpoint-down(md) {
+        .my-votes .table {
+            thead {
+                display: none;
+            }
+
+            .row-date {
+                display: block;
+
+                th {
+                    display: block;
+                    width: 100%;
+                }
+            }
+
+            .row-my-vote {
+                display: grid;
+                grid-template-columns: 75px 1fr 1fr 75px;
+                grid-template-areas:
+                    "time name name more"
+                    "my-option my-option result result";
+
+                .my-vote-time {
+                    grid-area: time;
+                }
+
+                .my-vote-name {
+                    grid-area: name;
+                }
+
+                .my-vote-more {
+                    grid-area: more;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+
+                    .btn {
+                        text-decoration: underline;
+                    }
+                }
+
+                .my-vote-option {
+                    grid-area: my-option;
+                    border-top: 0;
+                    padding-top: 0;
+
+                    &::before {
+                        content: "Mi voto";
+                        color: $gray-600;
+                        font-size: .85rem;
+                        grid-column: span 2;
+                    }
+                }
+
+                .my-vote-result {
+                    grid-area: result;
+                    border-top: 0;
+                    padding-top: 0;
+
+                    &::before {
+                        content: "Resultado";
+                        display: block;
+                        color: $gray-600;
+                        font-size: .85rem;
+                        margin-bottom: .5rem;
+                    }
+                }
+            }
+        }
+
+        
     }
 </style>

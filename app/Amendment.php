@@ -89,6 +89,7 @@ class Amendment extends Model
             ->where('amendment_id', $amendment['id'])
             ->join('users', 'users.id', '=', 'votes.user_id')
             ->orderBy('votes.id', 'asc')
+            ->orderBy('votes.vote_for', 'asc')
             ->get();
 
         $groups = Group::orderBy('acronym', 'asc')->get();
