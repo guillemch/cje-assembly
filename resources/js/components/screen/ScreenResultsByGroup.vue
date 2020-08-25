@@ -14,7 +14,7 @@
                                     <span class="group-dots">
                                         <ul>
                                             <li v-for="(votes, vote_for) in entity.votes" :key="'group' + id + vote_for">
-                                                <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
+                                                <span v-if="votes > 0" :class="'option option-fill option_' + vote_for">{{ votes }}</span>
                                             </li>
                                         </ul>
                                     </span>
@@ -72,6 +72,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../../sass/variables';
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
@@ -123,32 +124,11 @@
             display: inline-block;
 
             .option {
-                background: $gray-200;
                 color: $white;
                 border-radius: 3vw;
                 padding: .25vw .75vw;
                 font-size: 1.25vw;
                 margin-right: .25vw;
-
-                &.option-1 {
-                    background: $green;
-                }
-
-                &.option-2 {
-                    background: $red;
-                }
-
-                &.option-3 {
-                    background: $orange;
-                }
-
-                &.option-4 {
-                    background: $blue;
-                }
-
-                &.option-5 {
-                    background: $black;
-                }
             }
         }
     }

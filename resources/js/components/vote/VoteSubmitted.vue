@@ -16,7 +16,7 @@
                                 <li
                                     v-for="vote in amendment.votes"
                                     :key="vote.id"
-                                    :class="['vote-pill', `option_${vote.vote_for}`]">
+                                    :class="['vote-pill option-fill', `option_${vote.vote_for}`]">
                                     {{ amendment[`option_${vote.vote_for}`] }}
                                 </li>
                             </ul>
@@ -93,12 +93,6 @@
                 border-radius: $border-radius-lg;
                 white-space: nowrap;
                 margin: 0 .5rem .5rem 0;
-            }
-        }
-
-        @each $name, $color in $colors {
-            .#{$name} {
-                background: $color;
             }
         }
     }

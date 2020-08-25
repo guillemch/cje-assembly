@@ -30,7 +30,7 @@
                                     <td class="my-vote-time">{{ vote.created_at | time }}</td>
                                     <td class="my-vote-name">{{ vote.amendment.name }}</td>
                                     <td class="my-vote-option">
-                                        <div :class="'option-tag option-tag-' + vote.vote_for">
+                                        <div :class="'option-tag option-invert option_' + vote.vote_for">
                                             {{ vote.amendment['option_' + vote.vote_for] }}
                                         </div>
                                         <div v-if="vote.votes > 1" class="times-tag">
@@ -38,7 +38,7 @@
                                         </div>
                                     </td>
                                     <td class="my-vote-result">
-                                        <div v-if="vote.amendment.results.winner && vote.amendment.closed_at" :class="'option-tag option-tag-' + vote.amendment.results.winner">
+                                        <div v-if="vote.amendment.results.winner && vote.amendment.closed_at" :class="'option-tag option-invert option_' + vote.amendment.results.winner">
                                             {{ vote.amendment['option_' + vote.amendment.results.winner] }}
                                         </div>
                                         <div v-else-if="vote.amendment.closed_at === null">

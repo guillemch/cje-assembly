@@ -26,7 +26,7 @@
                             {{ amendment.name }}
                         </b-td>
                         <b-td>
-                            <div :class="'option-tag option-tag-' + amendment.results.winner" v-if="amendment.results.winner">
+                            <div :class="'option-tag option-invert option_' + amendment.results.winner" v-if="amendment.results.winner">
                                 {{ amendment['option_' + amendment.results.winner] }}
                             </div>
                         </b-td>
@@ -55,7 +55,7 @@
                             {{ jointAmendment.name }}
                         </b-td>
                         <b-td>
-                            <div :class="'option-tag option-tag-' + jointAmendment.results.winner" v-if="jointAmendment.results.winner">
+                            <div :class="'option-tag option-invert option_' + jointAmendment.results.winner" v-if="jointAmendment.results.winner">
                                 {{ jointAmendment['option_' + jointAmendment.results.winner] }}
                             </div>
                         </b-td>

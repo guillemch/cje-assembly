@@ -21,7 +21,7 @@
                                 <span class="group-votes">
                                     <ul class="group-votes">
                                         <li v-for="(votes, vote_for) in entity.votes" :key="'group' + id + vote_for">
-                                            <span v-if="votes > 0" :class="'option option-' + vote_for">{{ votes }}</span>
+                                            <span v-if="votes > 0" :class="'option option-fill option_' + vote_for">{{ votes }}</span>
                                         </li>
                                     </ul>
                                 </span>
@@ -39,7 +39,7 @@
                     <th class="text-right">E</th>
                     <th colspan="2"></th>
                 </tr>
-                <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option-' + option, (amendment.results.winner === option) ? 'winner' : '']">
+                <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option_' + option, (amendment.results.winner === option) ? 'winner' : '']">
                     <template v-if="amendment['option_' + option]">
                         <td width="40%">{{ amendment['option_' + option] }}</td>
                         <td width="15%" class="text-right">{{ amendment.results.absolute[1][option] }}</td>
@@ -115,6 +115,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../../sass/variables';
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
@@ -139,29 +140,11 @@
                 font-weight: bold;
             }
 
-            &.option-1 td {
-                background: lighten($green, 40%);
-                color: darken($green, 20%);
-            }
-
-            &.option-2 td {
-                background: lighten($red, 40%);
-                color: darken($red, 20%);
-            }
-
-            &.option-3 td {
-                background: lighten($orange, 40%);
-                color: darken($orange, 20%);
-            }
-
-            &.option-4 td {
-                background: lighten($blue, 40%);
-                color: darken($blue, 20%);
-            }
-
-            &.option-5 td {
-                background: $gray-400;
-                color: $gray-800;
+            @each $name, $color in $colors {
+                &.#{$name} td {
+                    background: mix($color, $white, 15%);
+                    color: darken($color, 15%);
+                }
             }
         }
     }
@@ -188,32 +171,11 @@
             display: inline-block;
 
             .option {
-                background: $gray-200;
                 color: $white;
                 border-radius: 10px;
                 padding: .25rem .5rem;
                 font-size: .7rem;
                 margin-right: .25rem;
-
-                &.option-1 {
-                    background: $green;
-                }
-
-                &.option-2 {
-                    background: $red;
-                }
-
-                &.option-3 {
-                    background: $orange;
-                }
-
-                &.option-4 {
-                    background: $blue;
-                }
-
-                &.option-5 {
-                    background: $black;
-                }
             }
         }
     }

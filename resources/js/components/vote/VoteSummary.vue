@@ -21,7 +21,7 @@
                                 {{ vote[key] }}:
                                 {{ votes }}
                             </span>
-                            <span v-else :class="['vote-pill', key]">
+                            <span v-else :class="['vote-pill option-fill', key]">
                                 {{ vote[key] }}
                             </span>
                         </li>
@@ -115,12 +115,6 @@
             padding: .25rem .75rem;
             border-radius: $border-radius-lg;
             white-space: nowrap;
-        }
-
-        @each $name, $color in $colors {
-            .#{$name} {
-                background: $color;
-            }
         }
     }
 </style>

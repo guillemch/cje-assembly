@@ -7,7 +7,7 @@
                 <th class="text-right">E</th>
                 <th colspan="2"></th>
             </tr>
-            <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option-' + option, (amendment.results.winner === option) ? 'winner' : '']">
+            <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option_' + option, (amendment.results.winner === option) ? 'winner' : '']">
                 <template v-if="amendment['option_' + option]">
                     <td width="40%">{{ amendment['option_' + option] }}</td>
                     <td width="15%" class="text-right">{{ amendment.results.absolute[1][option] }}</td>
@@ -37,6 +37,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '../../../sass/variables';
     @import '~bootstrap/scss/functions';
     @import '~bootstrap/scss/variables';
     @import '~bootstrap/scss/mixins';
@@ -69,24 +70,10 @@
                 color: $white;
             }
 
-            &.option-1 td {
-                background: $green;
-            }
-
-            &.option-2 td {
-                background: $red;
-            }
-
-            &.option-3 td {
-                background: $orange;
-            }
-
-            &.option-4 td {
-                background: $blue;
-            }
-
-            &.option-5 td {
-                background: $gray-800;
+            @each $name, $color in $colors {
+                &.#{$name} td {
+                    background: $color;
+                }
             }
         }
     }
