@@ -30,8 +30,13 @@
                         </a>
                     </li>
                     <li>
+                        <a class="nav-link {{ Route::currentRouteName() === 'secret-vote' ? 'active' : '' }}" href="{{ route('secret-vote') }}">
+                            <i class="far fa-person-booth"></i> Voto secreto
+                        </a>
+                    </li>
+                    <li>
                         <a class="nav-link {{ Route::currentRouteName() === 'my-votes' ? 'active' : '' }}" href="{{ route('my-votes') }}">
-                            <i class="far fa-box-ballot"></i> Mis votos
+                            <i class="far fa-ballot"></i> Mis votos
                         </a>
                     </li>
                 @endif
@@ -50,7 +55,7 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('my-votes') }}">
-                                <i class="far fa-box-ballot"></i> {{ __('Mis votos') }}
+                                <i class="far fa-ballot"></i> {{ __('Mis votos') }}
                             </a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();document.getElementById('logout-form').submit();">
