@@ -1,0 +1,18 @@
+.vote-button {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 1000;
+
+  &__wrapper {
+      max-width: 525px;
+      margin: 0 auto;
+  }
+
+  .btn {
+      box-shadow: 0 3px 10px rgba(black, .5);
+      border-radius: .5rem;
+      font-weight: 500;
+  }
+}

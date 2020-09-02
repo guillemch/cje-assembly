@@ -51,6 +51,14 @@ export default class API {
         return this._call('post', 'vote/submit', data);
     }
 
+    submitSecretVote (data) {
+        return this._call('post', 'secret-vote/submit', data);
+    }
+
+    getSecretVotes (data) {
+        return this._call('get', 'secret-vote/list', data);
+    }
+
     _call (type, url, data) {
         return new Promise((resolve, reject) => {
             axios[type](this.baseUrl + url, data).then(response => {

@@ -19,7 +19,6 @@
                         size="lg"
                         variant="primary"
                         block
-                        :aria-disabled="!canVote"
                         :class="!canVote ? 'disabled' : ''"
                         v-b-modal.voteConfirm>
                         ✋&nbsp; Vota
@@ -135,28 +134,3 @@
     }
 </style>
 
-<style lang="scss">
-    @import '../../../sass/variables';
-    @import '~bootstrap/scss/functions';
-    @import '~bootstrap/scss/variables';
-    @import '~bootstrap/scss/mixins';
-
-    .vote-button {
-        position: fixed;
-        bottom: 1.5rem;
-        left: 1rem;
-        right: 1rem;
-        z-index: 1000;
-
-        &__wrapper {
-            max-width: 525px;
-            margin: 0 auto;
-        }
-
-        .btn {
-            box-shadow: 0 3px 10px rgba(black, .5);
-            border-radius: .5rem;
-            font-weight: 500;
-        }
-    }
-</style>

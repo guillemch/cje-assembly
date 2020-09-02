@@ -21,4 +21,12 @@ class SecretVote extends Model
     {
         return $this->hasManyThrough('App\SecretVoteBallot', 'App\SecretVoteOption');
     }
+
+    /**
+     * Get the roll registers for the vote
+     */
+    public function roll()
+    {
+        return $this->hasMany('App\SecretVoteRoll');
+    }
 }

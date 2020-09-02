@@ -10,8 +10,8 @@
 
 @push('scripts')
     <script>
-        window.secret_vote = {
-            secret_votes: {!! $secretVotes !!}
+        window.user = {
+            votes: {!! Auth::user()->votes !!}
         }
     </script>
     <script src="{{ mix('/js/secret-vote.js') }}"></script>

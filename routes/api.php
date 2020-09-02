@@ -30,5 +30,9 @@ Route::get('/vote/open', 'VoteController@open_votes');
 Route::post('/vote/submit', 'VoteController@submit');
 Route::get('/vote/my-votes', 'VoteController@myVotes');
 
+/* Secret votes */
+Route::get('/secret-vote/list', 'SecretVoteController@list');
+Route::post('/secret-vote/submit', 'SecretVoteController@submit');
+
 /* Screen */
 Route::get('/screen', 'ScreenController@screen');
