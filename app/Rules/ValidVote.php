@@ -8,6 +8,8 @@ use App\Amendment;
 
 class ValidVote implements Rule
 {
+    protected $validOptions = ['option_1', 'option_2', 'option_3', 'option_4', 'option_5'];
+
     /**
      * Create a new rule instance.
      *
@@ -39,9 +41,10 @@ class ValidVote implements Rule
             if ($totalVotes > $userVotes) return false;
 
             // Check that options are valid
-            foreach($selection as $optionNum => $votes) {
-                $cell = 'option_' . $optionNum;
-                if (!in_array($optionName, ['1', '2', '3', '4', '5']) || !$amendment[$cell]) return false;
+            foreach($selection as $option => $votes) {
+                if (!in_array($option, $this->validOptions) || (!$amendment[$option] && $votes > 0)) {
+                    return false;
+                }
             }
         }
 
