@@ -44,11 +44,11 @@ class ScreenController extends Controller
         $secret = config('google2fa.secret');
         $google2fa = app('pragmarx.google2fa');
         $google2fa->setOneTimePasswordLength(4);
-        $google2fa->setKeyRegeneration(30);
+        $google2fa->setKeyRegeneration(45);
         $code = $google2fa->getCurrentOtp($secret);
         $timestamp = Google2FA::getTimestamp();
         $now = Carbon::now();
-        $nextCode = Carbon::createFromTimestamp(($timestamp * 30) + 30);
+        $nextCode = Carbon::createFromTimestamp(($timestamp * 45) + 45);
         $nextAlert = ($nextCode->diffInSeconds($now) <= 5);
         $willHideIn = null;
 
