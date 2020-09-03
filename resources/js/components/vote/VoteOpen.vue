@@ -14,7 +14,7 @@
             <div class="vote-button">
                 <div
                     class="vote-button__wrapper"
-                    v-b-tooltip.hover="!canVote ? 'Hay algunos errores en los votos asignados' : false">
+                    v-tooltip="!canVote ? 'Hay algunos errores en los votos asignados' : false">
                     <b-button
                         size="lg"
                         variant="primary"

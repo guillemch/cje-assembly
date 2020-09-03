@@ -2,7 +2,7 @@
   <div>
     <h3>{{ vote.name }}</h3>
     <div v-if="vote.roll.length > 0" class="vote-status voted">
-      Ya has votado
+      Voto registrado
       <i class="far fa-vote-yea"></i>
     </div>
     <div v-else-if="vote.open">

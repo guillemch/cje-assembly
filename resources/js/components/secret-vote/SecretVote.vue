@@ -11,7 +11,7 @@
     <div class="vote-button" v-if="secretVotes.some(vote => vote.open === 1 && vote.roll.length === 0)">
       <div
         class="vote-button__wrapper"
-        v-b-tooltip.hover="!canVote ? 'Hay algunos errores en los votos asignados' : false">
+        v-tooltip="!canVote ? 'Hay algunos errores en los votos asignados' : false">
         <b-button
           size="lg"
           variant="primary"

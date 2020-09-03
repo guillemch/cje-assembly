@@ -4,11 +4,11 @@ import API from './api';
 window.API = new API();
 
 import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
+import { ModalPlugin } from 'bootstrap-vue';
  
 import MyVotes from './components/my-votes/MyVotes';
 
-Vue.use(BootstrapVue);
+Vue.use(ModalPlugin);
 
 const myVotes = new Vue({
     components: {
