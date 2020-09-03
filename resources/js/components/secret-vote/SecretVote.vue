@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(selected).length && secretVotes.length">
+  <div v-if="Object.keys(selected).length && secretVotes.length" class="secret-votes">
     <ul>
       <li v-for="vote in secretVotes" :key="vote.id">
         <secret-vote-question
@@ -109,3 +109,27 @@
   }
 </script>
 
+<style lang="scss" scoped>
+  @import '../../../sass/variables';
+  @import '~bootstrap/scss/functions';
+  @import '~bootstrap/scss/variables';
+  @import '~bootstrap/scss/mixins';
+
+  .secret-votes {
+    max-width: 450px;
+    margin: 0 auto;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 4rem;
+  }
+
+  li {
+    margin: 0;
+    padding: 2rem 0;
+    list-style: none;
+    border-bottom: 1px $gray-200 solid;
+  }
+</style>

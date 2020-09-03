@@ -9,20 +9,29 @@
             <div class="vote__icon" v-if="userVotes === 1">
                 <i class="hand far fa-ballot" />
             </div>
-            <ul>
+            <ul class="vote__summary">
                 <li v-for="vote in votes" :key="vote.id">
-                    {{ vote.name }}
-                    <ul v-if="Object.values(selected[vote.id]).some((votes) => votes > 0)">
-                        <template v-for="option in vote.options">
-                            <li :key="option.id" v-if="selected[vote.id][option.id] > 0">
-                                {{ option.name }}
-                                <span v-if="selected[vote.id][option.id] > 1">
-                                    x {{ selected[vote.id][option.id] }}
-                                </span>
-                            </li>
-                        </template>
-                    </ul>
-                    <div v-else>No votar</div>
+                    <span>{{ vote.name }}</span>
+                    <div v-if="Object.values(selected[vote.id]).some((votes) => votes > 0)">
+                        <div v-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) < userVotes">
+                            <div class="alert alert-sm alert-info">
+                                ℹ️ No has asignado todos tus votos
+                            </div>
+                        </div>
+                        <ul class="vote__summary__options">
+                            <template v-for="option in vote.options">
+                                <li :key="option.id" v-if="selected[vote.id][option.id] > 0">
+                                    {{ option.name }}
+                                    <span v-if="selected[vote.id][option.id] > 1">
+                                        × {{ selected[vote.id][option.id] }}
+                                    </span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                    <div v-else class="vote__summary__blank">
+                        No votar
+                    </div>
                 </li>
             </ul>
         </div>
@@ -104,6 +113,37 @@
         &__icon {
             text-align: center;
             font-size: 2.5rem;
+        }
+
+        &__summary {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            & > li {
+                margin-bottom: 1rem;
+
+                & > span {
+                    display: block;
+                    font-weight: bold;
+                    border-bottom: 1px dotted $gray-400;
+                }
+            }
+
+            &__options li {
+                font-size: 1.25rem;
+                padding: .25rem 0;
+
+                span {
+                    color: $gray-600;
+                }
+            }
+
+            &__blank {
+                color: $gray-600;
+                font-style: italic;
+                font-size: 1.25rem;
+            }
         }
     }
 

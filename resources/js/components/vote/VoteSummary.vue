@@ -18,8 +18,8 @@
                     <template v-for="(votes, key) in selected[vote.id]">
                         <li v-if="(userVotes > 1 && vote[key]) || (userVotes === 1 && votes === 1)" :key="key">
                             <span v-if="userVotes > 1">
-                                {{ vote[key] }}:
-                                {{ votes }}
+                                <span :class="['option-text', key]">{{ vote[key] }}</span>
+                                <span>× {{ votes }}</span>
                             </span>
                             <span v-else :class="['vote-pill option-fill', key]">
                                 {{ vote[key] }}

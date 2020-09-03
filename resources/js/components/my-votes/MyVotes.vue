@@ -34,7 +34,7 @@
                                             {{ vote.amendment['option_' + vote.vote_for] }}
                                         </div>
                                         <div v-if="vote.votes > 1" class="times-tag">
-                                            x {{ vote.votes }}
+                                            × {{ vote.votes }}
                                         </div>
                                     </td>
                                     <td class="my-vote-result">

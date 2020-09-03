@@ -50,3 +50,11 @@ body {
     }
   }
 }
+
+.option-text {
+  @each $name, $color in $colors {
+    &.#{$name} {
+      color: $color;
+    }
+  }
+}
