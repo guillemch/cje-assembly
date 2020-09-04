@@ -12,6 +12,7 @@
                         Nuevo turno de palabra
                     </b-btn>
                     <div class="ml-auto form-inline">
+                        <online-users class="mr-4" />
                         <b-form-checkbox
                             id="globalTimer"
                             v-model="timer.active">
@@ -41,6 +42,7 @@
     import AmendmentsNew from './AmendmentsNew';
     import FloorNew from './FloorNew';
     import FloorManager from './FloorManager';
+    import OnlineUsers from './OnlineUsers';
 
     export default {
         name: 'amendments',
@@ -50,7 +52,8 @@
             AmendmentsOpen,
             AmendmentsNew,
             FloorNew,
-            FloorManager
+            FloorManager,
+            OnlineUsers
         },
 
         data () {
@@ -74,7 +77,6 @@
         mounted () {
             const timerSettings = localStorage.getItem('timer_settings');
             if (timerSettings && timerSettings !== 'null') {
-                console.log(timerSettings)
                 this.timer = JSON.parse(timerSettings);
             }
         }

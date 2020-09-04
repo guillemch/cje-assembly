@@ -5,7 +5,7 @@
                 <i class="far fa-sync fa-spin mr-2"></i> Turno de palabra
                 <div class="float-right">
                     <b-btn variant="danger" class="close-button" @click="close">
-                        <i class="far fa-hand-paper" />
+                        <i class="far fa-times-square" />
                         Cerrar
                     </b-btn>
                     <b-btn variant="info" class="minimize-button" @click="minimized = !minimized">

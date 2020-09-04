@@ -85,7 +85,7 @@ class Amendment extends Model
     public static function results($amendment, $full = false)
     {
         $options = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
-        $votes = Vote::select('votes.id', 'votes.amendment_id', 'votes.vote_for', 'users.type', 'users.name', 'users.last_name', 'users.group_id')
+        $votes = Vote::select('votes.id', 'votes.user_id', 'votes.amendment_id', 'votes.vote_for', 'users.type', 'users.name', 'users.last_name', 'users.group_id')
             ->where('amendment_id', $amendment['id'])
             ->join('users', 'users.id', '=', 'votes.user_id')
             ->orderBy('votes.id', 'asc')
@@ -102,9 +102,11 @@ class Amendment extends Model
             ];
         }
 
+        $unique = [];
         $participation = [1 => 0, 2 => 0];
         $totals = [1 => $options, 2 => $options];
         foreach($votes as $vote) {
+            $unique[$vote->user_id] = 1;
             $participation[$vote->type]++;
             $totals[$vote->type][$vote->vote_for]++;
 
@@ -160,6 +162,7 @@ class Amendment extends Model
             'winner' => $winner,
             'by_group' => $byGroup,
             'total' => array_sum($totals[1]) + array_sum($totals[2]),
+            'unique' => count($unique),
             'compensate' => $compensate
         ];
 

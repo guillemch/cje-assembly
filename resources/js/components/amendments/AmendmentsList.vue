@@ -134,7 +134,6 @@
                             time: milliseconds
                         });
                     }
-                    // window.scrollTo(0, 0);
                 }).catch(error => {
                     console.log(error)
                     alert('Error al cargar las enmiendas. Refresca el navegador');

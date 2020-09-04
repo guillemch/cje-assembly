@@ -4,7 +4,12 @@
             <h4 class="mb-4">
                 {{ amendment.name }}
                 <span class="float-right">
+                    <i class="far fa-hand-paper" aria-label="Votos recibidos" />
                     {{ amendment.results.total }}
+                    <span class="text-muted unique-votes ml-2" v-if="uniqueVoters">
+                        <i class="far fa-user-friends" aria-label="Votantes únicos" />
+                        {{ amendment.results.unique }}
+                    </span>
                 </span>
             </h4>
         </div>
@@ -77,7 +82,8 @@
 
         props: {
           amendment: Object,
-          fullList: Boolean
+          fullList: Boolean,
+          uniqueVoters: Boolean
         },
 
         filters: {
@@ -178,5 +184,9 @@
                 margin-right: .25rem;
             }
         }
+    }
+
+    .unique-votes {
+        font-weight: 400;
     }
 </style>

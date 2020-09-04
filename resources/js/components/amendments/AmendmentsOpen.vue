@@ -10,7 +10,7 @@
                 <div class="float-right">
                     <amendments-timer :opened="amendments[0].opened_at" />
                     <b-btn variant="danger" class="amendments-open__close-button" @click="close" :disabled="closing">
-                        <i class="far fa-hand-paper" v-if="!closing" />
+                        <i class="far fa-times-square" v-if="!closing" />
                         <i class="fa-spinner-third fa-spin" v-else />
                         Cerrar
                     </b-btn>
@@ -25,7 +25,7 @@
                     v-for="amendment in amendments"
                     :key="amendment.id"
                     :title="amendment.name">
-                        <amendments-results :amendment="amendment" />
+                        <amendments-results :amendment="amendment" unique-voters />
                 </b-tab>
             </b-tabs>
          </b-card>
