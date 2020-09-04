@@ -54,6 +54,10 @@
         border-color: mix($primary, $white, 70%);
       }
 
+      &:focus-within {
+          box-shadow: 0 0 0 .25rem rgba($cje-yellow, .5);
+      }
+
       &.selected {
         background: $cje-yellow;
         color: $primary;

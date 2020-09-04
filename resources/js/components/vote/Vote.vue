@@ -3,7 +3,7 @@
         <div class="vote__status">
             <div class="container d-flex align-items-center">
                 <div class="connected" v-if="connected">
-                    Conectado
+                    <span class="pulse-icon"></span> Conectado 
                 </div>
                 <div  class="disconnected" v-else>
                     Desconectado
@@ -120,6 +120,36 @@
                 color: $red;
                 font-weight: bold;
             }
+        }
+    }
+
+    .pulse-icon {
+        display: inline-block;
+        position: relative;
+        height: .75em;
+        width: .75em;
+        background: $green;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba($green, 1);
+        transform: scale(1);
+        animation: pulse 2s infinite;
+        margin-right: .25rem;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba($green, 0.7);
+        }
+
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba($green, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba($green, 0);
         }
     }
 </style>

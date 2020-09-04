@@ -61,6 +61,10 @@
                 border-color: $gray-600;
             }
 
+            &:focus-within {
+                box-shadow: 0 0 0 .25rem $gray-400;
+            }
+
             &.selected {
                 background: $gray-500;
                 color: $white;
@@ -82,6 +86,10 @@
                 &:hover {
                     background: mix($color, $white, 25%);
                     border-color: darken($color, 10%);
+                }
+
+                &:focus-within {
+                    box-shadow: 0 0 0 .25rem rgba($color, .5);
                 }
 
                 &.selected {
