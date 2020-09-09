@@ -19,7 +19,7 @@
                         <div key="awaiting" v-else></div>
                     </transition>
                 </div>
-                <div key="multiple-votes" v-else-if="screen.votes.length > 1" class="vote-info">
+                <div key="multiple-votes" v-else-if="screen.votes.length < 5" class="vote-info">
                     <transition name="fade" mode="out-in">
                         <screen-multiple-results :amendments="screen.votes" v-if="screen.just_closed" />
                         <div v-else class="ongoing-vote">
@@ -27,6 +27,20 @@
                             <div v-for="amendment in screen.votes" :key="amendment.id">
                                 <h2>{{ amendment.name }}</h2>
                             </div>
+                        </div>
+                    </transition>
+                </div>
+                <div key="many-votes" v-else-if="screen.votes.length >= 5" class="vote-info">
+                    <transition name="fade" mode="out-in">
+                        <screen-many-results :amendments="screen.votes" v-if="screen.just_closed" />
+                        <div v-else class="ongoing-vote">
+                            <h3>Votación <span class="pulse-icon"></span></h3>
+                            <h2>{{ screen.votes[0].description }}</h2>
+                            <ul class="many-votes-list">
+                                <li v-for="amendment in screen.votes" :key="amendment.id">
+                                    <i class="far fa-file-alt"></i> {{ amendment.name }}
+                                </li>
+                            </ul>
                         </div>
                     </transition>
                 </div>
@@ -63,6 +77,7 @@
 <script>
     import ScreenResults from './ScreenResults';
     import ScreenMultipleResults from './ScreenMultipleResults';
+    import ScreenManyResults from './ScreenManyResults';
     import ScreenResultsByGroup from './ScreenResultsByGroup';
     import ScreenCode from './ScreenCode';
     import VueCountdown from '@chenfengyuan/vue-countdown';
@@ -73,6 +88,7 @@
         components: {
             ScreenResults,
             ScreenMultipleResults,
+            ScreenManyResults,
             ScreenResultsByGroup,
             ScreenCode,
             'countdown': VueCountdown
@@ -304,6 +320,18 @@
                 margin: .25em 0;
                 font-size: 4.5vw;
                 font-weight: bold;
+            }
+
+            .many-votes-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+
+                li {
+                    font-size: 2vw;
+                }
             }
         }
 

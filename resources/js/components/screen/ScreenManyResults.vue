@@ -1,7 +1,7 @@
 <template>
     <div class="screen-multiple-results">
         <div :class="['screen-slide', {'screen-slide--current': currentSlide === 0 }]">
-            <screen-multiple-results-summary :amendments="amendments" class="summary" />
+            <screen-many-results-summary :amendments="amendments" class="summary" />
         </div>
         <div v-for="(amendment, slide) in amendments" :key="amendment.id" :class="['screen-slide', {'screen-slide--current': currentSlide === slide + 1 }]">
             <div class="vote-name">
@@ -18,19 +18,15 @@
         </div>
         <div class="slide-nav">
             <ul>
-                <li :class="['slide-nav-item', {'slide-nav-item--current': currentSlide === 0 }]">
-                    Resumen
-                </li>
-                <li v-for="(amendment, slide) in amendments" :key="`amendment-${amendment.id}`" :class="['slide-nav-item', {'slide-nav-item--current': currentSlide === slide + 1 }]">
-                    {{ amendment.name }}
-                </li>
+                <li :class="['slide-nav-item', {'slide-nav-item--current': currentSlide === 0 }]"></li>
+                <li v-for="(amendment, slide) in amendments" :key="`amendment-${amendment.id}`" :class="['slide-nav-item', {'slide-nav-item--current': currentSlide === slide + 1 }]"></li>
             </ul>
         </div>
     </div>
 </template>
 
 <script>
-    import ScreenMultipleResultsSummary from './ScreenMultipleResultsSummary';
+    import ScreenManyResultsSummary from './ScreenManyResultsSummary';
     import ScreenResults from './ScreenResults';
     import ScreenResultsByGroup from './ScreenResultsByGroup';
 
@@ -38,7 +34,7 @@
         name: 'screen-multiple-results',
 
         components: {
-          ScreenMultipleResultsSummary,
+          ScreenManyResultsSummary,
           ScreenResults,
           ScreenResultsByGroup
         },
@@ -106,10 +102,6 @@
             }
         }
 
-        .summary {
-            margin-top: 4rem;
-        }
-
         .vote-name {
             h1 {
                 font-size: 4vw;
@@ -133,43 +125,19 @@
             &-item {
                 position: relative;
                 overflow: hidden;
-                border-radius: .5rem;
+                border-radius: 50%;
                 margin-right: 1rem;
                 background: $gray-200;
                 padding: .25rem .5rem;
                 font-size: .85rem;
-                min-width: 100px;
                 text-align: center;
-
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    bottom: 0;
-                    background: $gray-400;
-                    z-index: 1;
-                    width: 0;
-                    mix-blend-mode: multiply;
-                    will-change: width;
-                }
+                width: 1rem;
+                height: 1rem;
 
                 &--current {
-                    &::before {
-                        animation: fill 10s linear;
-                    }
+                    background: $gray-500;
                 }
             }
-        }
-    }
-
-    @keyframes fill {
-        0% {
-            width: 0;
-        }
-
-        100% {
-            width: 100%;
         }
     }
 </style>

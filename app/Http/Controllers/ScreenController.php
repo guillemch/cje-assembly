@@ -65,7 +65,7 @@ class ScreenController extends Controller
 
                 // Allocate 10 seconds per amendment or 30 if only one
                 $votesClosedAt = Carbon::parse($lastCloseTime->closed_at);
-                $seconds = ($lastAmendments->count() === 1) ? 35 : 15 * ($lastAmendments->count() + 1);
+                $seconds = ($lastAmendments->count() === 1) ? 35 : 10 * ($lastAmendments->count() + 1);
 
                 if ($votesClosedAt->diffInSeconds($now) < $seconds) {
                     $votes = $lastAmendments;

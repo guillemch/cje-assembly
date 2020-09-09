@@ -54,3 +54,13 @@ body {
     }
   }
 }
+
+.card-header-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-y: auto;
+
+  li {
+    flex-shrink: 0;
+  }
+}
