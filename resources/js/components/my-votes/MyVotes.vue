@@ -2,7 +2,7 @@
     <div class="my-votes">
         <div class="row justify-content-center">
             <div class="col-md-10">
-                <h2><i class="far fa-box-ballot"></i> Mis votos</h2>
+                <h1><i class="far fa-box-ballot"></i> Mis votos</h1>
 
                 <div class="card">
                     <div class="card-body p-0">
@@ -23,10 +23,10 @@
                                 </tr>
                             </thead>
                             <template v-for="(vote, i) in votes">
-                                <tr v-if="(i === 0) ? true : (compareDate(votes[(i - 1)].created_at) !== compareDate(vote.created_at))" class="row-date thead-light" :key="'header-' + vote.id">
+                                <tr v-if="(i === 0) ? true : (compareDate(votes[(i - 1)].created_at) !== compareDate(vote.created_at))" class="row-date thead-light" :key="'header-' + vote.amendment_id">
                                     <th colspan="5">{{ vote.created_at | fullDate }}</th>
                                 </tr>
-                                <tr :key="'vote-' + vote.id" class="row-my-vote">
+                                <tr :key="'vote-' + vote.amendment_id + '-' + vote.vote_for" class="row-my-vote">
                                     <td class="my-vote-time">{{ vote.created_at | time }}</td>
                                     <td class="my-vote-name">{{ vote.amendment.name }}</td>
                                     <td class="my-vote-option">
@@ -34,7 +34,7 @@
                                             {{ vote.amendment['option_' + vote.vote_for] }}
                                         </div>
                                         <div v-if="vote.votes > 1" class="times-tag">
-                                            × {{ vote.votes }}
+                                            &times; {{ vote.votes }}
                                         </div>
                                     </td>
                                     <td class="my-vote-result">
@@ -133,7 +133,7 @@
     @import '~bootstrap/scss/mixins';
     
     .my-votes {
-      h2 {
+      h1 {
         color: $primary;
         font-size: 2.5rem;
         margin-top: 2rem;
@@ -164,7 +164,7 @@
 
     @include media-breakpoint-up(md) {
       .vote-archive {
-        h2 {
+        h1 {
           font-size: 4rem;
         }
       }

@@ -1,12 +1,12 @@
 <template>
     <div class="vote__multiple">
-        <div class="alert alert-info" v-if="remainingVotes > 0">
+        <div class="alert alert-info" v-if="remainingVotes > 0" aria-live="assertive" role="alert">
             ℹ️ Te quedan <strong>{{ remainingVotes }} votos</strong> por asignar
         </div>
-        <div class="alert alert-success" v-else-if="remainingVotes === 0">
+        <div class="alert alert-success" v-else-if="remainingVotes === 0" aria-live="assertive" role="alert">
             👍 Has asignado <strong>todos los votos</strong>.
         </div>
-        <div class="alert alert-danger" v-else>
+        <div class="alert alert-danger" v-else aria-live="assertive" role="alert">
             🛑 Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
         </div>
         <ul>

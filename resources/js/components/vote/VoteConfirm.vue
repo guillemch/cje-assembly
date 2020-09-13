@@ -3,12 +3,13 @@
         id="voteConfirm"
         ref="voteConfirm"
         @shown="focusPassword"
-        @hidden="hidden">
+        @hidden="hidden"
+        header-close-label="Cerrar confirmación de voto">
         <div slot="modal-title">
             Confirma tu voto
         </div>
         <div class="vote">
-            <div class="vote__icon" v-if="userVotes === 1">
+            <div class="vote__icon" v-if="userVotes === 1" aria-hidden="true">
                 <i class="hand far fa-hand-paper" />
             </div>
             <vote-summary :votes="votes" :selected="selected" />
@@ -26,6 +27,7 @@
                         type="text"
                         size="lg"
                         class="text-center"
+                        aria-describedby="errors"
                         autocomplete="off"
                         pattern="[0-9]*"
                         maxlength="6"
@@ -37,16 +39,17 @@
                             variant="primary"
                             size="lg">
                             <i class="far fa-check" />
+                            <span class="sr-only">Emitir voto</span>
                         </b-btn>
                     </b-input-group-append>
                 </b-input-group>
-                <div v-if="errors">
+                <div v-if="errors" id="errors" aria-live="assertive" role="alert">
                     <div v-for="(error, key) in errors" :key="key" class="alert alert-danger mt-3 mb-0">
                         {{ error[0] }}
                     </div>
                 </div>
             </b-form>
-            <div v-else>
+            <div v-else id="ballot-errors">
                 Corrige los errores para poder votar
             </div>
         </div>

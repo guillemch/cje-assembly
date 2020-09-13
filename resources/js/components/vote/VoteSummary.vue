@@ -1,36 +1,39 @@
 <template>
-    <ul :class="['vote__summary', {'vote__summary--multiple': userVotes > 1}]">
-        <li v-for="vote in votes" :key="vote.id">
-            <span class="vote__summary__name">{{ vote.name }}</span>
-            <span class="vote__summary__divider"></span>
-            <div v-if="Object.values(selected[vote.id]).some((votes) => votes > 0)" class="vote__summary__selection">
-                <div v-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) < userVotes">
-                    <div class="alert alert-sm alert-info">
-                        ℹ️ No has asignado todos tus votos
+    <div>
+        <h6 class="sr-only">Resumen del voto</h6>
+        <ul :class="['vote__summary', {'vote__summary--multiple': userVotes > 1}]">
+            <li v-for="vote in votes" :key="vote.id">
+                <span class="vote__summary__name">{{ vote.name }}</span>
+                <span class="vote__summary__divider"></span>
+                <div v-if="Object.values(selected[vote.id]).some((votes) => votes > 0)" class="vote__summary__selection">
+                    <div v-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) < userVotes">
+                        <div class="alert alert-sm alert-info" role="alert">
+                            ℹ️ No has asignado todos tus votos
+                        </div>
                     </div>
-                </div>
-                <div v-else-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) > userVotes">
-                    <div class="alert alert-sm alert-danger">
-                        🛑 Has asignado más votos de los disponibles
+                    <div v-else-if="Object.values(selected[vote.id]).reduce((a, b) => a + b) > userVotes">
+                        <div class="alert alert-sm alert-danger" role="alert">
+                            🛑 Has asignado más votos de los disponibles
+                        </div>
                     </div>
+                    <ul>
+                        <template v-for="(votes, key) in selected[vote.id]">
+                            <li v-if="(userVotes > 1 && vote[key]) || (userVotes === 1 && votes === 1)" :key="key">
+                                <span v-if="userVotes > 1">
+                                    <span :class="['option-text', key]">{{ vote[key] }}</span>
+                                    <span>× {{ votes }}</span>
+                                </span>
+                                <span v-else :class="['vote-pill option-fill', key]">
+                                    {{ vote[key] }}
+                                </span>
+                            </li>
+                        </template>
+                    </ul>
                 </div>
-                <ul>
-                    <template v-for="(votes, key) in selected[vote.id]">
-                        <li v-if="(userVotes > 1 && vote[key]) || (userVotes === 1 && votes === 1)" :key="key">
-                            <span v-if="userVotes > 1">
-                                <span :class="['option-text', key]">{{ vote[key] }}</span>
-                                <span>× {{ votes }}</span>
-                            </span>
-                            <span v-else :class="['vote-pill option-fill', key]">
-                                {{ vote[key] }}
-                            </span>
-                        </li>
-                    </template>
-                </ul>
-            </div>
-            <span v-else class="vote__summary__ignore">No votar</span>
-        </li>
-    </ul>
+                <span v-else class="vote__summary__ignore">No votar</span>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>

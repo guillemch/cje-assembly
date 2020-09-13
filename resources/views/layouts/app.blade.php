@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="jwt-token" content="{{ $jwtToken }}">
 
-    <title>{{ config('app.name', 'Asamblea CJE') }}</title>
+    <title>@yield('title'){{ config('app.name', 'Asamblea CJE') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -21,10 +21,11 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-toEUmnrGu+eq8XUD6ovsr/vFX+R3v9+FUGAnpef+uwGKMCeqZkcZfkXQ0Pls5WS7" crossorigin="anonymous">
 </head>
 <body>
+    <a href="#main" class="sr-only sr-only-focusable">Saltar navegación</a>
     <div id="app">
         @include('components.nav')
 
-        <main class="py-4">
+        <main class="py-4" id="main">
             @yield('content')
         </main>
     </div>

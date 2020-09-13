@@ -1,6 +1,7 @@
 <template>
     <div class="vote-open" v-if="Object.keys(selected).length">
-        <div v-if="!votes[0].votes.length">
+        <form v-if="!votes[0].votes.length" @submit.prevent="$bvModal.show('voteConfirm')">
+            <div class="sr-only" aria-live="assertive">Nueva votación abierta</div>
             <ul aria-label="Listado de votaciones" class="vote-list">
                 <li v-for="vote in votes" :key="vote.id">
                     <vote-options
@@ -16,17 +17,17 @@
                     class="vote-button__wrapper"
                     v-tooltip="!canVote ? 'Hay algunos errores en los votos asignados' : false">
                     <b-button
+                        type="submit"
                         size="lg"
                         variant="primary"
                         block
-                        :class="!canVote ? 'disabled' : ''"
-                        v-b-modal.voteConfirm>
-                        ✋&nbsp; Vota
+                        :class="!canVote ? 'disabled' : ''">
+                        <span aria-hidden="true">✋&nbsp;</span> Vota
                     </b-button>
                 </div>
             </div>
             <vote-confirm :votes="votes" :selected="selected" :can-vote="canVote" @submitted="voteSubmitted" />
-        </div>
+        </form>
         <div v-else>
             <vote-submitted :votes="votes" />
         </div>

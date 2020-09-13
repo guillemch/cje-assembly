@@ -1,14 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top navbar-cje">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('/img/logo.jpg') }}" alt="CJE" class="cje-logo" /> Asamblea CJE
+            <img src="{{ asset('/img/logo.jpg') }}" alt="" class="cje-logo" /> Asamblea CJE
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Abrir menú') }}">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto" aria-label="Navegación">
                 @if(Auth::user())
                     @if(Auth::user()->hasRole('credential_manager'))
                         <li>
@@ -42,7 +42,7 @@
                 @endif
             </ul>
 
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto" aria-label="Opciones de usuario">
                 @guest
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Entrar') }}</a>

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="Object.keys(selected).length && secretVotes.length" class="secret-votes">
-    <ul>
+  <form @submit.prevent="$bvModal.show('voteConfirm')" v-if="Object.keys(selected).length && secretVotes.length" class="secret-votes">
+    <ul aria-label="Listado de votaciones">
       <li v-for="vote in secretVotes" :key="vote.id">
         <secret-vote-question
           :vote="vote"
@@ -13,12 +13,12 @@
         class="vote-button__wrapper"
         v-tooltip="!canVote ? 'Hay algunos errores en los votos asignados' : false">
         <b-button
+          type="submit"
           size="lg"
           variant="primary"
           block
-          :class="!canVote ? 'disabled' : ''"
-          v-b-modal.voteConfirm>
-          🗳 &nbsp; Revisa y vota
+          :class="!canVote ? 'disabled' : ''">
+          <span aria-hidden="true">🗳 &nbsp;</span> Revisa y vota
         </b-button>
       </div>
     </div>
@@ -27,7 +27,7 @@
       :selected="selected"
       :can-vote="canVote"
       @submitted="getSecretVotes" />
-  </div>
+  </form>
 </template>
 
 <script>

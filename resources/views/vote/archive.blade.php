@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Mis votos - ')
+
 @section('content')
     <div class="container">
         <div id="myVotes">

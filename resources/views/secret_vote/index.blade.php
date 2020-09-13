@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Voto secreto - ')
+
 @section('content')
     <div class="container">
         <div id="secretVote">

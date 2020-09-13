@@ -13,36 +13,13 @@
                 </span>
             </h4>
         </div>
-        <div class="col-md-6">
-            <table v-for="group in groups" :key="group.title" class="table table-groups table-sm">
+        <div class="col-md-6" style="order: 2">
+            <table class="table table-results" arial-label="Resultado general">
                 <tr>
-                    <th colspan="2">{{ group.title }} <span v-if="amendment.results.compensate == group.type">(Voto compensado)</span></th>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="group-votes">
-                            <div v-for="(entity, id) in group.groups" :key="'group' + id" class="group">
-                                <span class="group-acronym">{{ entity.acronym }}</span>
-                                <span class="group-votes">
-                                    <ul class="group-votes">
-                                        <li v-for="(votes, vote_for) in entity.votes" :key="'group' + id + vote_for">
-                                            <span v-if="votes > 0" :class="'option option-fill option_' + vote_for">{{ votes }}</span>
-                                        </li>
-                                    </ul>
-                                </span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="col-md-6">
-            <table class="table table-results">
-                <tr>
-                    <th></th>
-                    <th class="text-right">C</th>
-                    <th class="text-right">E</th>
-                    <th colspan="2"></th>
+                    <th><span class="sr-only">Opción</span></th>
+                    <th class="text-right" aria-label="Votos de consejos">C</th>
+                    <th class="text-right" aria-label="Votos de entidades">E</th>
+                    <th><span class="sr-only">Porcentaje</span></th>
                 </tr>
                 <tr v-for="option in [1, 2, 3, 4, 5]" :key="'option' + option" :class="['option_' + option, (amendment.results.winner === option) ? 'winner' : '']">
                     <template v-if="amendment['option_' + option]">
@@ -50,12 +27,42 @@
                         <td width="15%" class="text-right">{{ amendment.results.absolute[1][option] }}</td>
                         <td width="15%" class="text-right">{{ amendment.results.absolute[2][option] }}</td>
                         <td width="20%" class="text-right">{{ amendment.results.weighted[option] | percentage }}</td>
-                        <td width="10%"><i class="far fa-check" v-if="amendment.results.winner === option" /></td>
+                        <td width="10%"><i class="far fa-check" v-if="amendment.results.winner === option" aria-label="Opción ganadora" /></td>
                     </template>
                 </tr>
             </table>
         </div>
-        <div class="col-12" v-if="fullList">
+        <div class="col-md-6" style="order: 1">
+            <table v-for="group in groups" :key="group.title" class="table table-groups table-sm" :aria-label="`Resultados por ${group.title}`">
+                <thead>
+                    <tr>
+                        <th>{{ group.title }} <span v-if="amendment.results.compensate == group.type">(Voto compensado)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <ul class="group-votes m-0 p-0">
+                                <li v-for="(entity, id) in group.groups" :key="'group' + id" class="group">
+                                    <span class="group-acronym">{{ entity.acronym }}</span>
+                                    <span class="group-votes">
+                                        <span v-if="Object.values(entity.votes).reduce((a, b) => a + b) === 0" class="sr-only">Cero votos</span>
+                                        <ul v-else class="group-votes">
+                                            <template v-for="(votes, vote_for) in entity.votes">
+                                                <li v-if="votes > 0" :key="'group' + id + vote_for">
+                                                    <span v-if="votes > 0" :class="'option option-fill option_' + vote_for">{{ votes }} <span class="sr-only">votos {{ amendment['option_' + vote_for] }}</span></span>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </span>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-12" v-if="fullList" style="order: 3">
             <div v-if="amendment.votes.length > 0">
                 <h5>Votos</h5>
 

@@ -1,7 +1,8 @@
 <template>
     <b-modal
         id="voteConfirm"
-        ref="voteConfirm">
+        ref="voteConfirm"
+        header-close-label="Cerrar confirmación de voto">
         <div slot="modal-title">
             Confirma tu voto
         </div>

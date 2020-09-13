@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Votaciones - ')
+
 @section('content')
     <div class="container">
         <div id="amendments">

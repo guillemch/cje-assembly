@@ -1,15 +1,17 @@
 <template>
     <div class="vote">
+        <h1 class="sr-only">Votación</h1>
         <div class="vote__status">
             <div class="container d-flex align-items-center">
-                <div class="connected" v-if="connected">
+                <div class="connected" v-if="connected" aria-live="polite">
                     <span class="pulse-icon"></span> Conectado 
                 </div>
-                <div  class="disconnected" v-else>
+                <div class="disconnected" v-else aria-live="polite">
                     Desconectado
                 </div>
                 <b-btn @click="getOpenVotes" size="sm" class="ml-auto">
                     <i class="far fa-sync" />
+                    <span class="sr-only">Refrescar votaciones</span>
                 </b-btn>
             </div>
         </div>
@@ -17,8 +19,8 @@
             <i class="far fa-sync fa-spin"></i>
             Cargando...
         </div>
-        <div v-else>
-            <div v-if="!votes || votes.length === 0" class="vote__placeholder">
+        <div>
+            <div v-if="!votes || votes.length === 0" class="vote__placeholder" aria-live="polite">
                 <i class="far fa-mug-hot" />
                 Ninguna votación en curso
             </div>
