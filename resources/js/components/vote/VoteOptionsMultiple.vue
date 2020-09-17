@@ -1,38 +1,42 @@
 <template>
     <div class="vote__multiple">
         <div class="alert alert-info" v-if="remainingVotes > 0" aria-live="assertive" role="alert">
-            ℹ️ Te quedan <strong>{{ remainingVotes }} votos</strong> por asignar
+            <span aria-hidden="true">ℹ️</span> Te quedan <strong>{{ remainingVotes }} votos</strong> por asignar
         </div>
         <div class="alert alert-success" v-else-if="remainingVotes === 0" aria-live="assertive" role="alert">
-            👍 Has asignado <strong>todos los votos</strong>.
+            <span aria-hidden="true">👍</span> Has asignado <strong>todos los votos</strong>.
         </div>
         <div class="alert alert-danger" v-else aria-live="assertive" role="alert">
-            🛑 Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
+            <span aria-hidden="true">🛑</span> Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
         </div>
         <ul>
             <template v-for="i in 5">
                 <li v-if="vote[`option_${i}`]" :key="i" :class="`slider-option_${i}`">
                     <div class="vote__multiple__label">
-                        <label>{{ vote[`option_${i}`]}}</label>
+                        <label :for="`votes${vote.id}${i}`">{{ vote[`option_${i}`]}}</label>
                         <span>
                             <input
+                                :id="`votes${vote.id}${i}`"
                                 type="number"
                                 :value="selected[`option_${i}`]"
                                 class="vote__multiple__number"
                                 min="0"
                                 :max="userVotes"
+                                :aria-description="`Número de votos ${vote[`option_${i}`]}`"
                                 @input="$emit('select', i, parseInt($event.target.value))">
-                            votos
+                            <span aria-hidden="true">votos</span>
                         </span>
                     </div>
-                    <vue-slider
-                        :value="selected[`option_${i}`]"
-                        :dot-size="25"
-                        :height="15"
-                        :max="userVotes"
-                        :drag-on-click="true"
-                        :duration="0.2"
-                        @change="(value) => $emit('select', i, value)" />
+                    <div aria-hidden="true">
+                        <vue-slider
+                            :value="selected[`option_${i}`]"
+                            :dot-size="25"
+                            :height="15"
+                            :max="userVotes"
+                            :drag-on-click="true"
+                            :duration="0.2"
+                            @change="(value) => $emit('select', i, value)" />
+                    </div>
                 </li>
             </template>
         </ul>

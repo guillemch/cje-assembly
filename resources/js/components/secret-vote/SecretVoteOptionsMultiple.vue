@@ -1,37 +1,41 @@
 <template>
     <div class="vote__multiple">
         <div class="alert alert-info" v-if="remainingVotes > 0">
-            ℹ️ Te quedan <strong>{{ remainingVotes }} votos</strong> por asignar
+            <span aria-hidden="true">ℹ️</span> Te quedan <strong>{{ remainingVotes }} votos</strong> por asignar
         </div>
         <div class="alert alert-success" v-else-if="remainingVotes === 0">
-            👍 Has asignado <strong>todos los votos</strong>.
+            <span aria-hidden="true">👍</span> Has asignado <strong>todos los votos</strong>.
         </div>
         <div class="alert alert-danger" v-else>
-            🛑 Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
+            <span aria-hidden="true">🛑</span> Has superado el límite por <strong>{{ Math.abs(remainingVotes) }} voto(s)</strong>.
         </div>
         <ul>
             <li v-for="option in options" :key="option.id" class="slider">
                 <div class="vote__multiple__label">
-                    <label>{{ option.name }}</label>
+                    <label :for="`votes${option.secret_vote_id}${option.id}`">{{ option.name }}</label>
                     <span>
                         <input
+                            :id="`votes${option.secret_vote_id}${option.id}`"
                             type="number"
                             :value="selected[option.id]"
                             class="vote__multiple__number"
                             min="0"
                             :max="userVotes"
+                            :aria-description="`Número de votos ${vote[`option_${i}`]}`"
                             @input="$emit('select', option.id, parseInt($event.target.value))">
-                        votos
+                        <span aria-hidden="true">votos</span>
                     </span>
                 </div>
-                <vue-slider
-                    :value="selected[option.id]"
-                    :dot-size="25"
-                    :height="15"
-                    :max="userVotes"
-                    :drag-on-click="true"
-                    :duration="0.2"
-                    @change="(value) => $emit('select', option.id, value)" />
+                <div aria-hidden="true">
+                    <vue-slider
+                        :value="selected[option.id]"
+                        :dot-size="25"
+                        :height="15"
+                        :max="userVotes"
+                        :drag-on-click="true"
+                        :duration="0.2"
+                        @change="(value) => $emit('select', option.id, value)" />
+                </div>
             </li>
         </ul>
     </div>
