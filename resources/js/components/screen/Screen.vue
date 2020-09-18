@@ -297,8 +297,9 @@
 
             &--ongoing {
                 h1 {
-                    transform: translateY(15vw);
-                    font-size: 7.5vw;
+                    transform: translateY(6vw);
+                    font-size: 6.5vw;
+                    line-height: 1.1;
                 }
 
                 h3 {
