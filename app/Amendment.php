@@ -141,7 +141,7 @@ class Amendment extends Model
 
         // Winner
         if ($amendment['option_3'] == 'Abstención') {
-            if ($amendment['vote_type'] === 'absolute') {
+            if ($amendment['vote_type'] === 'absolute' && count($unique) > 0) {
                 if ($weighted[1] > 50) {
                     $winner = 1;
                 } else {

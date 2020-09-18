@@ -19,7 +19,7 @@
                         <div key="awaiting" v-else></div>
                     </transition>
                 </div>
-                <div key="multiple-votes" v-else-if="screen.votes.length < 5 && screen.votes.length > 1" class="vote-info">
+                <div key="multiple-votes" v-else-if="screen.votes && screen.votes.length < 4 && screen.votes.length > 1" class="vote-info">
                     <transition name="fade" mode="out-in">
                         <screen-multiple-results :amendments="screen.votes" v-if="screen.just_closed" />
                         <div v-else class="ongoing-vote">
@@ -30,7 +30,7 @@
                         </div>
                     </transition>
                 </div>
-                <div key="many-votes" v-else-if="screen.votes.length >= 5" class="vote-info">
+                <div key="many-votes" v-else-if="screen.votes && screen.votes.length >= 4" class="vote-info">
                     <transition name="fade" mode="out-in">
                         <screen-many-results :amendments="screen.votes" v-if="screen.just_closed" />
                         <div v-else class="ongoing-vote">
