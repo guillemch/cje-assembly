@@ -3,7 +3,7 @@
       <h3>{{ amendments[0].description }}</h3>
       <ul class="list-many-results">
           <li v-for="amendment in amendments" :key="amendment.id" :class="`winner-option_${amendment.results.winner}`">
-              <span class="vote-name">ROFI_60_8_1OJE-ASDE-JCCOO</span>
+              <span class="vote-name">{{ amendment.name }}</span>
               <span class="vote-result">{{ options[amendment.results.winner] }}</span>
           </li>
       </ul>
