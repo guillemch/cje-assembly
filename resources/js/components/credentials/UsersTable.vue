@@ -24,10 +24,10 @@
                     <col width="240" />
                     <col width="200" />
                 </template>
-                <template slot="name" slot-scope="data">
+                <template v-slot:cell(name)="data">
                     {{ data.item.name + ' ' + data.item.last_name }}
                 </template>
-                <template slot="actions" slot-scope="data">
+                <template v-slot:cell(actions)="data">
                     <div>
                         <b-btn v-if="data.item.credentials_pickedup_at === null" size="sm" variant="success" @click="checkIn(data.item)" :disabled="loadingUser === data.item.id">
                             <i :class="{ 'far': true, 'fa-check': loadingUser !== data.item.id, 'fa-spinner-third fa-spin': loadingUser === data.item.id }" />
@@ -63,12 +63,12 @@
                     },
                     {
                         key: 'name',
-                        label: 'Nombre y apellidos',
+                        label: 'Nombre',
                         sortable: true
                     },
                     {
-                        key: 'id_card',
-                        label: 'DNI',
+                        key: 'phone',
+                        label: 'Móvil',
                         sortable: true
                     },
                     {
