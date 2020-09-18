@@ -53,7 +53,7 @@
                         </b-td>
                         <b-td>
                             <i class="far fa-arrow-right"></i>
-                            {{ jointAmendment.name }}
+                            {{ jointAmendment.name }} <span class="text-muted" v-if="jointAmendment.vote_type === 'absolute'">(absoluta)</span>
                         </b-td>
                         <b-td>
                             <div :class="'option-tag option-invert option_' + jointAmendment.results.winner" v-if="jointAmendment.results.winner">
