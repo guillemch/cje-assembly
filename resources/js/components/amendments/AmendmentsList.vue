@@ -23,7 +23,10 @@
                             {{ amendment.id }}
                         </b-td>
                         <b-td>
-                            {{ amendment.name }} / {{ amendment.description }}
+                            <span v-if="amendment.description">
+                                <strong>{{ amendment.description }}</strong> / 
+                            </span>
+                            {{ amendment.name }}
                             <span class="text-muted" v-if="amendment.vote_type === 'absolute'">(absoluta)</span>
                         </b-td>
                         <b-td>
