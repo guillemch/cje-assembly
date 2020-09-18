@@ -19,7 +19,7 @@
                         <div key="awaiting" v-else></div>
                     </transition>
                 </div>
-                <div key="multiple-votes" v-else-if="screen.votes.length < 5" class="vote-info">
+                <div key="multiple-votes" v-else-if="screen.votes.length < 5 && screen.votes.length > 1" class="vote-info">
                     <transition name="fade" mode="out-in">
                         <screen-multiple-results :amendments="screen.votes" v-if="screen.just_closed" />
                         <div v-else class="ongoing-vote">
@@ -66,7 +66,7 @@
             </transition>
             <div :class="{ 'screen-logo': true, 'vote-active': ((screen.votes && screen.votes.length > 0) || countdown.time !== null) }">
                 <div class="logo">
-                    <img src="../../../images/logo.jpg" alt="Logo" />
+                    <img src="../../../images/logo_ago.png" alt="Logo" />
                     <button type="button" @click="toggleFullscreen" v-if="!fullscreen" class="fullscreen-button">Fullscreen</button>
                 </div>
             </div>
@@ -212,7 +212,7 @@
             justify-content: center;
             align-items: center;
             background: $cje-yellow;
-            background-image: url(../../../images/background.jpg);
+            background-image: url(../../../images/background_ago.png);
             background-size: cover;
             background-position: center;
             z-index: 1000;
