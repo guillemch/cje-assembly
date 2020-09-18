@@ -141,13 +141,21 @@ class Amendment extends Model
 
         // Winner
         if ($amendment['option_3'] == 'Abstención') {
-            $difference = $weighted[1] - $weighted[2];
-            if ($difference > 0) {
-                $winner = 1;
-            } elseif($difference < 0) {
-                $winner = 2;
+            if ($amendment['vote_type'] === 'absolute') {
+                if ($weighted[1] > 50) {
+                    $winner = 1;
+                } else {
+                    $winner = 2;
+                }
             } else {
-                $winner = 0;
+                $difference = $weighted[1] - $weighted[2];
+                if ($difference > 0) {
+                    $winner = 1;
+                } elseif($difference < 0) {
+                    $winner = 2;
+                } else {
+                    $winner = 0;
+                }
             }
         } else {
             $sortedByScore = $weighted;

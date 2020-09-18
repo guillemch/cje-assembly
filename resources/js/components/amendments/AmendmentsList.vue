@@ -24,6 +24,7 @@
                         </b-td>
                         <b-td>
                             {{ amendment.name }}
+                            <span class="text-muted" v-if="amendment.vote_type === 'absolute'">(absoluta)</span>
                         </b-td>
                         <b-td>
                             <div :class="'option-tag option-invert option_' + amendment.results.winner" v-if="amendment.results.winner">
