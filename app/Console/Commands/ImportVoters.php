@@ -49,13 +49,15 @@ class ImportVoters extends Command
             $fields = explode(";", $line);
 
             $user = new User;
-            $user->type = $fields[0];
-            $user->group_id = $fields[1];
-            $user->name = $fields[2];
-            $user->last_name = $fields[3];
-            $user->email = $fields[4];
-            $user->phone = $fields[5];
-            $user->id_card = $fields[6];
+            $user->type = $fields[1];
+            $user->group_id = ($fields[0]) ? $fields[0] : null;
+            $user->name = $fields[3];
+            $user->last_name = $fields[4];
+            $user->email = $fields[5];
+            $user->phone = ($fields[6]) ? '34' . str_replace(" ", "", $fields[6]) : '';
+            $user->id_card = '';
+            $user->votes = $fields[7];
+            $user->in_person = 1;
             $user->password = bcrypt(str_random(40));
             $user->save();
         }
