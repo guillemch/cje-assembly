@@ -19,7 +19,7 @@
             <i class="far fa-sync fa-spin"></i>
             Cargando...
         </div>
-        <div>
+        <div v-else>
             <div v-if="!votes || votes.length === 0" class="vote__placeholder" aria-live="polite">
                 <i class="far fa-mug-hot" />
                 Ninguna votación en curso

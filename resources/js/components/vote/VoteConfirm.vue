@@ -16,10 +16,10 @@
         </div>
         <div slot="modal-footer" class="footer text-center">
             <b-form @submit.prevent="submitVote" v-if="canVote">
-                <label for="password">
+                <label for="password" v-if="!codeExemption">
                     <small class="text-muted">Para confirmar tu voto introduce el código que se muestra en pantalla</small>
                 </label>
-                <b-input-group>
+                <b-input-group v-if="!codeExemption">
                     <b-form-input
                         v-model="password"
                         id="password"
@@ -43,6 +43,16 @@
                         </b-btn>
                     </b-input-group-append>
                 </b-input-group>
+                <div v-else>
+                    <b-btn
+                        ref="submit"
+                        type="submit"
+                        variant="primary"
+                        size="lg">
+                        <i class="far fa-check" />
+                        Emitir voto
+                    </b-btn>
+                </div>
                 <div v-if="errors" id="errors" aria-live="assertive" role="alert">
                     <div v-for="(error, key) in errors" :key="key" class="alert alert-danger mt-3 mb-0">
                         {{ error[0] }}
@@ -77,7 +87,8 @@
                 password: '',
                 loading: false,
                 errors: [],
-                userVotes: window.user.votes
+                userVotes: window.user.votes,
+                codeExemption: window.user.code_exemption
             };
         },
 
@@ -111,7 +122,11 @@
             },
 
             focusPassword () {
-                this.$refs.password.focus();
+                if (this.codeExemption) {
+                    this.$refs.submit.focus();
+                } else {
+                    this.$refs.password.focus();
+                }
             }
         }
     }

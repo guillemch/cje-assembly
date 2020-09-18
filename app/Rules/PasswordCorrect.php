@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use Auth;
 use Illuminate\Contracts\Validation\Rule;
 use Google2FA;
 
@@ -26,6 +27,15 @@ class PasswordCorrect implements Rule
      */
     public function passes($attribute, $value)
     {
+        $codeExemption = Auth::user()->code_exemption;
+        if ($codeExemption) {
+            return true;
+        }
+
+        if (empty($value)) {
+            return false;
+        }
+        
         $secret = config('google2fa.secret');
         $google2fa = app('pragmarx.google2fa');
         $google2fa->setOneTimePasswordLength(4);

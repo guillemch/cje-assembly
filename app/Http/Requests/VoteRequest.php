@@ -36,7 +36,6 @@ class VoteRequest extends FormRequest
                 new ValidVote()
             ],
             'password' => [
-                'required',
                 new PasswordCorrect()
             ]
         ];

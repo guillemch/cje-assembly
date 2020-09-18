@@ -13,7 +13,8 @@
 @push('scripts')
     <script>
         window.user = {
-            votes: {!! Auth::user()->votes !!}
+            votes: {!! Auth::user()->votes !!},
+            code_exemption: {!! Auth::user()->code_exemption !!}
         }
     </script>
     <script src="{{ mix('/js/vote.js') }}"></script>
