@@ -27,7 +27,7 @@
 
         data () {
             return {
-                time: '02:00',
+                time: '00:30',
                 speaker: null,
                 customSpeaker: '',
                 speakers: null,
@@ -52,6 +52,18 @@
                     }
                 });
             });
+
+            // Set last used time
+            const floorTime = localStorage.getItem('floor_time');
+            if (floorTime && floorTime !== 'null') {
+                this.time = floorTime;
+            }
+        },
+
+        watch: {
+            time (newTime) {
+                localStorage.setItem('floor_time', newTime);
+            },
         },
 
         methods: {
@@ -59,7 +71,7 @@
                 const time = this.time.split(":");
                 const milliseconds = ((parseInt(time[0]) * 60) + (parseInt(time[1]))) * 1000;
                 this.$socket.emit('new_speaker', {
-                    speaker: (this.customSpeaker) ? { name: this.customSpeaker, group: { name: '', acronym: '--' } } : this.speaker,
+                    speaker: (this.customSpeaker) ? { name: this.customSpeaker, group: { name: this.customSpeaker, acronym: '--' } } : this.speaker,
                     time: milliseconds
                 });
                 this.resetFloor();
