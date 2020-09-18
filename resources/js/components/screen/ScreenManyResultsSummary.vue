@@ -3,8 +3,11 @@
       <h3>{{ amendments[0].description }}</h3>
       <ul class="list-many-results">
           <li v-for="amendment in amendments" :key="amendment.id" :class="`winner-option_${amendment.results.winner}`">
-              <span class="vote-name">{{ amendment.name }}</span>
-              <span class="vote-result">{{ options[amendment.results.winner] }}</span>
+              <span class="vote-name">{{ amendment.option_1 === 'A favor' ? amendment.name : amendment[`option_${amendment.results.winner}`] }}</span>
+              <span class="vote-result">
+                {{ options[amendment.results.winner] }}
+                <i class="far fa-check" v-if="amendment.option_1 !== 'A favor'"></i>
+              </span>
           </li>
       </ul>
     </div>
