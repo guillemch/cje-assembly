@@ -76,9 +76,7 @@
 
         methods: {
             updateVoteNumber (i, e) {
-                let number = e.target.value
-
-                if (typeof number !== 'number') {
+                if (e.target.value === '') {
                     this.$emit('select', i, 0)
                 } else {
                     this.$emit('select', i, parseInt(e.target.value))
