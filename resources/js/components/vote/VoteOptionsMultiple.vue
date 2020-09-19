@@ -23,7 +23,7 @@
                                 min="0"
                                 :max="userVotes"
                                 :aria-description="`Número de votos ${vote[`option_${i}`]}`"
-                                @input="$emit('select', i, parseInt($event.target.value))">
+                                @input="updateVoteNumber(i, $event)">
                             <span aria-hidden="true">votos</span>
                         </span>
                     </div>
@@ -71,6 +71,18 @@
             },
             remainingVotes () {
                 return this.userVotes - this.totalVotes
+            }
+        },
+
+        methods: {
+            updateVoteNumber (i, e) {
+                let number = e.target.value
+
+                if (typeof number !== 'number') {
+                    this.$emit('select', i, 0)
+                } else {
+                    this.$emit('select', i, parseInt(e.target.value))
+                }
             }
         }
     }

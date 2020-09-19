@@ -4,6 +4,34 @@
             <i class="far fa-check-circle" />
             Voto registrado
         </div>
+        <div class="submitted__summary">
+            <h2 class="sr-only" id="summary">Resumen del voto</h2>
+            <table class="table" aria-labelledby="summary">
+                <thead class="sr-only">
+                    <tr>
+                        <th>Nombre de la votación</th>
+                        <th>Opción emitida</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="amendment in votes" :key="amendment.id">
+                        <td class="vote-name" width="40%">
+                            {{ amendment.name }}
+                        </td>
+                        <td class="vote-pills" width="60%">
+                            <ul v-if="amendment.votes.length > 0">
+                                <li
+                                    v-for="vote in amendment.votes"
+                                    :key="vote.id"
+                                    :class="['vote-pill option-fill', `option_${vote.vote_for}`]">
+                                    {{ amendment[`option_${vote.vote_for}`] }}
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
